@@ -1,0 +1,1 @@
+# finm37000-grp-6-trading
