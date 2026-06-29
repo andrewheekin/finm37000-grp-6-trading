@@ -21,7 +21,7 @@ Group 6's strategy is specified below. Items still under discussion are tracked 
 6. **Thesis**: A spread anchored by an economic relationship mean-reverts around a slowly-drifting equilibrium, and we trade deviations from it. The primary pair is Brent–WTI (both light, sweet crude); a WTI / rate-future pair could be tested as a secondary hypothesis.
 
 **Market Data**
-1. Databento, CME Globex (`GLBX`) dataset, covering BZ, CL, and the chosen interest-rate future. Resolution (MBP-1 / 1-second / 1-minute) to be finalized against the holding period.
+1. Databento, CME Globex (`GLBX`) dataset, covering BZ, CL, and a chosen interest-rate future if desired. Resolution (MBP-1 / 1-second / 1-minute / etc.) to be finalized against the holding period.
 ## Methodology
 ### 1. Spread construction & hedge ratio
 - **Baseline:** static 1:1 spread given that the underlying is the same for both Brent and WTI.
