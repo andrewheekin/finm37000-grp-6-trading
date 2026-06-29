@@ -34,7 +34,7 @@ Group 6's strategy is specified below. Items still under discussion are tracked 
 - **Rolling test as a trading gate:** only trade when the trailing window currently passes the stationarity tests.
 - **Half-life** via AR(1) / Ornstein–Uhlenbeck: −ln(2) / ln(φ); sets the holding-period scale and checks whether an intraday version is viable.
 ### 4. Risk management
-- Time-stop at a multiple of the half-life; end-of-session flatten; stationarity gate; volatility-scaled sizing.
+- Potential strategies: Time-stop at a multiple of the half-life; end-of-session flatten (i.e. intraday trading); stationarity gate; volatility-scaled sizing (i.e. consistent risk profile).
 - Note: in pure mean reversion a wider spread is a *stronger* signal, so a level-stop is protection against a broken stationarity assumption; payoffs are negatively skewed.
 ### 5. Backtest
 - **No look-ahead:** all parameters estimated on data available up to each decision point (trailing/expanding window) or a clean train/test split.
