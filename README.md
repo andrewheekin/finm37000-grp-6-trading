@@ -28,10 +28,10 @@ Group 6's strategy is specified below. Items still under discussion are tracked 
 ### 2. Fair value & signal
 - Fair value = the spread's mean under **local** stationarity (rolling mean if the equilibrium drifts).
 - Signal = **z-score** of the spread vs. its trailing mean/σ, with entry/exit bands (e.g. enter ±2σ, exit toward 0) and a risk stop.
-### 3. Stationarity / cointegration testing
-- **ADF and KPSS together** (complementary nulls).
-- **Engle–Granger two-step** on the pair (regress one leg on the other, test the residual).
-- **Rolling test as a trading gate:** only trade when the trailing window currently passes the stationarity tests.
+### 3. Stationarity testing
+- **Possible tests for stationarity**
+  - **ADF and KPSS together** (complementary nulls).
+  - **Engle–Granger two-step** on the pair (regress one leg on the other, test the residual).
 - **Half-life** via AR(1) / Ornstein–Uhlenbeck: −ln(2) / ln(φ); sets the holding-period scale and checks whether an intraday version is viable.
 ### 4. Risk management
 - Potential strategies: Time-stop at a multiple of the half-life; end-of-session flatten (i.e. intraday trading); stationarity gate; volatility-scaled sizing (i.e. consistent risk profile).
