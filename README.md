@@ -24,9 +24,7 @@ Group 6's strategy is specified below. Items still under discussion are tracked 
 1. Databento, CME Globex (`GLBX`) dataset, covering BZ, CL, and the chosen interest-rate future. Resolution (MBP-1 / 1-second / 1-minute) to be finalized against the holding period.
 ## Methodology
 ### 1. Spread construction & hedge ratio
-- **Baseline:** static 1:1 spread.
-- **Refinement:** estimated hedge ratio via total least squares / orthogonal regression (both legs are noisy, so plain OLS is direction-asymmetric).
-- **Robustness:** rolling-window or Kalman-filtered dynamic hedge ratio, reported as a check on the baseline.
+- **Baseline:** static 1:1 spread given that the underlying is the same for both Brent and WTI.
 ### 2. Fair value & signal
 - Fair value = the spread's mean under **local** stationarity (rolling mean if the equilibrium drifts).
 - Signal = **z-score** of the spread vs. its trailing mean/σ, with entry/exit bands (e.g. enter ±2σ, exit toward 0) and a risk stop.
