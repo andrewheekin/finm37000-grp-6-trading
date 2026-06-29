@@ -4,7 +4,13 @@
 
 FINM 37000 Summer '26 Group 6 is building a relative-value (spread) trading strategy and evaluating it in a backtest-and-report framework. Our primary strategy is an intraday mean-reversion trade on the Brent–WTI crude oil spread. As a secondary, exploratory track, we also test whether a cross-asset relationship between WTI and an interest-rate future is statistically tradeable using similar machinery.
 Note: The goal is a methodologically sound strategy, not a profit-maximized one.
+## Desired Outcome
 
+Success for this project is a **reproducible, end-to-end research pipeline** that turns raw market data into a defensible verdict on the strategy — not a particular P&L number. By the end of the project we aim to deliver:
+
+- **A clear answer to the central question:** does the Brent–WTI spread mean-revert at our chosen frequency, after realistic costs, and is that reversion stable enough to trade? The exploratory WTI / rate-future pair receives the same up-or-down verdict.
+- **Reproducibility.** A teammate — or the grader — can clone the repository, supply their own data credentials, run a single command, and regenerate every figure and number in the report.
+- **A documented decision trail.** Our choices (which pair, hedge-ratio method, parameters, sample window) are recorded with their rationale.
 ## Strategy Specification
 Group 6's strategy is specified below. Items still under discussion are tracked in **Open Decisions**.
 
