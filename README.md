@@ -18,7 +18,7 @@ Group 6's strategy is specified below. Items still under discussion are tracked 
 1. **Products**: Brent (BZ) and WTI (CL) crude oil futures on CME Globex; optionally one interest-rate future (SR3) for the exploratory cross-asset leg.
 2. **Type of Strategy**: Relative-value / statistical-arbitrage mean reversion on a stationary (locally cointegrated) spread.
 3. **Holding Period**: Intraday, flat at end of session, contingent on the estimated half-life of mean reversion supporting an intraday horizon.
-4. **Thesis**: A spread anchored by an economic relationship mean-reverts around a slowly-drifting equilibrium, and we trade deviations from it. The primary pair is Brent–WTI (both light, sweet crude); a WTI / rate-future pair is tested as a secondary hypothesis.
+6. **Thesis**: A spread anchored by an economic relationship mean-reverts around a slowly-drifting equilibrium, and we trade deviations from it. The primary pair is Brent–WTI (both light, sweet crude); a WTI / rate-future pair could be tested as a secondary hypothesis.
 
 **Market Data**
 1. Databento, CME Globex (`GLBX`) dataset, covering BZ, CL, and the chosen interest-rate future. Resolution (MBP-1 / 1-second / 1-minute) to be finalized against the holding period.
