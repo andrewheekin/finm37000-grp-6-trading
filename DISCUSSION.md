@@ -1,8 +1,11 @@
-# Trading Strategy Extensions
-FINM 37000 Summer '26 — **Group 6**
+# Team Discussion Archive
+
+For the locked strategy and extensions, see [README.md](README.md).
+
+FINM 37000 Summer '26 — **Group 6**  
 **Team:** Andrew Heekin, Michael Dowling, Sam Zhang, Bobby Kodem
 
-This document captures the the trading strategy candidates from our team discussions. Our goal here is to document what we discussed as a group before we locked the final strategy in `README.md`.
+This document preserves our brainstorming contributions with attribution. The canonical project spec lives in `README.md`.
 
 ---
 
@@ -10,9 +13,9 @@ This document captures the the trading strategy candidates from our team discuss
 
 | Title | Author | Type |
 |-------|--------|------|
-| **The Brent–WTI Spread Reversion** | Michael Dowling | Primary candidate — intra-commodity mean reversion |
-| **The Macro-Gated Brent–WTI** | Sam Zhang | Overlay on Michael's strategy — rates/VIX filters |
-| **The Oil–Rates Cross-Asset Reversion** | Andrew Heekin | Variation — CL vs SR3 as primary trade |
+| **The Brent–WTI Spread Reversion** | Michael Dowling | Primary — adopted in README |
+| **The Macro-Gated Brent–WTI** | Sam Zhang | Extension A+ — summarized in README |
+| **The Oil–Rates Cross-Asset Reversion** | Andrew Heekin | Extension B — summarized in README |
 | **Mental model of the core strategy** | Bobby Kodem | Discussion — sanity check on Michael's framework |
 
 ---

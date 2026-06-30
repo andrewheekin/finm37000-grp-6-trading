@@ -39,14 +39,23 @@ Group 6's strategy is specified below. Items still under discussion are tracked 
 ### 5. Backtest
 - **No look-ahead:** all parameters estimated on data available up to each decision point (trailing/expanding window) or a clean train/test split.
 - **Transaction costs:** Vary, starting at one tick + slippage per leg. Report drawdowns and the loss distribution, not just mean return.
-## Interest-Rate Extension (Exploratory)
-1. **Pair:** WTI (CL) vs. a chosen rate future (SR3).
-2. **Hypothesis:** oil and yields are linked via inflation/growth channels, but the relationship is regime-dependent.
-3. **Test cointegration:** a z-score on a non-cointegrated spread has no stable mean/variance to standardize against. 
-4. **Hedge ratio:** no natural 1:1; size the rate leg by **DV01** against the oil notional.
-5. **If it doesn't cointegrate:** report the negative result, optionally exploring other tradeable relationships between crude and interest rates.
-## Open Decisions
-- [ ] Data resolution / bar frequency in Databento.
-- [ ] Backtest sample window and train/test split.
-- [ ] Entry/exit band levels and stop parameters.
-- [ ] Division of labor.
+## Extensions (Exploratory)
+
+Optional tracks that build on the primary Brent–WTI strategy. Full team discussion and attribution are in [DISCUSSION.md](DISCUSSION.md).
+
+### A+ — Macro-gated Brent–WTI (Sam Zhang)
+
+Keep the Brent–WTI core, but gate entries and sizing with macro signals:
+
+- **Regime filter:** use interest-rate futures to avoid trading during large macro-driven rate moves.
+- **VIX-adjusted entry:** widen or tighten z-score entry bands based on implied volatility.
+- **Exit refinement:** evaluate explicit exit rules beyond revert-to-mean — e.g. |z| < 0.5, velocity/acceleration of z-score, half-life time-stop, vol spike, rolling stationarity failure, or modeled reversion probability.
+
+### B — Oil–rates cross-asset reversion (Andrew Heekin)
+
+Standalone cross-asset mean reversion on WTI (CL) and front-end rates (SR3):
+
+- **Pair & signal:** trade CL–SR3 when the oil–rates relationship stretches (z-score entry/exit, same statistical framework as the primary strategy).
+- **Hypothesis:** oil and yields are linked via inflation & growth channels, but the relationship is regime-dependent — test cointegration before trading; a z-score on a non-cointegrated spread has no stable mean/variance to standardize against.
+- **Brent–WTI filter:** only take CL–SR3 trades when Brent–WTI is stable (no geographic dislocation), to avoid double-counting an energy shock.
+- **Negative result:** if the pair does not cointegrate, report that outcome rather than forcing a trade.
