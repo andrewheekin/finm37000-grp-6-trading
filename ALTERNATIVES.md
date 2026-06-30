@@ -1,4 +1,4 @@
-# Trading Strategy Alternatives
+# Trading Strategy Extensions
 FINM 37000 Summer '26 — **Group 6**
 **Team:** Andrew Heekin, Michael Dowling, Sam Zhang, Bobby Kodem
 
