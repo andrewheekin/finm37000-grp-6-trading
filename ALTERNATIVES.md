@@ -67,7 +67,7 @@ This document captures the the trading strategy candidates from our team discuss
 
 ### Andrew's comment
 
-> One final strategy alternative (to show we've considered options 🙂) - Instead of treating rates as a side leg on Brent-WTI, we could build a standalone cross-asset mean-reversion strategy on WTI (CL) and front-end rates (SR3):
+> One final strategy alternative - Instead of treating rates as a side leg on Brent-WTI, we could build a standalone cross-asset mean-reversion strategy on WTI (CL) and front-end rates (SR3):
 >
 > - Trade the CL–SR3 spread directly when the oil–rates relationship stretches vs a rolling fair value (z-score entry/exit, same statistical framework as Michael's strategy
 > - Use Brent–WTI as a signal and only take CL–SR3 trades when the crude isn't in a geographic dislocation (Brent–WTI stable), to avoid double-counting an energy shock.
