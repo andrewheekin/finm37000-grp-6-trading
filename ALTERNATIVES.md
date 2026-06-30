@@ -12,7 +12,7 @@ This document captures the the trading strategy candidates from our team discuss
 |-------|--------|------|
 | **The Brent–WTI Spread Reversion** | Michael Dowling | Primary candidate — intra-commodity mean reversion |
 | **The Macro-Gated Brent–WTI** | Sam Zhang | Overlay on Michael's strategy — rates/VIX filters |
-| **The Oil–Rates Cross-Asset Reversion** | Andrew Heekin | Alternative — CL vs SR3 as primary trade |
+| **The Oil–Rates Cross-Asset Reversion** | Andrew Heekin | Variation — CL vs SR3 as primary trade |
 | **Mental model of the core strategy** | Bobby Kodem | Discussion — sanity check on Michael's framework |
 
 ---
