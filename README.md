@@ -39,14 +39,79 @@ Group 6's strategy is specified below. Items still under discussion are tracked 
 ### 5. Backtest
 - **No look-ahead:** all parameters estimated on data available up to each decision point (trailing/expanding window) or a clean train/test split.
 - **Transaction costs:** Vary, starting at one tick + slippage per leg. Report drawdowns and the loss distribution, not just mean return.
-## Interest-Rate Extension (Exploratory)
-1. **Pair:** WTI (CL) vs. a chosen rate future (SR3).
-2. **Hypothesis:** oil and yields are linked via inflation/growth channels, but the relationship is regime-dependent.
-3. **Test cointegration:** a z-score on a non-cointegrated spread has no stable mean/variance to standardize against. 
-4. **Hedge ratio:** no natural 1:1; size the rate leg by **DV01** against the oil notional.
-5. **If it doesn't cointegrate:** report the negative result, optionally exploring other tradeable relationships between crude and interest rates.
-## Open Decisions
-- [ ] Data resolution / bar frequency in Databento.
-- [ ] Backtest sample window and train/test split.
-- [ ] Entry/exit band levels and stop parameters.
-- [ ] Division of labor.
+## Extensions (Exploratory)
+
+Optional tracks that build on the primary Brent–WTI strategy. Full team discussion and attribution are in [DISCUSSION.md](DISCUSSION.md).
+
+### A+ — Macro-gated Brent–WTI (Sam Zhang)
+
+Keep the Brent–WTI core, but gate entries and sizing with macro signals:
+
+- **Regime filter:** use interest-rate futures to avoid trading during large macro-driven rate moves.
+- **VIX-adjusted entry:** widen or tighten z-score entry bands based on implied volatility.
+- **Exit refinement:** evaluate explicit exit rules beyond revert-to-mean — e.g. |z| < 0.5, velocity/acceleration of z-score, half-life time-stop, vol spike, rolling stationarity failure, or modeled reversion probability.
+
+### B — Oil–rates cross-asset reversion (Andrew Heekin)
+
+Standalone cross-asset mean reversion on WTI (CL) and front-end rates (SR3):
+
+- **Pair & signal:** trade CL–SR3 when the oil–rates relationship stretches (z-score entry/exit, same statistical framework as the primary strategy).
+- **Hypothesis:** oil and yields are linked via inflation & growth channels, but the relationship is regime-dependent — test cointegration before trading; a z-score on a non-cointegrated spread has no stable mean/variance to standardize against.
+- **Brent–WTI filter:** only take CL–SR3 trades when Brent–WTI is stable (no geographic dislocation), to avoid double-counting an energy shock.
+- **Negative result:** if the pair does not cointegrate, report that outcome rather than forcing a trade.
+
+## Running the Project
+
+> **Draft / placeholder.** The structure and commands below describe the *intended* workflow and will be updated as the code is developed. They are a target, not yet a working pipeline.
+
+### Prerequisites
+- Python 3.11+
+- A [Databento](https://databento.com) API key with access to the CME Globex dataset (`GLBX.MDP3`)
+- `git`
+
+### Setup
+```bash
+# 1. Clone the repository
+git clone https://github.com/andrewheekin/finm37000-grp-6-trading.git
+cd finm37000-grp-6-trading
+
+# 2. Create and activate a virtual environment
+python -m venv .venv
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
+
+# 3. Install dependencies
+pip install -r requirements.txt
+
+# 4. Provide your Databento credentials
+cp .env.example .env
+# then edit .env and set DATABENTO_API_KEY=your_key_here
+```
+
+### Configuration
+Strategy parameters live in `config.yaml` — instruments, sample window, bar resolution, z-score bands, and stop settings:
+```yaml
+instruments: [CL, BZ]          # swap in SR3 or ZN for the rate-extension run
+start: 2023-01-01
+end:   2024-12-31
+resolution: 1m                 # 1-minute bars
+entry_z: 2.0                   # enter when |z| exceeds this
+exit_z:  0.0                   # exit as the spread reverts toward its mean
+window:  60                    # trailing window (days) for mean/σ and the stationarity gate
+```
+
+### Workflow
+```bash
+# 1. Pull market data from Databento into ./data
+python -m src.data.fetch
+
+# 2. Build the spread; run cointegration and half-life diagnostics
+python -m src.research.diagnostics
+
+# 3. Generate signals and run the backtest (transaction costs included)
+python -m src.backtest.run
+
+# 4. Build the report (figures + metrics) into ./reports
+python -m src.report.build
+```
+
+Outputs land in `./reports/`: a performance summary, the equity curve, a trade log, and the stationarity / half-life diagnostics. To run the exploratory interest-rate pair, set `instruments: [CL, SR3]` in `config.yaml` and re-run the workflow.
