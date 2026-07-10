@@ -34,8 +34,11 @@ PILOT_START = "2026-06-01"
 PILOT_END = "2026-06-06"
 
 # stype_in="continuous" for the rolled outrights, "raw_symbol" for spreads.
+# SPREADS[0] is the listed spread whose legs match the continuous front
+# months during the pilot week (CL.v.0 -> CLN6, BZ.v.0 -> BZQ6); the
+# same-month-code pairings follow for comparison.
 OUTRIGHTS = ["CL.v.0", "BZ.v.0"]
-SPREADS = ["CLQ6-BZQ6", "CLU6-BZU6"]
+SPREADS = ["CLN6-BZQ6", "CLQ6-BZQ6", "CLU6-BZU6"]
 
 
 def _cache_path(symbol: str, schema: str, start: str, end: str) -> Path:
