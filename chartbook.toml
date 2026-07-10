@@ -1,0 +1,39 @@
+[config]
+type = "pipeline"
+chartbook_format_version = "0.0.2"
+
+[site]
+title = "FINM 37000 Group 6 Trading"
+author = "Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem"
+copyright = "2025"
+logo_path = ""
+favicon_path = ""
+
+[pipeline]
+id = "FI"
+pipeline_name = "FINM 37000 Group 6 Trading"
+pipeline_description = "Relative-value mean-reversion trading strategy on the Brent-WTI crude oil futures spread"
+lead_pipeline_developer = "Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem"
+contributors = ["Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem"]
+software_modules_command = "module load anaconda3/3.11.4 TeXLive/2023"
+runs_on_grid_or_windows_or_other = "Windows/Linux/MacOS"
+git_repo_URL = ""
+README_file_path = "./README.md"
+site_dir = "./docs_src/"
+
+[notebooks]
+
+
+[notebooks.01_example_notebook_interactive]
+notebook_name = "Example Notebook Interactive"
+notebook_description = "Example notebook for demonstrating how to construct a Chartbook notebook."
+notebook_path = "_output/01_example_notebook_interactive.ipynb"
+
+
+
+
+[dataframes]
+
+
+[charts]
+
