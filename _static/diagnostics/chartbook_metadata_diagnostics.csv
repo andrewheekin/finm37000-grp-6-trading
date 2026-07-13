@@ -1,0 +1,5 @@
+Name,Metadata Complete,Object Type,Identifier,Pipeline,Missing Fields,Page Link
+FINM 37000 Group 6 Trading,False,pipeline,FI,FI,"build_commands, os_compatibility",../index.html
+Brent-WTI Aligned (1-minute),True,dataframe,brent_wti_aligned_1m,FI,,./dataframes/FI/brent_wti_aligned_1m.html
+Brent-WTI Aligned (1-second),True,dataframe,brent_wti_aligned_1s,FI,,./dataframes/FI/brent_wti_aligned_1s.html
+Listed Spread Events (CLN6-BZQ6),True,dataframe,spread_events_front,FI,,./dataframes/FI/spread_events_front.html

@@ -1,0 +1,640 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Dataframe: FI:brent_wti_aligned_1m - Brent-WTI Aligned (1-minute) &#8212; FINM 37000 Group 6 Trading</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=206a6f58" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=b9472d72"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'cb/dataframes/FI/brent_wti_aligned_1m';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="icon" href="../../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Dataframe: FI:brent_wti_aligned_1s - Brent-WTI Aligned (1-second)" href="brent_wti_aligned_1s.html" />
+    <link rel="prev" title="Chart List" href="../../charts.html" /> 
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />   
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo.png" class="logo__image only-light" alt="FINM 37000 Group 6 Trading - Home"/>
+    <img src="../../../_static/logo.png" class="logo__image only-dark pst-js-only" alt="FINM 37000 Group 6 Trading - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../index.html">
+                    FINM 37000 Group 6 Trading
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Project Notes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../project_overview.html">Project Overview</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../project_overview/goals.html">Goals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project_overview/data_sources.html">Data Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project_overview/methodology.html">Methodology</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_pipeline.html">Data Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../spread_diagnostics.html">Spread Diagnostics</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks 📖</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/FI/02_brent_wti_data_pipeline.html">Brent-WTI Data Pipeline Walkthrough</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Charts 📈</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../charts.html">Chart List</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Dataframes 📊</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_aligned_1m</span></code> - Brent-WTI Aligned (1-minute)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brent_wti_aligned_1s.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_aligned_1s</span></code> - Brent-WTI Aligned (1-second)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spread_events_front.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:spread_events_front</span></code> - Listed Spread Events (CLN6-BZQ6)</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/cb/dataframes/FI/brent_wti_aligned_1m.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Dataframe: FI:brent_wti_aligned_1m - Brent-WTI Aligned (1-minute)</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#description">Description</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conventions">Conventions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-dictionary">Data Dictionary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataframe-glimpse">DataFrame Glimpse</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataframe-manifest">Dataframe Manifest</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline-manifest">Pipeline Manifest</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                   <section class="tex2jax_ignore mathjax_ignore" id="dataframe-fi-brent-wti-aligned-1m-brent-wti-aligned-1-minute">
+<h1>Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_aligned_1m</span></code> - Brent-WTI Aligned (1-minute)<a class="headerlink" href="#dataframe-fi-brent-wti-aligned-1m-brent-wti-aligned-1-minute" title="Link to this heading">#</a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Link to this heading">#</a></h2>
+<p>The headline dataset of the issue-4 pipeline: WTI (<code class="docutils literal notranslate"><span class="pre">CL.v.0</span></code>) and Brent
+(<code class="docutils literal notranslate"><span class="pre">BZ.v.0</span></code>) top-of-book grids on one tz-aware UTC index at 1-minute buckets,
+with the synthetic Brent-WTI spread computed from the legs and the front
+exchange-listed spread instrument’s book (<code class="docutils literal notranslate"><span class="pre">CLN6-BZQ6</span></code>) alongside. Pilot week
+2026-06-01 to 2026-06-06 (end exclusive), ~7,000 rows.</p>
+<p>Load it in analysis code with:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">clean_mbp1</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_aligned</span>
+<span class="n">aligned</span> <span class="o">=</span> <span class="n">load_aligned</span><span class="p">(</span><span class="s2">&quot;1m&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(Requires the local data to exist — see the Data Pipeline page for
+regeneration and the <code class="docutils literal notranslate"><span class="pre">_data</span></code> junction setup.)</p>
+</section>
+<section id="conventions">
+<h2>Conventions<a class="headerlink" href="#conventions" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Quote columns are the last quote per bucket, forward-filled for at most
+600 seconds; buckets beyond that stay <code class="docutils literal notranslate"><span class="pre">NaN</span></code> (e.g. the daily maintenance
+break).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*_n_events</span> <span class="pre">==</span> <span class="pre">0</span></code> marks a bucket whose quote is a carry-forward; activity
+columns are never forward-filled.</p></li>
+<li><p>Legs are combined with an outer join — no timestamps are dropped.</p></li>
+</ul>
+</section>
+<section id="data-dictionary">
+<h2>Data Dictionary<a class="headerlink" href="#data-dictionary" title="Link to this heading">#</a></h2>
+<p>Index: <code class="docutils literal notranslate"><span class="pre">ts_recv</span></code> — <code class="docutils literal notranslate"><span class="pre">datetime64[ns,</span> <span class="pre">UTC]</span></code>, 1-minute buckets.</p>
+<p>Leg columns repeat per prefix: <code class="docutils literal notranslate"><span class="pre">cl_</span></code> (WTI leg), <code class="docutils literal notranslate"><span class="pre">bz_</span></code> (Brent leg), <code class="docutils literal notranslate"><span class="pre">ls_</span></code>
+(front listed spread’s book):</p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">{leg}_bid_px_00</span></code></strong>, <strong><code class="docutils literal notranslate"><span class="pre">{leg}_ask_px_00</span></code></strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> — best bid/ask ($/bbl)</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">{leg}_bid_sz_00</span></code></strong>, <strong><code class="docutils literal notranslate"><span class="pre">{leg}_ask_sz_00</span></code></strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> — size at best bid/ask (contracts)</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">{leg}_mid</span></code></strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> — (bid + ask) / 2</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">{leg}_instrument_id</span></code></strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> — underlying contract id (tracks rolls)</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">{leg}_n_events</span></code></strong>: <code class="docutils literal notranslate"><span class="pre">int64</span></code> — book events in the bucket (0 ⇒ quote carried forward)</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">{leg}_n_trades</span></code></strong>: <code class="docutils literal notranslate"><span class="pre">int64</span></code> — trades in the bucket</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">{leg}_volume</span></code></strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> — contracts traded in the bucket</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">{leg}_is_roll_date</span></code></strong>: <code class="docutils literal notranslate"><span class="pre">bool</span></code> — this leg’s mapped contract changed on this date</p></li>
+</ul>
+<p>Spread columns:</p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">synth_mid</span></code></strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> — <code class="docutils literal notranslate"><span class="pre">cl_mid</span> <span class="pre">−</span> <span class="pre">bz_mid</span></code>, the synthetic spread</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">synth_bid</span></code></strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> — <code class="docutils literal notranslate"><span class="pre">cl_bid</span> <span class="pre">−</span> <span class="pre">bz_ask</span></code>, received selling the synthetic spread</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">synth_ask</span></code></strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> — <code class="docutils literal notranslate"><span class="pre">cl_ask</span> <span class="pre">−</span> <span class="pre">bz_bid</span></code>, paid buying the synthetic spread</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">is_roll_date</span></code></strong>: <code class="docutils literal notranslate"><span class="pre">bool</span></code> — OR of the two legs’ roll flags</p></li>
+</ul>
+</section>
+<section id="dataframe-glimpse">
+<h2>DataFrame Glimpse<a class="headerlink" href="#dataframe-glimpse" title="Link to this heading">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Rows: 7021
+Columns: 35
+$ cl_bid_px_00                   &lt;f64&gt; 90.2
+$ cl_ask_px_00                   &lt;f64&gt; 90.4
+$ cl_bid_sz_00                   &lt;f64&gt; 1.0
+$ cl_ask_sz_00                   &lt;f64&gt; 1.0
+$ cl_mid                         &lt;f64&gt; 90.30000000000001
+$ cl_instrument_id               &lt;f64&gt; 777566.0
+$ cl_n_events                    &lt;i64&gt; 1
+$ cl_n_trades                    &lt;i64&gt; 0
+$ cl_volume                      &lt;u32&gt; 0
+$ cl_is_roll_date               &lt;bool&gt; False
+$ bz_bid_px_00                   &lt;f64&gt; 92.69
+$ bz_ask_px_00                   &lt;f64&gt; 93.5
+$ bz_bid_sz_00                   &lt;f64&gt; 5.0
+$ bz_ask_sz_00                   &lt;f64&gt; 30.0
+$ bz_mid                         &lt;f64&gt; 93.095
+$ bz_instrument_id               &lt;f64&gt; 755267.0
+$ bz_n_events                    &lt;i64&gt; 1
+$ bz_n_trades                    &lt;i64&gt; 0
+$ bz_volume                      &lt;u32&gt; 0
+$ bz_is_roll_date               &lt;bool&gt; False
+$ ls_bid_px_00                   &lt;f64&gt; -4.0
+$ ls_ask_px_00                   &lt;f64&gt; -2.45
+$ ls_bid_sz_00                   &lt;f64&gt; 1.0
+$ ls_ask_sz_00                   &lt;f64&gt; 3.0
+$ ls_mid                         &lt;f64&gt; -3.225
+$ ls_instrument_id               &lt;f64&gt; 42016777.0
+$ ls_n_events                    &lt;i64&gt; 1
+$ ls_n_trades                    &lt;i64&gt; 0
+$ ls_volume                      &lt;u32&gt; 0
+$ ls_is_roll_date               &lt;bool&gt; False
+$ synth_mid                      &lt;f64&gt; -2.7949999999999875
+$ synth_bid                      &lt;f64&gt; -3.299999999999997
+$ synth_ask                      &lt;f64&gt; -2.289999999999992
+$ is_roll_date                  &lt;bool&gt; False
+$ ts_recv          &lt;datetime[ns, UTC]&gt; 2026-06-05 21:00:00+00:00
+
+
+</pre></div>
+</div>
+</section>
+<section id="dataframe-manifest">
+<h2>Dataframe Manifest<a class="headerlink" href="#dataframe-manifest" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Dataframe Name</p></th>
+<th class="head"><p>Brent-WTI Aligned (1-minute)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Dataframe ID</p></td>
+<td><p><a class="reference internal" href="#../dataframes/FI/brent_wti_aligned_1m.md"><span class="xref myst">brent_wti_aligned_1m</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Data Sources</p></td>
+<td><p>Databento GLBX.MDP3 (CME Globex), schema mbp-1</p></td>
+</tr>
+<tr class="row-even"><td><p>Data Providers</p></td>
+<td><p>Databento</p></td>
+</tr>
+<tr class="row-odd"><td><p>Links to Providers</p></td>
+<td><p><a class="reference external" href="https://databento.com">https://databento.com</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Topic Tags</p></td>
+<td><p>Brent, Wti, Futures, Spread, Market Data</p></td>
+</tr>
+<tr class="row-odd"><td><p>Type of Data Access</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>How is data pulled?</p></td>
+<td><p>doit pull_databento clean_mbp1 (src/pull_databento.py -&gt; src/clean_mbp1.py)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Data available up to (min)</p></td>
+<td><p>N/A</p></td>
+</tr>
+<tr class="row-even"><td><p>Data available up to (max)</p></td>
+<td><p>N/A</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dataframe Path</p></td>
+<td><p>C:\Users\shpan\OneDrive\School\University of Chicago\Summer 2026\FINM 37000 - Futures and Related Derivatives\finm37000-grp-6-trading_data\clean\brent_wti_aligned_1m_2026-06-01_2026-06-06.parquet</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Linked Charts:</strong></p>
+<ul class="simple">
+<li><p>None</p></li>
+</ul>
+</section>
+<section id="pipeline-manifest">
+<h2>Pipeline Manifest<a class="headerlink" href="#pipeline-manifest" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Pipeline Name</p></th>
+<th class="head"><p>FINM 37000 Group 6 Trading</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Pipeline ID</p></td>
+<td><p><a class="reference internal" href="../../../index.html"><span class="std std-doc">FI</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Lead Pipeline Developer</p></td>
+<td><p>Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem</p></td>
+</tr>
+<tr class="row-even"><td><p>Contributors</p></td>
+<td><p>Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem</p></td>
+</tr>
+<tr class="row-odd"><td><p>Git Repo URL</p></td>
+<td><p><a class="github reference external" href="https://github.com/andrewheekin/finm37000-grp-6-trading">andrewheekin/finm37000-grp-6-trading</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Pipeline Web Page</p></td>
+<td><p><a href="file://C:/Users/shpan/OneDrive/School/University of Chicago/Summer 2026/FINM 37000 - Futures and Related Derivatives/finm37000-grp-6-trading/docs/index.html">Pipeline Web Page</p></td>
+</tr>
+<tr class="row-odd"><td><p>Date of Last Code Update</p></td>
+<td><p>2026-07-13 11:50:43</p></td>
+</tr>
+<tr class="row-even"><td><p>OS Compatibility</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>Linked Dataframes</p></td>
+<td><p><a class="reference internal" href="#"><span class="std std-doc">FI:brent_wti_aligned_1m</span></a><br>  <a class="reference internal" href="brent_wti_aligned_1s.html"><span class="std std-doc">FI:brent_wti_aligned_1s</span></a><br>  <a class="reference internal" href="spread_events_front.html"><span class="std std-doc">FI:spread_events_front</span></a><br></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+
+<div class="section ablog__blog_comments">
+   
+</div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../../charts.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Chart List</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="brent_wti_aligned_1s.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_aligned_1s</span></code> - Brent-WTI Aligned (1-second)</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#description">Description</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conventions">Conventions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-dictionary">Data Dictionary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataframe-glimpse">DataFrame Glimpse</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataframe-manifest">Dataframe Manifest</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline-manifest">Pipeline Manifest</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1217 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>02. Brent–WTI Market Data Pipeline Walkthrough &#8212; FINM 37000 Group 6 Trading</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=206a6f58" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=b9472d72"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'cb/notebooks/FI/02_brent_wti_data_pipeline';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="icon" href="../../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Chart List" href="../../charts.html" />
+    <link rel="prev" title="Spread Diagnostics" href="../../../spread_diagnostics.html" /> 
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />   
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo.png" class="logo__image only-light" alt="FINM 37000 Group 6 Trading - Home"/>
+    <img src="../../../_static/logo.png" class="logo__image only-dark pst-js-only" alt="FINM 37000 Group 6 Trading - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../index.html">
+                    FINM 37000 Group 6 Trading
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Project Notes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../project_overview.html">Project Overview</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../project_overview/goals.html">Goals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project_overview/data_sources.html">Data Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project_overview/methodology.html">Methodology</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_pipeline.html">Data Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../spread_diagnostics.html">Spread Diagnostics</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks 📖</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Brent-WTI Data Pipeline Walkthrough</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Charts 📈</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../charts.html">Chart List</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Dataframes 📊</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../dataframes/FI/brent_wti_aligned_1m.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_aligned_1m</span></code> - Brent-WTI Aligned (1-minute)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dataframes/FI/brent_wti_aligned_1s.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_aligned_1s</span></code> - Brent-WTI Aligned (1-second)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dataframes/FI/spread_events_front.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:spread_events_front</span></code> - Listed Spread Events (CLN6-BZQ6)</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/cb/notebooks/FI/02_brent_wti_data_pipeline.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>02. Brent–WTI Market Data Pipeline Walkthrough</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-was-pulled">1. What was pulled</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-aligned-dataset">2. The aligned dataset</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#column-glossary">Column glossary</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#missing-data-conventions">Missing-data conventions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-the-spread-looks-like">3. What the spread looks like</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#liquidity-when-and-where-the-spread-trades">4. Liquidity: when and where the spread trades</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#finer-grained-data">5. Finer-grained data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-the-data-in-your-own-code">6. Loading the data in your own code</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regenerating-from-scratch">7. Regenerating from scratch</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                   <section class="tex2jax_ignore mathjax_ignore" id="brentwti-market-data-pipeline-walkthrough">
+<h1>02. Brent–WTI Market Data Pipeline Walkthrough<a class="headerlink" href="#brentwti-market-data-pipeline-walkthrough" title="Link to this heading">#</a></h1>
+<p>This notebook documents the market-data pipeline built for
+<a class="reference external" href="https://github.com/andrewheekin/finm37000-grp-6-trading/issues/4">issue #4</a>:
+a cleaned, timestamp-aligned dataset of WTI (CL) and Brent (BZ) futures
+prices that the rest of the strategy is developed on.</p>
+<p>It is written for two audiences:</p>
+<ol class="arabic simple">
+<li><p><strong>Teammates</strong> who want to load the data and start building — see the
+<em>Loading the data</em> sections and the column glossary.</p></li>
+<li><p><strong>Reviewers/instructors</strong> who want to see what was pulled, how gaps and
+mismatches are handled, and what the spread looks like.</p></li>
+</ol>
+<p>Everything here reads from the local parquet outputs of the pipeline
+(<code class="docutils literal notranslate"><span class="pre">doit</span> <span class="pre">pull_databento</span> <span class="pre">clean_mbp1</span></code>); no network access or API key is needed
+to re-run this notebook once those files exist.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">clean_mbp1</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">FRONT_SPREAD</span><span class="p">,</span>
+    <span class="n">load_aligned</span><span class="p">,</span>
+    <span class="n">load_grid</span><span class="p">,</span>
+    <span class="n">load_spread_events</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">plot_spread_diagnostics</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">plot_activity_by_hour</span><span class="p">,</span>
+    <span class="n">plot_histogram</span><span class="p">,</span>
+    <span class="n">plot_pacf</span><span class="p">,</span>
+    <span class="n">plot_rolling_deviations</span><span class="p">,</span>
+    <span class="n">plot_week_series</span><span class="p">,</span>
+    <span class="n">plot_width_by_hour</span><span class="p">,</span>
+    <span class="n">rolling_deviations</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pull_databento</span><span class="w"> </span><span class="kn">import</span> <span class="n">OUTRIGHTS</span><span class="p">,</span> <span class="n">PILOT_END</span><span class="p">,</span> <span class="n">PILOT_START</span><span class="p">,</span> <span class="n">SPREADS</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;display.max_columns&quot;</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;display.width&quot;</span><span class="p">,</span> <span class="mi">160</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pilot window: </span><span class="si">{</span><span class="n">PILOT_START</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">PILOT_END</span><span class="si">}</span><span class="s2"> (end exclusive)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Outrights:    </span><span class="si">{</span><span class="n">OUTRIGHTS</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Spreads:      </span><span class="si">{</span><span class="n">SPREADS</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Pilot window: 2026-06-01 to 2026-06-06 (end exclusive)
+Outrights:    [&#39;CL.v.0&#39;, &#39;BZ.v.0&#39;]
+Spreads:      [&#39;CLN6-BZQ6&#39;, &#39;CLQ6-BZQ6&#39;, &#39;CLU6-BZU6&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<section id="what-was-pulled">
+<h2>1. What was pulled<a class="headerlink" href="#what-was-pulled" title="Link to this heading">#</a></h2>
+<p>All data comes from Databento, dataset <code class="docutils literal notranslate"><span class="pre">GLBX.MDP3</span></code> (CME Globex), schema
+<code class="docutils literal notranslate"><span class="pre">mbp-1</span></code> (top-of-book quotes and trades, one record per book event), over a
+pilot week 2026-06-01 → 2026-06-06 (Mon–Fri, end exclusive).</p>
+<p>Two kinds of instruments:</p>
+<ul class="simple">
+<li><p><strong>Continuous front-month outrights</strong> <code class="docutils literal notranslate"><span class="pre">CL.v.0</span></code> (WTI) and <code class="docutils literal notranslate"><span class="pre">BZ.v.0</span></code> (Brent),
+rolled by volume. The <code class="docutils literal notranslate"><span class="pre">.v.0</span></code> vs <code class="docutils literal notranslate"><span class="pre">.n.0</span></code> decision and supporting
+measurements are in issue #20 — the open-interest rule (<code class="docutils literal notranslate"><span class="pre">.n.0</span></code>) mapped to
+December contracts rather than the front month, so it was not used.</p></li>
+<li><p><strong>Exchange-listed Brent–WTI spread instruments</strong> (<code class="docutils literal notranslate"><span class="pre">CLN6-BZQ6</span></code>,
+<code class="docutils literal notranslate"><span class="pre">CLQ6-BZQ6</span></code>, <code class="docutils literal notranslate"><span class="pre">CLU6-BZU6</span></code>). These trade as single instruments with their
+own order book, so they are an execution venue for the spread itself,
+with one bid/ask rather than two legs to cross.</p></li>
+</ul>
+<p>Raw DBN files are cached one-per-symbol under <code class="docutils literal notranslate"><span class="pre">DATA_DIR/databento</span></code>;
+re-running the pull with a warm cache costs nothing.</p>
+</section>
+<section id="the-aligned-dataset">
+<h2>2. The aligned dataset<a class="headerlink" href="#the-aligned-dataset" title="Link to this heading">#</a></h2>
+<p>The headline deliverable for issue #4: CL and BZ on one UTC time index,
+with the synthetic spread computed from the legs and the front listed
+spread’s book alongside. Two grid frequencies are produced (<code class="docutils literal notranslate"><span class="pre">1s</span></code> and <code class="docutils literal notranslate"><span class="pre">1m</span></code>);
+the 1-minute grid is shown here.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">aligned</span> <span class="o">=</span> <span class="n">load_aligned</span><span class="p">(</span><span class="s2">&quot;1m&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;shape: </span><span class="si">{</span><span class="n">aligned</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;index: </span><span class="si">{</span><span class="n">aligned</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">  -&gt;  </span><span class="si">{</span><span class="n">aligned</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">  (</span><span class="si">{</span><span class="n">aligned</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tz</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+<span class="n">aligned</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>shape: (7021, 34)
+index: 2026-06-01 00:00:00+00:00  -&gt;  2026-06-05 21:00:00+00:00  (UTC)
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cl_bid_px_00</th>
+      <th>cl_ask_px_00</th>
+      <th>cl_bid_sz_00</th>
+      <th>cl_ask_sz_00</th>
+      <th>cl_mid</th>
+      <th>cl_instrument_id</th>
+      <th>cl_n_events</th>
+      <th>cl_n_trades</th>
+      <th>cl_volume</th>
+      <th>cl_is_roll_date</th>
+      <th>bz_bid_px_00</th>
+      <th>bz_ask_px_00</th>
+      <th>bz_bid_sz_00</th>
+      <th>bz_ask_sz_00</th>
+      <th>bz_mid</th>
+      <th>bz_instrument_id</th>
+      <th>bz_n_events</th>
+      <th>bz_n_trades</th>
+      <th>bz_volume</th>
+      <th>bz_is_roll_date</th>
+      <th>ls_bid_px_00</th>
+      <th>ls_ask_px_00</th>
+      <th>ls_bid_sz_00</th>
+      <th>ls_ask_sz_00</th>
+      <th>ls_mid</th>
+      <th>ls_instrument_id</th>
+      <th>ls_n_events</th>
+      <th>ls_n_trades</th>
+      <th>ls_volume</th>
+      <th>ls_is_roll_date</th>
+      <th>synth_mid</th>
+      <th>synth_bid</th>
+      <th>synth_ask</th>
+      <th>is_roll_date</th>
+    </tr>
+    <tr>
+      <th>ts_recv</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2026-06-01 00:00:00+00:00</th>
+      <td>89.51</td>
+      <td>89.54</td>
+      <td>3.0</td>
+      <td>4.0</td>
+      <td>89.525</td>
+      <td>777566.0</td>
+      <td>416</td>
+      <td>40</td>
+      <td>46</td>
+      <td>False</td>
+      <td>92.99</td>
+      <td>93.03</td>
+      <td>1.0</td>
+      <td>2.0</td>
+      <td>93.010</td>
+      <td>755267.0</td>
+      <td>169</td>
+      <td>4</td>
+      <td>9</td>
+      <td>False</td>
+      <td>-3.49</td>
+      <td>-3.47</td>
+      <td>2.0</td>
+      <td>1.0</td>
+      <td>-3.480</td>
+      <td>42016777.0</td>
+      <td>79</td>
+      <td>0</td>
+      <td>0</td>
+      <td>False</td>
+      <td>-3.485</td>
+      <td>-3.52</td>
+      <td>-3.45</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>2026-06-01 00:01:00+00:00</th>
+      <td>89.59</td>
+      <td>89.60</td>
+      <td>2.0</td>
+      <td>11.0</td>
+      <td>89.595</td>
+      <td>777566.0</td>
+      <td>271</td>
+      <td>18</td>
+      <td>25</td>
+      <td>False</td>
+      <td>93.05</td>
+      <td>93.10</td>
+      <td>3.0</td>
+      <td>1.0</td>
+      <td>93.075</td>
+      <td>755267.0</td>
+      <td>104</td>
+      <td>0</td>
+      <td>0</td>
+      <td>False</td>
+      <td>-3.51</td>
+      <td>-3.47</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>-3.490</td>
+      <td>42016777.0</td>
+      <td>36</td>
+      <td>0</td>
+      <td>0</td>
+      <td>False</td>
+      <td>-3.480</td>
+      <td>-3.51</td>
+      <td>-3.45</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>2026-06-01 00:02:00+00:00</th>
+      <td>89.52</td>
+      <td>89.55</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>89.535</td>
+      <td>777566.0</td>
+      <td>248</td>
+      <td>18</td>
+      <td>19</td>
+      <td>False</td>
+      <td>93.01</td>
+      <td>93.06</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>93.035</td>
+      <td>755267.0</td>
+      <td>66</td>
+      <td>0</td>
+      <td>0</td>
+      <td>False</td>
+      <td>-3.51</td>
+      <td>-3.48</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>-3.495</td>
+      <td>42016777.0</td>
+      <td>26</td>
+      <td>0</td>
+      <td>0</td>
+      <td>False</td>
+      <td>-3.500</td>
+      <td>-3.54</td>
+      <td>-3.46</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<section id="column-glossary">
+<h3>Column glossary<a class="headerlink" href="#column-glossary" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>prefix / column</p></th>
+<th class="head"><p>meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cl_*</span></code></p></td>
+<td><p>WTI leg (<code class="docutils literal notranslate"><span class="pre">CL.v.0</span></code>): top-of-book <code class="docutils literal notranslate"><span class="pre">bid_px_00</span></code>, <code class="docutils literal notranslate"><span class="pre">ask_px_00</span></code>, sizes, <code class="docutils literal notranslate"><span class="pre">mid</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bz_*</span></code></p></td>
+<td><p>Brent leg (<code class="docutils literal notranslate"><span class="pre">BZ.v.0</span></code>): same layout</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ls_*</span></code></p></td>
+<td><p>front listed spread instrument’s book (<code class="docutils literal notranslate"><span class="pre">CLN6-BZQ6</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">synth_mid</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cl_mid</span> <span class="pre">-</span> <span class="pre">bz_mid</span></code> — the synthetic Brent–WTI spread</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">synth_bid</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cl_bid</span> <span class="pre">-</span> <span class="pre">bz_ask</span></code> — what you receive selling the synthetic spread</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">synth_ask</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cl_ask</span> <span class="pre">-</span> <span class="pre">bz_bid</span></code> — what you pay buying the synthetic spread</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">*_n_events</span></code></p></td>
+<td><p>book events in the bucket; <code class="docutils literal notranslate"><span class="pre">0</span></code> means the quote is carried forward</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">*_n_trades</span></code>, <code class="docutils literal notranslate"><span class="pre">*_volume</span></code></p></td>
+<td><p>trades and traded contracts in the bucket (never filled)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">*_instrument_id</span></code></p></td>
+<td><p>underlying contract id (tracks rolls)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">is_roll_date</span></code></p></td>
+<td><p>date on which either leg’s mapped contract changed</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="missing-data-conventions">
+<h3>Missing-data conventions<a class="headerlink" href="#missing-data-conventions" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Quote columns are the <strong>last quote per bucket</strong>, forward-filled for at
+most 600 seconds; beyond that (e.g. the daily maintenance break) the
+bucket stays <code class="docutils literal notranslate"><span class="pre">NaN</span></code> rather than carrying a stale quote.</p></li>
+<li><p>Activity columns (<code class="docutils literal notranslate"><span class="pre">n_events</span></code>, <code class="docutils literal notranslate"><span class="pre">n_trades</span></code>, <code class="docutils literal notranslate"><span class="pre">volume</span></code>) are per-bucket facts
+and are <strong>never</strong> forward-filled, so <code class="docutils literal notranslate"><span class="pre">n_events</span> <span class="pre">==</span> <span class="pre">0</span></code> cleanly marks any
+bucket whose quote is a carry-forward.</p></li>
+<li><p>Crossed/locked books are <strong>flagged</strong> (<code class="docutils literal notranslate"><span class="pre">is_crossed</span></code> in the event series),
+not dropped — downstream code decides what to exclude.</p></li>
+<li><p>The legs are combined with an <strong>outer join</strong>, so no timestamps are
+silently discarded; both-legs coverage is measurable directly:</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">key_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;cl_mid&quot;</span><span class="p">,</span> <span class="s2">&quot;bz_mid&quot;</span><span class="p">,</span> <span class="s2">&quot;synth_mid&quot;</span><span class="p">,</span> <span class="s2">&quot;ls_bid_px_00&quot;</span><span class="p">]</span>
+<span class="n">coverage</span> <span class="o">=</span> <span class="n">aligned</span><span class="p">[</span><span class="n">key_cols</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">to_frame</span><span class="p">(</span><span class="s2">&quot;non-null share&quot;</span><span class="p">)</span>
+<span class="n">carried</span> <span class="o">=</span> <span class="p">(</span><span class="n">aligned</span><span class="p">[</span><span class="s2">&quot;cl_n_events&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">aligned</span><span class="p">[</span><span class="s2">&quot;cl_mid&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">())</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CL buckets whose quote is a carry-forward: </span><span class="si">{</span><span class="n">carried</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">coverage</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CL buckets whose quote is a carry-forward: 1.0%
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>non-null share</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>cl_mid</th>
+      <td>0.9785</td>
+    </tr>
+    <tr>
+      <th>bz_mid</th>
+      <td>0.9781</td>
+    </tr>
+    <tr>
+      <th>synth_mid</th>
+      <td>0.9761</td>
+    </tr>
+    <tr>
+      <th>ls_bid_px_00</th>
+      <td>0.9793</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+</section>
+<section id="what-the-spread-looks-like">
+<h2>3. What the spread looks like<a class="headerlink" href="#what-the-spread-looks-like" title="Link to this heading">#</a></h2>
+<p>The question the diagnostics address: does the spread visually mean-revert,
+and at what horizon? These are the same figures produced by
+<code class="docutils literal notranslate"><span class="pre">doit</span> <span class="pre">spread_diagnostics</span></code>; here they render inline with commentary.</p>
+<p>First, the synthetic spread mid over the pilot week, colored by 4-hour UTC
+window (dashed verticals separate calendar days):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">synth</span> <span class="o">=</span> <span class="n">aligned</span><span class="p">[</span><span class="s2">&quot;synth_mid&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+<span class="n">plot_week_series</span><span class="p">(</span>
+    <span class="n">synth</span><span class="p">,</span>
+    <span class="s2">&quot;Brent-WTI synthetic spread (CL.v.0 - BZ.v.0), 1-minute mid&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Spread ($/bbl)&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../../../_images/56ec67a714ab9dfc9fb672cea708de7fb0f4a0a608f42f5879c9a2e10a00079e.png"><img alt="../../../_images/56ec67a714ab9dfc9fb672cea708de7fb0f4a0a608f42f5879c9a2e10a00079e.png" src="../../../_images/56ec67a714ab9dfc9fb672cea708de7fb0f4a0a608f42f5879c9a2e10a00079e.png" style="width: 1400px; height: 400px;" />
+</a>
+</div>
+</div>
+<p>Deviations from trailing means at three horizons (30 min, 2 h, 1 day).
+Each panel shows the spread minus its own rolling mean — the raw material
+for any mean-reversion signal:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_rolling_deviations</span><span class="p">(</span><span class="n">synth</span><span class="p">,</span> <span class="s2">&quot;Spread minus trailing mean - does it pull back to zero?&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../../../_images/7e40bb00c16b7c9b204842a4973f277abca4caf002fe026d646386bd75bc5e76.png"><img alt="../../../_images/7e40bb00c16b7c9b204842a4973f277abca4caf002fe026d646386bd75bc5e76.png" src="../../../_images/7e40bb00c16b7c9b204842a4973f277abca4caf002fe026d646386bd75bc5e76.png" style="width: 1400px; height: 800px;" />
+</a>
+</div>
+</div>
+<p>The distribution of 2-hour-window deviations, with quantile markers — this
+is the width of the band a reversion strategy would trade against:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dev_2h</span> <span class="o">=</span> <span class="n">rolling_deviations</span><span class="p">(</span><span class="n">synth</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;2h&quot;</span><span class="p">])[</span><span class="s2">&quot;deviation&quot;</span><span class="p">]</span>
+<span class="n">plot_histogram</span><span class="p">(</span>
+    <span class="n">dev_2h</span><span class="p">,</span>
+    <span class="s2">&quot;Distribution of 2h-window deviations&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Spread - 2h trailing mean ($/bbl)&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../../../_images/c2508dc484a52b1ee03ed296c73cc050f20895b93d7549d1c4177a7b0f647625.png"><img alt="../../../_images/c2508dc484a52b1ee03ed296c73cc050f20895b93d7549d1c4177a7b0f647625.png" src="../../../_images/c2508dc484a52b1ee03ed296c73cc050f20895b93d7549d1c4177a7b0f647625.png" style="width: 1200px; height: 400px;" />
+</a>
+</div>
+</div>
+<p>Partial autocorrelation of the deviation series at 1-minute lags — how much
+of the current deviation is explained by recent history:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_pacf</span><span class="p">(</span><span class="n">dev_2h</span><span class="p">,</span> <span class="s2">&quot;PACF - spread deviation from 2h trailing mean (1-minute lags)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../../../_images/eec0881bee0f418c7acc732ba631334ecc8f6a78c37396d7091757d8387f74c2.png"><img alt="../../../_images/eec0881bee0f418c7acc732ba631334ecc8f6a78c37396d7091757d8387f74c2.png" src="../../../_images/eec0881bee0f418c7acc732ba631334ecc8f6a78c37396d7091757d8387f74c2.png" style="width: 1200px; height: 400px;" />
+</a>
+</div>
+</div>
+</section>
+<section id="liquidity-when-and-where-the-spread-trades">
+<h2>4. Liquidity: when and where the spread trades<a class="headerlink" href="#liquidity-when-and-where-the-spread-trades" title="Link to this heading">#</a></h2>
+<p>Median top-of-book events per hour of day for every instrument (log scale).
+This shows which hours have live books on all legs at once:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_activity_by_hour</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../../../_images/34c0743d2b20ad3c0a2050a1660426af4e3547e165cfd07779910efe57103354.png"><img alt="../../../_images/34c0743d2b20ad3c0a2050a1660426af4e3547e165cfd07779910efe57103354.png" src="../../../_images/34c0743d2b20ad3c0a2050a1660426af4e3547e165cfd07779910efe57103354.png" style="width: 1200px; height: 400px;" />
+</a>
+</div>
+</div>
+<p>Execution cost by hour: the quoted width of the <em>synthetic</em> spread (crossing
+both leg books) versus the <em>listed</em> spread instruments’ own books. This
+comparison is what decides which venue a fill model should assume:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_width_by_hour</span><span class="p">(</span><span class="n">aligned</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../../../_images/fcf4c62eaa9657561650084bc0d8b5ad2b3bedcc1bc0a344349b4b9fe55e1909.png"><img alt="../../../_images/fcf4c62eaa9657561650084bc0d8b5ad2b3bedcc1bc0a344349b4b9fe55e1909.png" src="../../../_images/fcf4c62eaa9657561650084bc0d8b5ad2b3bedcc1bc0a344349b4b9fe55e1909.png" style="width: 1200px; height: 400px;" />
+</a>
+</div>
+</div>
+</section>
+<section id="finer-grained-data">
+<h2>5. Finer-grained data<a class="headerlink" href="#finer-grained-data" title="Link to this heading">#</a></h2>
+<p>The 1-minute aligned grid above is the convenient view. Two finer layers
+exist for signal work and microstructure checks.</p>
+<p><strong>1-second grids</strong>, same layout, per instrument:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cl_1s</span> <span class="o">=</span> <span class="n">load_grid</span><span class="p">(</span><span class="s2">&quot;CL.v.0&quot;</span><span class="p">,</span> <span class="s2">&quot;1s&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CL.v.0 1s grid: </span><span class="si">{</span><span class="n">cl_1s</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> rows&quot;</span><span class="p">)</span>
+<span class="n">cl_1s</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CL.v.0 1s grid: 421,201 rows
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>bid_px_00</th>
+      <th>ask_px_00</th>
+      <th>bid_sz_00</th>
+      <th>ask_sz_00</th>
+      <th>mid</th>
+      <th>instrument_id</th>
+      <th>n_events</th>
+      <th>n_trades</th>
+      <th>volume</th>
+      <th>is_roll_date</th>
+    </tr>
+    <tr>
+      <th>ts_recv</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2026-06-01 00:00:00+00:00</th>
+      <td>89.42</td>
+      <td>89.44</td>
+      <td>1.0</td>
+      <td>2.0</td>
+      <td>89.43</td>
+      <td>777566.0</td>
+      <td>24</td>
+      <td>2</td>
+      <td>2</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>2026-06-01 00:00:01+00:00</th>
+      <td>89.42</td>
+      <td>89.44</td>
+      <td>2.0</td>
+      <td>1.0</td>
+      <td>89.43</td>
+      <td>777566.0</td>
+      <td>28</td>
+      <td>8</td>
+      <td>9</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>2026-06-01 00:00:02+00:00</th>
+      <td>89.42</td>
+      <td>89.44</td>
+      <td>2.0</td>
+      <td>2.0</td>
+      <td>89.43</td>
+      <td>777566.0</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p><strong>Raw event series</strong> for the listed spread instruments — every top-of-book
+event with action/side/price/size, exactly as the book evolved:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">events</span> <span class="o">=</span> <span class="n">load_spread_events</span><span class="p">(</span><span class="n">FRONT_SPREAD</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">FRONT_SPREAD</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> events over the week&quot;</span><span class="p">)</span>
+<span class="n">events</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CLN6-BZQ6: 624,789 events over the week
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>instrument_id</th>
+      <th>action</th>
+      <th>side</th>
+      <th>price</th>
+      <th>size</th>
+      <th>bid_px_00</th>
+      <th>ask_px_00</th>
+      <th>bid_sz_00</th>
+      <th>ask_sz_00</th>
+      <th>mid</th>
+      <th>is_crossed</th>
+    </tr>
+    <tr>
+      <th>ts_recv</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2026-06-01 00:00:00+00:00</th>
+      <td>42016777</td>
+      <td>A</td>
+      <td>N</td>
+      <td>-3.46</td>
+      <td>2</td>
+      <td>-3.49</td>
+      <td>-3.47</td>
+      <td>2</td>
+      <td>2</td>
+      <td>-3.48</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>2026-06-01 00:00:00.135228895+00:00</th>
+      <td>42016777</td>
+      <td>C</td>
+      <td>A</td>
+      <td>-3.47</td>
+      <td>1</td>
+      <td>-3.49</td>
+      <td>-3.47</td>
+      <td>2</td>
+      <td>1</td>
+      <td>-3.48</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>2026-06-01 00:00:00.673503448+00:00</th>
+      <td>42016777</td>
+      <td>M</td>
+      <td>A</td>
+      <td>-3.47</td>
+      <td>1</td>
+      <td>-3.49</td>
+      <td>-3.47</td>
+      <td>2</td>
+      <td>2</td>
+      <td>-3.48</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="loading-the-data-in-your-own-code">
+<h2>6. Loading the data in your own code<a class="headerlink" href="#loading-the-data-in-your-own-code" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">clean_mbp1</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_aligned</span><span class="p">,</span> <span class="n">load_grid</span><span class="p">,</span> <span class="n">load_spread_events</span>
+
+<span class="n">aligned</span> <span class="o">=</span> <span class="n">load_aligned</span><span class="p">(</span><span class="s2">&quot;1m&quot;</span><span class="p">)</span>          <span class="c1"># or &quot;1s&quot;</span>
+<span class="n">cl</span>      <span class="o">=</span> <span class="n">load_grid</span><span class="p">(</span><span class="s2">&quot;CL.v.0&quot;</span><span class="p">,</span> <span class="s2">&quot;1s&quot;</span><span class="p">)</span>   <span class="c1"># per-instrument grid</span>
+<span class="n">events</span>  <span class="o">=</span> <span class="n">load_spread_events</span><span class="p">()</span>        <span class="c1"># front listed spread, raw events</span>
+</pre></div>
+</div>
+</section>
+<section id="regenerating-from-scratch">
+<h2>7. Regenerating from scratch<a class="headerlink" href="#regenerating-from-scratch" title="Link to this heading">#</a></h2>
+<p>Requires <code class="docutils literal notranslate"><span class="pre">DATABENTO_API_KEY</span></code> in <code class="docutils literal notranslate"><span class="pre">.env</span></code> (the pull is billable, ~260 MB raw;
+the DBN cache makes re-runs free):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">doit</span> <span class="n">pull_databento</span>      <span class="c1"># Databento -&gt; DBN cache</span>
+<span class="n">doit</span> <span class="n">clean_mbp1</span>          <span class="c1"># cache -&gt; parquet (grids, events, aligned)</span>
+<span class="n">doit</span> <span class="n">spread_diagnostics</span>  <span class="c1"># figures -&gt; _output/figures</span>
+</pre></div>
+</div>
+<p>Layout, conventions, and instrument details: <code class="docutils literal notranslate"><span class="pre">data_manual/data_README.md</span></code>.</p>
+</section>
+</section>
+
+<div class="section ablog__blog_comments">
+   
+</div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../../../spread_diagnostics.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Spread Diagnostics</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../../charts.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Chart List</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-was-pulled">1. What was pulled</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-aligned-dataset">2. The aligned dataset</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#column-glossary">Column glossary</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#missing-data-conventions">Missing-data conventions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-the-spread-looks-like">3. What the spread looks like</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#liquidity-when-and-where-the-spread-trades">4. Liquidity: when and where the spread trades</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#finer-grained-data">5. Finer-grained data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-the-data-in-your-own-code">6. Loading the data in your own code</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regenerating-from-scratch">7. Regenerating from scratch</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
