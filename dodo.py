@@ -17,6 +17,16 @@ from pathlib import Path
 
 from settings import config
 
+from clean_mbp1 import GRID_FREQS, _aligned_path, _events_path, _grid_path
+from pull_databento import (
+    OUTRIGHTS,
+    PILOT_END,
+    PILOT_START,
+    SCHEMA,
+    SPREADS,
+    _cache_path,
+)
+
 DOIT_CONFIG = {"backend": "sqlite3", "dep_file": "./.doit-db.sqlite"}
 
 
@@ -25,7 +35,7 @@ DATA_DIR = config("DATA_DIR")
 MANUAL_DATA_DIR = config("MANUAL_DATA_DIR")
 OUTPUT_DIR = config("OUTPUT_DIR")
 OS_TYPE = config("OS_TYPE")
-USER = config("USER")
+USER = config("USER", default="", cast=str)  # $USER exists on *nix only; unused on Windows
 
 ## Helpers for handling Jupyter Notebook tasks
 environ["PYDEVD_DISABLE_FILE_VALIDATION"] = "1"
@@ -105,10 +115,88 @@ def task_summary_stats():
     }
 
 
+##################################
+## Issue #4: Brent-WTI market-data pipeline
+##################################
+
+MBP1_CACHE_FILES = [
+    _cache_path(symbol, SCHEMA, PILOT_START, PILOT_END)
+    for symbol in OUTRIGHTS + SPREADS
+]
+
+
+def task_pull_databento():
+    """Pull pilot-week MBP-1 from Databento into the DBN cache (issue #4).
+
+    Requires DATABENTO_API_KEY in .env. Pulls are billable, so already-cached
+    symbols are skipped and `doit clean` never deletes the cache.
+    """
+    return {
+        "actions": ["python ./src/pull_databento.py"],
+        "file_dep": ["./src/pull_databento.py"],
+        "targets": MBP1_CACHE_FILES,
+        "clean": [],
+        "verbosity": 2,
+    }
+
+
+def task_clean_mbp1():
+    """Clean/align the MBP-1 pulls into parquet datasets (issue #4)"""
+    targets = (
+        [_grid_path(s, f) for s in OUTRIGHTS + SPREADS for f in GRID_FREQS]
+        + [_events_path(s) for s in SPREADS]
+        + [_aligned_path(f) for f in GRID_FREQS]
+    )
+    return {
+        "actions": ["python ./src/clean_mbp1.py"],
+        "file_dep": ["./src/clean_mbp1.py", "./src/pull_databento.py", *MBP1_CACHE_FILES],
+        "task_dep": ["pull_databento"],
+        "targets": targets,
+        "clean": True,
+        "verbosity": 2,
+    }
+
+
+def task_spread_diagnostics():
+    """plotnine mean-reversion diagnostics for the Brent-WTI spread (issue #4)"""
+    figure_names = [
+        "01_spread_week",
+        "02_rolling_deviations",
+        "03_deviation_histogram",
+        "04_pacf_deviation",
+        "05_activity_by_hour",
+        "06_width_by_hour",
+    ]
+    file_dep = (
+        ["./src/plot_spread_diagnostics.py", "./src/clean_mbp1.py"]
+        + [_aligned_path(f) for f in GRID_FREQS]
+        + [_grid_path(s, "1m") for s in OUTRIGHTS + SPREADS]
+    )
+    return {
+        "actions": ["python ./src/plot_spread_diagnostics.py"],
+        "file_dep": file_dep,
+        "task_dep": ["clean_mbp1"],
+        "targets": [OUTPUT_DIR / "figures" / f"{name}.png" for name in figure_names],
+        "clean": True,
+        "verbosity": 2,
+    }
+
+
 notebook_tasks = {
     "01_example_notebook_interactive.ipynb.py": {
         "path": "./src/01_example_notebook_interactive.ipynb.py",
         "file_dep": [],
+        "targets": [],
+    },
+    "02_brent_wti_data_pipeline.ipynb.py": {
+        "path": "./src/02_brent_wti_data_pipeline.ipynb.py",
+        "file_dep": [
+            "./src/clean_mbp1.py",
+            "./src/plot_spread_diagnostics.py",
+            *[_aligned_path(f) for f in GRID_FREQS],
+            _grid_path("CL.v.0", "1s"),
+            _events_path(SPREADS[0]),
+        ],
         "targets": [],
     },
 }

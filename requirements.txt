@@ -33,6 +33,10 @@ xlwings>=0.33.3
 zstandard>=0.23.0
 linearmodels>=6.1
 
+# Market data (issue #4)
+databento>=0.81.0
+plotnine>=0.13.0
+
 # Jupyter dependencies
 jupyter
 jupyterlab

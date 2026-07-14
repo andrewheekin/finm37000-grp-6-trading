@@ -3,4 +3,6 @@
 :caption: Project Notes
 
 project_overview
+data_pipeline
+spread_diagnostics
 ```
