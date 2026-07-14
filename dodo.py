@@ -188,6 +188,17 @@ notebook_tasks = {
         "file_dep": [],
         "targets": [],
     },
+    "02_brent_wti_data_pipeline.ipynb.py": {
+        "path": "./src/02_brent_wti_data_pipeline.ipynb.py",
+        "file_dep": [
+            "./src/clean_mbp1.py",
+            "./src/plot_spread_diagnostics.py",
+            *[_aligned_path(f) for f in GRID_FREQS],
+            _grid_path("CL.v.0", "1s"),
+            _events_path(SPREADS[0]),
+        ],
+        "targets": [],
+    },
 }
 
 

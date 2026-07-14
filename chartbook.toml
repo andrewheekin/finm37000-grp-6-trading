@@ -5,7 +5,7 @@ chartbook_format_version = "0.0.2"
 [site]
 title = "FINM 37000 Group 6 Trading"
 author = "Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem"
-copyright = "2025"
+copyright = "2026"
 logo_path = ""
 favicon_path = ""
 
@@ -17,23 +17,60 @@ lead_pipeline_developer = "Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh 
 contributors = ["Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem"]
 software_modules_command = "module load anaconda3/3.11.4 TeXLive/2023"
 runs_on_grid_or_windows_or_other = "Windows/Linux/MacOS"
-git_repo_URL = ""
+git_repo_URL = "https://github.com/andrewheekin/finm37000-grp-6-trading"
 README_file_path = "./README.md"
 site_dir = "./docs_src/"
 
 [notebooks]
 
-
-[notebooks.01_example_notebook_interactive]
-notebook_name = "Example Notebook Interactive"
-notebook_description = "Example notebook for demonstrating how to construct a Chartbook notebook."
-notebook_path = "_output/01_example_notebook_interactive.ipynb"
-
-
-
+[notebooks.02_brent_wti_data_pipeline]
+notebook_name = "Brent-WTI Data Pipeline Walkthrough"
+notebook_description = "What was pulled from Databento, how the CL/BZ legs are cleaned and aligned, missing-data conventions, spread diagnostics, and how to load the datasets (issue #4)."
+notebook_path = "_output/02_brent_wti_data_pipeline.ipynb"
 
 [dataframes]
 
+[dataframes.brent_wti_aligned_1m]
+dataframe_name = "Brent-WTI Aligned (1-minute)"
+short_description_df = "CL and BZ top-of-book grids on one UTC index with the synthetic spread (mid + tradeable bid/ask) and the front listed spread's book"
+data_sources = ["Databento GLBX.MDP3 (CME Globex), schema mbp-1"]
+data_providers = ["Databento"]
+links_to_data_providers = ["https://databento.com"]
+data_license = "Databento subscription; redistribution of raw data not permitted"
+restriction_on_use = "Course project use; data files are not committed to the repository"
+how_is_pulled = "doit pull_databento clean_mbp1 (src/pull_databento.py -> src/clean_mbp1.py)"
+topic_tags = ["Brent", "WTI", "Futures", "Spread", "Market Data"]
+path_to_parquet_data = "./_data/clean/brent_wti_aligned_1m_2026-06-01_2026-06-06.parquet"
+dataframe_docs_path = "./docs_src/dataframes/brent_wti_aligned_1m.md"
 
+[dataframes.brent_wti_aligned_1s]
+dataframe_name = "Brent-WTI Aligned (1-second)"
+short_description_df = "Same layout as the 1-minute aligned dataset on a 1-second grid, for signal work and microstructure checks"
+data_sources = ["Databento GLBX.MDP3 (CME Globex), schema mbp-1"]
+data_providers = ["Databento"]
+links_to_data_providers = ["https://databento.com"]
+data_license = "Databento subscription; redistribution of raw data not permitted"
+restriction_on_use = "Course project use; data files are not committed to the repository"
+how_is_pulled = "doit pull_databento clean_mbp1 (src/pull_databento.py -> src/clean_mbp1.py)"
+topic_tags = ["Brent", "WTI", "Futures", "Spread", "Market Data"]
+path_to_parquet_data = "./_data/clean/brent_wti_aligned_1s_2026-06-01_2026-06-06.parquet"
+dataframe_docs_path = "./docs_src/dataframes/brent_wti_aligned_1s.md"
+
+[dataframes.spread_events_front]
+dataframe_name = "Listed Spread Events (CLN6-BZQ6)"
+short_description_df = "Raw cleaned top-of-book event series for the front exchange-listed Brent-WTI spread instrument"
+data_sources = ["Databento GLBX.MDP3 (CME Globex), schema mbp-1"]
+data_providers = ["Databento"]
+links_to_data_providers = ["https://databento.com"]
+data_license = "Databento subscription; redistribution of raw data not permitted"
+restriction_on_use = "Course project use; data files are not committed to the repository"
+how_is_pulled = "doit pull_databento clean_mbp1 (src/pull_databento.py -> src/clean_mbp1.py)"
+topic_tags = ["Brent", "WTI", "Futures", "Spread", "Market Data", "Microstructure"]
+path_to_parquet_data = "./_data/clean/cln6-bzq6_events_2026-06-01_2026-06-06.parquet"
+dataframe_docs_path = "./docs_src/dataframes/spread_events_front.md"
+
+# The mean-reversion diagnostics are matplotlib/plotnine PNGs, not HTML, so
+# they are documented on the Spread Diagnostics site page and rendered inside
+# the walkthrough notebook rather than as [charts] entries (which require
+# path_to_html_chart).
 [charts]
-
