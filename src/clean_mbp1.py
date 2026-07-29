@@ -19,8 +19,11 @@ Outputs, written under DATA_DIR/clean:
 
 Roll handling (issue #20): every row keeps its underlying instrument_id, and
 is_roll_date flags calendar dates on which an instrument's mapped contract
-differs from the previous date's. The pilot week contains no rolls, so the
-flag is exercised by the full pull.
+differs from the previous date's. Because the two legs roll on different
+dates, the unit that must stay constant across a rolling window is the *pair*
+of held contracts -- see regime_key and rolling_within_regime below. The
+measurements behind that convention are in src/roll_analysis.py and the
+"Contract rolls" section of data_manual/data_README.md.
 
 Usage:
     python src/clean_mbp1.py
@@ -113,6 +116,101 @@ def mark_roll_dates(grid: pd.DataFrame) -> pd.DataFrame:
     roll_dates = set(last_id_by_date.index[rolled])
     grid["is_roll_date"] = pd.Series(grid.index.date, index=grid.index).isin(roll_dates)
     return grid
+
+
+def regime_key(aligned: pd.DataFrame) -> pd.Series:
+    """Identify the (CL contract, BZ contract) pair backing each row.
+
+    CL and BZ roll on different dates, so neither leg's contract alone marks
+    off a comparable stretch of the spread -- the pair does. A change in this
+    key is exactly a point where the spread level shifts for a reason that is
+    not a market move.
+    """
+    return (
+        aligned["cl_instrument_id"].astype("Int64").astype(str)
+        + "/"
+        + aligned["bz_instrument_id"].astype("Int64").astype(str)
+    )
+
+
+def regime_blocks(regime: pd.Series) -> pd.Series:
+    """Number each *contiguous* run of one regime key separately.
+
+    Grouping on the key alone would merge every occurrence of a contract pair
+    into one group, so a pair that recurs -- which is what a flip-back is,
+    e.g. BZK6 -> BZM6 -> BZK6 five times in March 2026 -- would let a window
+    reach back across the intervening contract as if it were continuous.
+    Numbering runs instead makes each stretch its own group.
+
+    >>> regime_blocks(pd.Series(["A", "A", "B", "A"])).tolist()
+    [1, 1, 2, 3]
+    """
+    key = regime.astype(object)
+    return key.ne(key.shift()).cumsum()
+
+
+def rolling_within_regime(
+    series: pd.Series,
+    regime: pd.Series,
+    window: int | str,
+    min_periods: int | None = None,
+    stat: str = "mean",
+    require_full_window: bool = True,
+) -> pd.Series:
+    """Trailing statistic that never draws on a different contract pair.
+
+    Equivalent to restarting the rolling window at every roll: a row whose
+    window would span a contract change is NaN until ``min_periods``
+    observations have accumulated inside the new stretch.
+
+    ``window`` accepts either form, and the choice matters once the grid
+    frequency changes:
+
+    - an **int** counts observations, so its duration is tied to the grid --
+      ``120`` is two hours of a 1m grid but two minutes of a 1s grid;
+    - a **time offset string** (``"2h"``, ``"30min"``) is a real duration and
+      means the same thing at every frequency.
+
+    Prefer the offset form for anything that should survive a change of grid.
+
+    ``require_full_window`` keeps the convention honest: the statistic stays
+    NaN until a whole window has accumulated inside the new stretch, so the
+    warm-up after every roll is suppressed rather than being computed from a
+    couple of observations. For an int window ``min_periods`` already does
+    this; for an offset window ``min_periods`` is an observation count and
+    cannot express the duration, so elapsed time is masked explicitly.
+    """
+    blocks = regime_blocks(regime)
+    if min_periods is None and not isinstance(window, str):
+        min_periods = window
+    grouped = series.groupby(blocks, sort=False)
+    rolled = getattr(grouped.rolling(window=window, min_periods=min_periods), stat)()
+    out = rolled.reset_index(level=0, drop=True).reindex(series.index)
+
+    if require_full_window and isinstance(window, str):
+        stamps = pd.Series(series.index, index=series.index)
+        elapsed = stamps - stamps.groupby(blocks).transform("first")
+        out = out.where(elapsed >= pd.Timedelta(window))
+    return out
+
+
+def zscore_within_regime(
+    series: pd.Series,
+    regime: pd.Series,
+    window: int | str = "2h",
+    min_periods: int | None = None,
+) -> pd.Series:
+    """Rolling z-score computed inside a single contract pair.
+
+    The z-score is what a roll damages most: an unhandled splice of 1-14
+    spread sigma enters the numerator as a deviation the market never made.
+
+    The window defaults to a duration rather than an observation count so the
+    same call is meaningful on the 1s and 1m grids alike.
+    """
+    mean = rolling_within_regime(series, regime, window, min_periods, "mean")
+    std = rolling_within_regime(series, regime, window, min_periods, "std")
+    return (series - mean) / std
 
 
 def build_aligned(grids: dict, freq: str) -> pd.DataFrame:

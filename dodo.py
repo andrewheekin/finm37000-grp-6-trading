@@ -157,6 +157,65 @@ def task_clean_mbp1():
     }
 
 
+##################################
+## Issue #20: contract rolls
+##################################
+
+INSTRUMENT_DISCOVERY_TARGETS = [
+    OUTPUT_DIR / name
+    for name in [
+        "cl_bz_spread_instruments.csv",
+        "cl_bz_definitions_snapshot.csv",
+        "roll_dates_c_vs_n.csv",
+    ]
+]
+
+ROLL_ANALYSIS_TARGETS = [
+    OUTPUT_DIR / name
+    for name in [
+        "roll_jumps.csv",
+        "roll_contract_closes.csv",
+        "roll_contamination_cost.csv",
+    ]
+]
+
+
+def task_instrument_discovery():
+    """Resolve CL/BZ spread instruments and continuous roll dates (issues #4, #20).
+
+    Symbology and metadata only -- no market-data pull -- but it does call the
+    Databento API, so the targets guard re-runs.
+    """
+    return {
+        "actions": ["python ./src/instrument_discovery.py"],
+        "file_dep": ["./src/instrument_discovery.py"],
+        "targets": INSTRUMENT_DISCOVERY_TARGETS,
+        "clean": True,
+        "verbosity": 2,
+    }
+
+
+def task_roll_analysis():
+    """Measure the splice at each roll and what the roll convention costs (issue #20).
+
+    Daily bars only, which is all the jump distribution needs. The intraday
+    June 2026 check is `python ./src/roll_analysis.py --mbp1`; it pulls ~93 MB
+    of MBP-1 and is deliberately not part of the default run.
+    """
+    return {
+        "actions": ["python ./src/roll_analysis.py"],
+        "file_dep": [
+            "./src/roll_analysis.py",
+            "./src/pull_databento.py",
+            OUTPUT_DIR / "roll_dates_c_vs_n.csv",
+        ],
+        "task_dep": ["instrument_discovery"],
+        "targets": ROLL_ANALYSIS_TARGETS,
+        "clean": True,
+        "verbosity": 2,
+    }
+
+
 def task_spread_diagnostics():
     """plotnine mean-reversion diagnostics for the Brent-WTI spread (issue #4)"""
     figure_names = [
