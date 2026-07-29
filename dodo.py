@@ -40,18 +40,32 @@ USER = config("USER", default="", cast=str)  # $USER exists on *nix only; unused
 ## Helpers for handling Jupyter Notebook tasks
 environ["PYDEVD_DISABLE_FILE_VALIDATION"] = "1"
 
+# Paths are interpolated into shell command strings, so every one of them has
+# to be quoted: this repository can live under a path containing spaces (e.g.
+# "University of Chicago"), and unquoted the shell splits it into separate
+# arguments. Unquoted, nbconvert read the fragments after the first space as
+# extra filename patterns and wrote its output to the truncated prefix.
+def q(path):
+    """Quote a path for interpolation into a shell command string.
+
+    >>> q("a b/c.ipynb")
+    '"a b/c.ipynb"'
+    """
+    return f'"{path}"'
+
+
 # fmt: off
 ## Helper functions for automatic execution of Jupyter notebooks
 def jupyter_execute_notebook(notebook_path):
-    return f"jupyter nbconvert --execute --to notebook --ClearMetadataPreprocessor.enabled=True --inplace {notebook_path}"
+    return f"jupyter nbconvert --execute --to notebook --ClearMetadataPreprocessor.enabled=True --inplace {q(notebook_path)}"
 def jupyter_to_html(notebook_path, output_dir=OUTPUT_DIR):
-    return f"jupyter nbconvert --to html --output-dir={output_dir} {notebook_path}"
+    return f"jupyter nbconvert --to html --output-dir={q(output_dir)} {q(notebook_path)}"
 def jupyter_to_md(notebook_path, output_dir=OUTPUT_DIR):
     """Requires jupytext"""
-    return f"jupytext --to markdown --output-dir={output_dir} {notebook_path}"
+    return f"jupytext --to markdown --output-dir={q(output_dir)} {q(notebook_path)}"
 def jupyter_clear_output(notebook_path):
     """Clear the output of a notebook"""
-    return f"jupyter nbconvert --ClearOutputPreprocessor.enabled=True --ClearMetadataPreprocessor.enabled=True --inplace {notebook_path}"
+    return f"jupyter nbconvert --ClearOutputPreprocessor.enabled=True --ClearMetadataPreprocessor.enabled=True --inplace {q(notebook_path)}"
 # fmt: on
 
 
@@ -61,9 +75,9 @@ def mv(from_path, to_path):
     to_path = Path(to_path)
     to_path.mkdir(parents=True, exist_ok=True)
     if OS_TYPE == "nix":
-        command = f"mv {from_path} {to_path}"
+        command = f"mv {q(from_path)} {q(to_path)}"
     else:
-        command = f"move {from_path} {to_path}"
+        command = f"move {q(from_path)} {q(to_path)}"
     return command
 
 
@@ -274,7 +288,7 @@ def task_run_notebooks():
             "name": notebook,
             "actions": [
                 """python -c "import sys; from datetime import datetime; print(f'Start """ + notebook + """: {datetime.now()}', file=sys.stderr)" """,
-                f"jupytext --to notebook --output {notebook_path} {pyfile_path}",
+                f"jupytext --to notebook --output {q(notebook_path)} {q(pyfile_path)}",
                 jupyter_execute_notebook(notebook_path),
                 jupyter_to_html(notebook_path),
                 mv(notebook_path, OUTPUT_DIR),
