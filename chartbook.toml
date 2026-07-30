@@ -28,6 +28,11 @@ notebook_name = "Brent-WTI Data Pipeline Walkthrough"
 notebook_description = "What was pulled from Databento, how the CL/BZ legs are cleaned and aligned, missing-data conventions, spread diagnostics, and how to load the datasets (issue #4)."
 notebook_path = "_output/02_brent_wti_data_pipeline.ipynb"
 
+[notebooks.03_signal_generator]
+notebook_name = "Entry Signal Generator Walkthrough"
+notebook_description = "Rolling z-score entry signals on the 1-minute synthetic Brent-WTI spread: past-only μ/σ, 30-bar window, ±2 entry bands, hygiene gates (issue #13)."
+notebook_path = "_output/03_signal_generator.ipynb"
+
 [dataframes]
 
 [dataframes.brent_wti_aligned_1m]
@@ -68,6 +73,19 @@ how_is_pulled = "doit pull_databento clean_mbp1 (src/pull_databento.py -> src/cl
 topic_tags = ["Brent", "WTI", "Futures", "Spread", "Market Data", "Microstructure"]
 path_to_parquet_data = "./_data/clean/cln6-bzq6_events_2026-06-01_2026-06-06.parquet"
 dataframe_docs_path = "./docs_src/dataframes/spread_events_front.md"
+
+[dataframes.entry_signals_1m]
+dataframe_name = "Entry Signals (1-minute)"
+short_description_df = "Past-only rolling z-score entry flags on the synthetic Brent-WTI spread (long/short at ±2σ, 30-bar window)"
+data_sources = ["Brent-WTI aligned 1-minute parquet (issue #4 pipeline)"]
+data_providers = ["Derived from Databento GLBX.MDP3 mbp-1"]
+links_to_data_providers = ["https://databento.com"]
+data_license = "Derived course artifact; underlying market data subject to Databento terms"
+restriction_on_use = "Course project use; data files are not committed to the repository"
+how_is_pulled = "doit signal_generator (src/signal_generator.py <- clean_mbp1 aligned 1m)"
+topic_tags = ["Brent", "WTI", "Futures", "Spread", "Signals", "Mean Reversion"]
+path_to_parquet_data = "./_output/brent_wti_signals_1m.parquet"
+dataframe_docs_path = "./docs_src/dataframes/entry_signals_1m.md"
 
 # The mean-reversion diagnostics are matplotlib/plotnine PNGs, not HTML, so
 # they are documented on the Spread Diagnostics site page and rendered inside

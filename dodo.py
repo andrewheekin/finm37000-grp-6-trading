@@ -26,6 +26,7 @@ from pull_databento import (
     SPREADS,
     _cache_path,
 )
+from signal_generator import signals_path
 
 DOIT_CONFIG = {"backend": "sqlite3", "dep_file": "./.doit-db.sqlite"}
 
@@ -182,6 +183,22 @@ def task_spread_diagnostics():
     }
 
 
+def task_signal_generator():
+    """Entry signals from rolling z-score of the 1m synthetic spread (issue #13)."""
+    return {
+        "actions": ["python ./src/signal_generator.py"],
+        "file_dep": [
+            "./src/signal_generator.py",
+            "./src/clean_mbp1.py",
+            _aligned_path("1m"),
+        ],
+        "task_dep": ["clean_mbp1"],
+        "targets": [signals_path()],
+        "clean": True,
+        "verbosity": 2,
+    }
+
+
 notebook_tasks = {
     "01_example_notebook_interactive.ipynb.py": {
         "path": "./src/01_example_notebook_interactive.ipynb.py",
@@ -197,6 +214,17 @@ notebook_tasks = {
             _grid_path("CL.v.0", "1s"),
             _events_path(SPREADS[0]),
         ],
+        "targets": [],
+    },
+    "03_signal_generator.ipynb.py": {
+        "path": "./src/03_signal_generator.ipynb.py",
+        "file_dep": [
+            "./src/signal_generator.py",
+            "./src/clean_mbp1.py",
+            _aligned_path("1m"),
+            signals_path(),
+        ],
+        "task_dep": ["signal_generator"],
         "targets": [],
     },
 }
@@ -225,6 +253,7 @@ def task_run_notebooks():
                 pyfile_path,
                 *notebook_tasks[notebook]["file_dep"],
             ],
+            "task_dep": notebook_tasks[notebook].get("task_dep", []),
             "targets": [
                 OUTPUT_DIR / f"{notebook_name}.html",
                 *notebook_tasks[notebook]["targets"],

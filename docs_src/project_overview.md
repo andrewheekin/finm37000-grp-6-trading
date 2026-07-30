@@ -33,6 +33,7 @@ project_overview/methodology
   and the Brent-WTI Data Pipeline Walkthrough notebook
 - [x] Build initial charts and notebooks — see
   [Spread Diagnostics](spread_diagnostics.md)
-- [ ] Define entry/exit rules and backtest the strategy
+- [x] Define entry rules (issue #13 signal generator) — exits and backtest still open
+- [ ] Define exit rules and backtest the strategy
 - [ ] Extend the data window beyond the pilot week
-- [ ] Write up findings
+- [x] Write up findings — see [Strategy Essay](strategy_essay.md)
