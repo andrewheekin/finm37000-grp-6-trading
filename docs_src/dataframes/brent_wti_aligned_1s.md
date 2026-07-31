@@ -15,3 +15,11 @@ See the Brent-WTI Aligned (1-minute) page — columns, conventions, and the
 missing-data rules are identical; only the bucket size differs. The
 600-second forward-fill limit spans 600 buckets on this grid (vs 10 on the
 1-minute grid).
+
+## Window sizes on this grid
+
+Rolling windows expressed as an **observation count** mean something different
+here than on the 1-minute grid: `window=120` is two *minutes* of this grid but
+two *hours* of the 1-minute one. Pass a time offset (`window="2h"`) to get the
+same duration on either grid — that is the default for
+`zscore_within_regime`. See [Contract Rolls](../contract_rolls.md).

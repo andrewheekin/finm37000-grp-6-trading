@@ -3,6 +3,9 @@
 Covers cache naming in pull_databento, event cleaning / gridding / roll
 flagging / alignment in clean_mbp1, spread filtering in instrument_discovery,
 and the rolling-deviation transform behind the diagnostics figures.
+
+Also covers the issue-#20 roll convention: rolling statistics must never span
+a change in the held contract pair, at any grid frequency.
 """
 
 import pandas as pd
@@ -13,7 +16,11 @@ from clean_mbp1 import (
     build_aligned,
     clean_events,
     mark_roll_dates,
+    regime_blocks,
+    regime_key,
+    rolling_within_regime,
     to_grid,
+    zscore_within_regime,
 )
 from instrument_discovery import find_cl_bz_spreads
 from plot_spread_diagnostics import rolling_deviations
@@ -146,6 +153,76 @@ def test_build_aligned_synthetic_spread_and_roll_flag():
     assert aligned["is_roll_date"].tolist() == [False, True]
     # Listed-spread columns arrive with the ls_ prefix.
     assert aligned["ls_bid_px_00"].iloc[0] == -4.1
+
+
+def test_regime_key_tracks_the_contract_pair_not_either_leg():
+    aligned = pd.DataFrame(
+        {
+            "cl_instrument_id": [101.0, 101.0, 202.0],
+            "bz_instrument_id": [55.0, 55.0, 55.0],
+        }
+    )
+    # CL rolls on the last row while BZ does not; the key must change anyway.
+    assert regime_key(aligned).tolist() == ["101/55", "101/55", "202/55"]
+
+
+def test_regime_blocks_separate_non_adjacent_runs_of_one_pair():
+    # A flip-back returns to a pair already seen (BZK6 -> BZM6 -> BZK6), which
+    # must not be merged with its earlier occurrence.
+    regime = pd.Series(["A", "A", "B", "A", "A"])
+    assert regime_blocks(regime).tolist() == [1, 1, 2, 3, 3]
+
+
+def test_rolling_within_regime_does_not_reach_across_a_flip_back():
+    idx = pd.date_range("2026-03-01", periods=12, freq="1min", tz="UTC")
+    series = pd.Series([1.0] * 4 + [100.0] * 4 + [2.0] * 4, index=idx)
+    regime = pd.Series(["A"] * 4 + ["B"] * 4 + ["A"] * 4, index=idx)
+
+    out = rolling_within_regime(series, regime, window=3)
+
+    # The second A run restarts rather than borrowing from the first, so its
+    # first two rows cannot yet fill a 3-observation window.
+    assert pd.isna(out.iloc[8])
+    assert pd.isna(out.iloc[9])
+    assert out.iloc[10] == pytest.approx(2.0)
+
+
+def test_rolling_within_regime_restarts_the_warmup_after_a_roll():
+    idx = pd.date_range("2026-03-01", periods=360, freq="1min", tz="UTC")
+    series = pd.Series(1.0, index=idx)
+    regime = pd.Series(["A"] * 180 + ["B"] * 180, index=idx)
+
+    out = rolling_within_regime(series, regime, window="2h")
+
+    assert out.iloc[:180].notna().argmax() == 120
+    assert out.iloc[180:].notna().argmax() == 120  # a fresh 2h after the roll
+
+
+def test_rolling_within_regime_offset_window_is_frequency_independent():
+    """An int window's duration depends on the grid; an offset window's does not."""
+
+    def warmup(freq, periods):
+        idx = pd.date_range("2026-03-01", periods=periods, freq=freq, tz="UTC")
+        series = pd.Series(1.0, index=idx)
+        regime = pd.Series("A", index=idx)
+        out = rolling_within_regime(series, regime, window="2h")
+        return idx[out.notna().argmax()] - idx[0]
+
+    assert warmup("1min", 4 * 60) == pd.Timedelta("2h")
+    assert warmup("1s", 3 * 3600) == pd.Timedelta("2h")
+
+
+def test_zscore_within_regime_matches_plain_rolling_when_no_roll_occurs():
+    idx = pd.date_range("2026-06-01", periods=400, freq="1min", tz="UTC")
+    series = pd.Series([float(i % 13) for i in range(400)], index=idx)
+    regime = pd.Series("A", index=idx)
+
+    z = zscore_within_regime(series, regime, window="2h")
+    plain = (series - series.rolling("2h").mean()) / series.rolling("2h").std()
+
+    overlap = pd.concat([z, plain], axis=1).dropna()
+    assert len(overlap) > 0
+    assert (overlap.iloc[:, 0] - overlap.iloc[:, 1]).abs().max() < 1e-9
 
 
 def test_find_cl_bz_spreads_keeps_only_cross_product_spreads():

@@ -5,8 +5,9 @@ definitions -- no market-data pull required:
 
 1. Do exchange-listed spread instruments with CL and BZ legs exist on CME
    Globex, and what are their exact symbols and instrument IDs?
-2. When do the calendar (.c.0) and open-interest (.n.0) continuous-contract
-   rules roll for CL and BZ? (feeds issue #20)
+2. When do the calendar (.c.0), open-interest (.n.0) and volume (.v.0)
+   continuous-contract rules roll for CL and BZ? (feeds issue #20, which
+   settled on .v.0 -- see the roll_dates_c_vs_n.csv artifact)
 3. What would the pilot-week MBP-1 pull cost, in dollars and bytes?
 
 Usage:
@@ -192,7 +193,7 @@ def main():
 
     print()
     print("=" * 70)
-    print(f"2. Roll dates, .c.0 vs .n.0 ({ROLL_WINDOW_START} to {ROLL_WINDOW_END})")
+    print(f"2. Roll dates, .c.0 vs .n.0 vs .v.0 ({ROLL_WINDOW_START} to {ROLL_WINDOW_END})")
     print("=" * 70)
     rolls = resolve_roll_dates(client)
     rolls.to_csv(OUTPUT_DIR / "roll_dates_c_vs_n.csv", index=False)
@@ -204,8 +205,9 @@ def main():
     print("=" * 70)
     print(f"3. Pilot-week MBP-1 cost ({PILOT_START} to {PILOT_END})")
     print("=" * 70)
+    # Price the rule the pipeline actually pulls (.v.0, per issue #20).
     outright_cost = pilot_cost(
-        client, [f"{leg}.n.0" for leg in LEGS], stype_in="continuous"
+        client, [f"{leg}.v.0" for leg in LEGS], stype_in="continuous"
     )
     print(
         f"Outrights ({outright_cost['symbols']}): "

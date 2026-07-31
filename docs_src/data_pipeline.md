@@ -15,13 +15,16 @@ section).
 | 1. Pull | `src/pull_databento.py` | Pulls MBP-1 for `CL.v.0`, `BZ.v.0` and three listed spreads; caches raw DBN one file per symbol |
 | 2. Clean/align | `src/clean_mbp1.py` | Events → 1s/1m grids (bounded forward-fill), listed-spread event series, and the aligned Brent-WTI dataset |
 | 3. Diagnostics | `src/plot_spread_diagnostics.py` | Six mean-reversion figures — see [Spread Diagnostics](spread_diagnostics.md) |
+| 4. Roll analysis | `src/roll_analysis.py` | Measures the splice at each contract roll and what the roll convention costs — see [Contract Rolls](contract_rolls.md) |
 
 Run everything with `doit`:
 
 ```
+doit instrument_discovery  # symbology -> roll table (step 0; calls the API)
 doit pull_databento      # Databento -> DBN cache (billable; cached pulls are skipped)
 doit clean_mbp1          # cache -> parquet (grids, events, aligned)
 doit spread_diagnostics  # figures -> _output/figures
+doit roll_analysis       # splice sizes + cost of the roll convention
 doit run_notebooks       # execute + render the walkthrough notebook
 ```
 
@@ -54,6 +57,10 @@ Column definitions and conventions: see the dataframe pages in this site's
 catalog section (Brent-WTI Aligned 1-minute / 1-second, Listed Spread
 Events) and
 [Methodology](project_overview/methodology.md).
+
+Rolling statistics must not span a contract change — use `regime_key` and
+`zscore_within_regime` rather than a bare `.rolling()`. See
+[Contract Rolls](contract_rolls.md).
 
 ## Local `_data` junction (for chartbook data loading)
 
