@@ -40,18 +40,32 @@ USER = config("USER", default="", cast=str)  # $USER exists on *nix only; unused
 ## Helpers for handling Jupyter Notebook tasks
 environ["PYDEVD_DISABLE_FILE_VALIDATION"] = "1"
 
+# Paths are interpolated into shell command strings, so every one of them has
+# to be quoted: this repository can live under a path containing spaces (e.g.
+# "University of Chicago"), and unquoted the shell splits it into separate
+# arguments. Unquoted, nbconvert read the fragments after the first space as
+# extra filename patterns and wrote its output to the truncated prefix.
+def q(path):
+    """Quote a path for interpolation into a shell command string.
+
+    >>> q("a b/c.ipynb")
+    '"a b/c.ipynb"'
+    """
+    return f'"{path}"'
+
+
 # fmt: off
 ## Helper functions for automatic execution of Jupyter notebooks
 def jupyter_execute_notebook(notebook_path):
-    return f"jupyter nbconvert --execute --to notebook --ClearMetadataPreprocessor.enabled=True --inplace {notebook_path}"
+    return f"jupyter nbconvert --execute --to notebook --ClearMetadataPreprocessor.enabled=True --inplace {q(notebook_path)}"
 def jupyter_to_html(notebook_path, output_dir=OUTPUT_DIR):
-    return f"jupyter nbconvert --to html --output-dir={output_dir} {notebook_path}"
+    return f"jupyter nbconvert --to html --output-dir={q(output_dir)} {q(notebook_path)}"
 def jupyter_to_md(notebook_path, output_dir=OUTPUT_DIR):
     """Requires jupytext"""
-    return f"jupytext --to markdown --output-dir={output_dir} {notebook_path}"
+    return f"jupytext --to markdown --output-dir={q(output_dir)} {q(notebook_path)}"
 def jupyter_clear_output(notebook_path):
     """Clear the output of a notebook"""
-    return f"jupyter nbconvert --ClearOutputPreprocessor.enabled=True --ClearMetadataPreprocessor.enabled=True --inplace {notebook_path}"
+    return f"jupyter nbconvert --ClearOutputPreprocessor.enabled=True --ClearMetadataPreprocessor.enabled=True --inplace {q(notebook_path)}"
 # fmt: on
 
 
@@ -61,9 +75,9 @@ def mv(from_path, to_path):
     to_path = Path(to_path)
     to_path.mkdir(parents=True, exist_ok=True)
     if OS_TYPE == "nix":
-        command = f"mv {from_path} {to_path}"
+        command = f"mv {q(from_path)} {q(to_path)}"
     else:
-        command = f"move {from_path} {to_path}"
+        command = f"move {q(from_path)} {q(to_path)}"
     return command
 
 
@@ -157,6 +171,65 @@ def task_clean_mbp1():
     }
 
 
+##################################
+## Issue #20: contract rolls
+##################################
+
+INSTRUMENT_DISCOVERY_TARGETS = [
+    OUTPUT_DIR / name
+    for name in [
+        "cl_bz_spread_instruments.csv",
+        "cl_bz_definitions_snapshot.csv",
+        "roll_dates_c_vs_n.csv",
+    ]
+]
+
+ROLL_ANALYSIS_TARGETS = [
+    OUTPUT_DIR / name
+    for name in [
+        "roll_jumps.csv",
+        "roll_contract_closes.csv",
+        "roll_contamination_cost.csv",
+    ]
+]
+
+
+def task_instrument_discovery():
+    """Resolve CL/BZ spread instruments and continuous roll dates (issues #4, #20).
+
+    Symbology and metadata only -- no market-data pull -- but it does call the
+    Databento API, so the targets guard re-runs.
+    """
+    return {
+        "actions": ["python ./src/instrument_discovery.py"],
+        "file_dep": ["./src/instrument_discovery.py"],
+        "targets": INSTRUMENT_DISCOVERY_TARGETS,
+        "clean": True,
+        "verbosity": 2,
+    }
+
+
+def task_roll_analysis():
+    """Measure the splice at each roll and what the roll convention costs (issue #20).
+
+    Daily bars only, which is all the jump distribution needs. The intraday
+    June 2026 check is `python ./src/roll_analysis.py --mbp1`; it pulls ~93 MB
+    of MBP-1 and is deliberately not part of the default run.
+    """
+    return {
+        "actions": ["python ./src/roll_analysis.py"],
+        "file_dep": [
+            "./src/roll_analysis.py",
+            "./src/pull_databento.py",
+            OUTPUT_DIR / "roll_dates_c_vs_n.csv",
+        ],
+        "task_dep": ["instrument_discovery"],
+        "targets": ROLL_ANALYSIS_TARGETS,
+        "clean": True,
+        "verbosity": 2,
+    }
+
+
 def task_spread_diagnostics():
     """plotnine mean-reversion diagnostics for the Brent-WTI spread (issue #4)"""
     figure_names = [
@@ -215,7 +288,7 @@ def task_run_notebooks():
             "name": notebook,
             "actions": [
                 """python -c "import sys; from datetime import datetime; print(f'Start """ + notebook + """: {datetime.now()}', file=sys.stderr)" """,
-                f"jupytext --to notebook --output {notebook_path} {pyfile_path}",
+                f"jupytext --to notebook --output {q(notebook_path)} {q(pyfile_path)}",
                 jupyter_execute_notebook(notebook_path),
                 jupyter_to_html(notebook_path),
                 mv(notebook_path, OUTPUT_DIR),
