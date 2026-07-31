@@ -1,6 +1,13 @@
 FINM 37000 Group 6 Trading
 ==========================
 
+**Project website:** <https://andrewheekin.github.io/finm37000-grp-6-trading/>
+
+The site carries the data catalog (dataframe and column documentation), the
+pipeline and contract-roll write-ups, and the executed analysis notebooks. It is
+generated from this repository with `doit build_chartbook_site` and served from
+the `gh-pages` branch.
+
 ## Authors
 
 - Andrew Heekin (<andrewheekin@gmail.com>)

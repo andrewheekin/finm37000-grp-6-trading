@@ -6,6 +6,7 @@ project_overview
 strategy_essay
 signal_generator_results
 data_pipeline
+contract_rolls
 spread_diagnostics
 ```
 
