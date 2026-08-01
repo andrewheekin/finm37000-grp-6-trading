@@ -49,33 +49,33 @@ def test_warmup_suppresses_signals_until_min_periods():
     n = DEFAULT_WINDOW + 5
     series = pd.Series(np.linspace(-1, 1, n), index=_idx(n))
     out = generate_signals(series, window=DEFAULT_WINDOW)
-    # First `window` bars lack a full past window after shift(1).
-    assert not out["valid"].iloc[:DEFAULT_WINDOW].any()
-    assert (out["signal"].iloc[:DEFAULT_WINDOW] == 0).all()
+    # Bar t is in its own window, so the first `window - 1` bars are short.
+    assert not out["valid"].iloc[: DEFAULT_WINDOW - 1].any()
+    assert (out["signal"].iloc[: DEFAULT_WINDOW - 1] == 0).all()
     assert out["rolling_mean"].iloc[: DEFAULT_WINDOW - 1].isna().all()
+    assert out["rolling_mean"].iloc[DEFAULT_WINDOW - 1 :].notna().all()
 
 
-def test_no_lookahead_in_rolling_stats():
+def test_rolling_stats_include_current_bar():
     n = 80
     window = 10
-    # Alternating past so σ > 0; spike only on the final bar.
+    # Alternating history so σ > 0; spike only on the final bar.
     values = np.tile([0.0, 1.0], n // 2)
     values[-1] = 100.0
     series = pd.Series(values, index=_idx(n))
     out = generate_signals(series, window=window)
 
-    past = series.iloc[-(window + 1) : -1]
-    assert out["rolling_mean"].iloc[-1] == pytest.approx(past.mean())
-    assert out["rolling_std"].iloc[-1] == pytest.approx(past.std(ddof=1))
-    # Including the spike would pull the mean far above the past mean.
-    assert out["rolling_mean"].iloc[-1] < 10.0
+    trailing = series.iloc[-window:]
+    assert out["rolling_mean"].iloc[-1] == pytest.approx(trailing.mean())
+    assert out["rolling_std"].iloc[-1] == pytest.approx(trailing.std(ddof=1))
 
-    # Changing only bar t must not change μ_t, σ_t.
+    # Bar t belongs to its own window, but must not touch earlier bars' stats.
     mutated = series.copy()
     mutated.iloc[-1] = -999.0
     out2 = generate_signals(mutated, window=window)
-    assert out2["rolling_mean"].iloc[-1] == out["rolling_mean"].iloc[-1]
-    assert out2["rolling_std"].iloc[-1] == out["rolling_std"].iloc[-1]
+    assert out2["rolling_mean"].iloc[-1] != out["rolling_mean"].iloc[-1]
+    assert out2["rolling_mean"].iloc[-2] == out["rolling_mean"].iloc[-2]
+    assert out2["rolling_std"].iloc[-2] == out["rolling_std"].iloc[-2]
 
 
 def test_threshold_short_and_long_entries():
@@ -143,10 +143,9 @@ def test_hygiene_blocks_nan_roll_carryforward_and_zero_std():
     bad.loc[idx[-1], "bz_n_events"] = 0
     assert not generate_signals(bad, window=DEFAULT_WINDOW)["short_entry"].iloc[-1]
 
-    # Flat history → σ ≈ 0
+    # Flat window → σ ≈ 0, so the z-score is undefined
     flat = frame.copy()
     flat["synth_mid"] = 1.0
-    flat.loc[idx[-1], "synth_mid"] = 10.0
     flat_out = generate_signals(flat, window=DEFAULT_WINDOW)
     assert not flat_out["valid"].iloc[-1]
     assert flat_out["signal"].iloc[-1] == 0

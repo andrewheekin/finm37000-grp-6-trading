@@ -1,6 +1,6 @@
 ## Description
 
-Entry signals for the Brent–WTI mean-reversion strategy (issue #13): past-only
+Entry signals for the Brent–WTI mean-reversion strategy (issue #13): trailing
 rolling mean and standard deviation of the 1-minute synthetic spread
 (`synth_mid`), z-score, and long/short entry flags when $|z|$ exceeds the
 symmetric entry threshold (default $\pm 2$).
@@ -33,8 +33,8 @@ Requires the local 1-minute aligned parquet (`doit clean_mbp1`) and
 
 ## Conventions
 
-- Rolling $\mu$ / $\sigma$ at time $t$ use only bars before $t$
-  (`shift(1).rolling`), so the decision bar is not in its own window.
+- Rolling $\mu$ / $\sigma$ at time $t$ use the `window` bars ending at $t$,
+  including $S_t$ itself, which is observed at decision time (no lookahead).
 - Entries may re-fire on every threshold breach; no “already in trade”
   suppression.
 - Hygiene blocks: NaN spread or legs, `is_roll_date`, carry-forward buckets
@@ -48,8 +48,8 @@ Index: `ts_recv` — `datetime64[ns, UTC]`, 1-minute buckets (same as the
 aligned source).
 
 - **`spread`**: `float64` — synthetic mid used for the signal (`cl_mid − bz_mid`)
-- **`rolling_mean`**: `float64` — past-only trailing mean of the spread
-- **`rolling_std`**: `float64` — past-only trailing sample standard deviation
+- **`rolling_mean`**: `float64` — trailing mean of the spread through the current bar
+- **`rolling_std`**: `float64` — trailing sample standard deviation through the current bar
 - **`zscore`**: `float64` — `(spread - rolling_mean) / rolling_std`
 - **`entry_threshold`**: `float64` — absolute z threshold used (default `2.0`)
 - **`long_entry`**: `bool` — `True` when `zscore < -entry_threshold` and valid

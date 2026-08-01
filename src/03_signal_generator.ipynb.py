@@ -17,7 +17,7 @@
 #
 # This notebook documents the core entry signal for
 # [issue #13](https://github.com/andrewheekin/finm37000-grp-6-trading/issues/13):
-# a past-only rolling z-score on the 1-minute synthetic Brent–WTI spread
+# a trailing rolling z-score on the 1-minute synthetic Brent–WTI spread
 # (`synth_mid = cl_mid − bz_mid`), with long/short entries at $\pm 2\sigma$.
 #
 # Defaults: **30-minute** rolling window on 1-minute bars, entry at

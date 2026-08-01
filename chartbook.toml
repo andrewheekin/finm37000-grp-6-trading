@@ -30,7 +30,7 @@ notebook_path = "_output/02_brent_wti_data_pipeline.ipynb"
 
 [notebooks.03_signal_generator]
 notebook_name = "Entry Signal Generator Walkthrough"
-notebook_description = "Rolling z-score entry signals on the 1-minute synthetic Brent-WTI spread: past-only μ/σ, 30-bar window, ±2 entry bands, hygiene gates (issue #13)."
+notebook_description = "Rolling z-score entry signals on the 1-minute synthetic Brent-WTI spread: trailing μ/σ over the window ending at the decision bar, 30-bar window, ±2 entry bands, hygiene gates (issue #13)."
 notebook_path = "_output/03_signal_generator.ipynb"
 
 [dataframes]

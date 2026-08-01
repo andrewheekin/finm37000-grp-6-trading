@@ -1,8 +1,9 @@
 """Entry signal generator for the Brent-WTI spread (issue #13).
 
-For each bar, compute a past-only rolling mean and standard deviation of the
-spread, form a z-score, and emit long/short entry flags when |z| exceeds the
-entry threshold. Exits and position state are out of scope (issue #15).
+For each bar, compute a trailing rolling mean and standard deviation of the
+spread over the window ending at that bar (inclusive), form a z-score, and emit
+long/short entry flags when |z| exceeds the entry threshold. Exits and position
+state are out of scope (issue #15).
 
 Defaults: 1-minute bars, 30-bar rolling window, symmetric ±2 entry bands.
 An optional ``is_stationary`` mask lets a future stationarity gate (issue #14)
@@ -101,9 +102,9 @@ def generate_signals(
 ) -> pd.DataFrame:
     """Vectorized entry signals from a spread Series or aligned DataFrame.
 
-    Rolling mean/std at time t use only bars strictly before t
-    (``shift(1).rolling``), so the current bar does not enter its own z-score
-    denominator. Entries may re-fire on every breach; no position state is kept.
+    Rolling mean/std at time t use the ``window`` bars ending at t, including the
+    observation at t itself, which is known at decision time and so introduces no
+    lookahead. Entries may re-fire on every breach; no position state is kept.
 
     Parameters
     ----------
@@ -137,10 +138,9 @@ def generate_signals(
         min_periods = window
 
     spread, frame = _extract_spread(data, spread_col)
-    # Past-only stats: bar t's μ/σ exclude the observation at t.
-    lagged = spread.shift(1)
-    rolling_mean = lagged.rolling(window=window, min_periods=min_periods).mean()
-    rolling_std = lagged.rolling(window=window, min_periods=min_periods).std(ddof=1)
+    roller = spread.rolling(window=window, min_periods=min_periods)
+    rolling_mean = roller.mean()
+    rolling_std = roller.std(ddof=1)
 
     zscore = (spread - rolling_mean) / rolling_std
 
