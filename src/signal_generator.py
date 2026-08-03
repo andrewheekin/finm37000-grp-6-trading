@@ -6,8 +6,8 @@ long/short entry flags when |z| exceeds the entry threshold. Exits and position
 state are out of scope (issue #15).
 
 Defaults: 1-minute bars, 30-bar rolling window, symmetric ±2 entry bands.
-An optional ``is_stationary`` mask lets a future stationarity gate (issue #14)
-suppress entries without coupling this module to ADF/KPSS.
+An optional ``is_stationary`` mask suppresses entries outside stationary
+windows. The production path builds this mask with the rolling ADF/KPSS test.
 
 Usage:
     python src/signal_generator.py   # writes parquet to OUTPUT_DIR
@@ -20,6 +20,7 @@ from pathlib import Path
 import pandas as pd
 
 from clean_mbp1 import load_aligned
+from rolling_stationarity import rolling_stationarity_test
 from settings import config
 
 OUTPUT_DIR = config("OUTPUT_DIR")
@@ -88,6 +89,28 @@ def _hygiene_mask(
             valid &= frame[col].fillna(0) > 0
 
     return valid
+
+
+def build_stationarity_mask(
+    data: pd.Series | pd.DataFrame,
+    *,
+    spread_col: str = "synth_mid",
+    window: int = DEFAULT_WINDOW,
+    step: int = 1,
+) -> pd.Series:
+    """Build an index-aligned rolling stationarity gate for signal generation.
+
+    Missing timestamps, including the initial warm-up interval, are treated as
+    non-stationary. Each rolling result is labeled at its window end, so the
+    returned mask uses no future observations.
+    """
+    spread, _ = _extract_spread(data, spread_col)
+    is_stationary = rolling_stationarity_test(
+        spread,
+        window=window,
+        step=step,
+    )["is_stationary"]
+    return is_stationary.reindex(spread.index).fillna(False).astype(bool)
 
 
 def generate_signals(
@@ -206,7 +229,13 @@ def signals_from_aligned(
 def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     aligned = load_aligned("1m")
-    signals = signals_from_aligned(aligned)
+    is_stationary = build_stationarity_mask(
+        aligned,
+        spread_col="synth_mid",
+        window=DEFAULT_WINDOW,
+        step=1,
+    )
+    signals = signals_from_aligned(aligned, is_stationary=is_stationary)
     path = signals_path()
     signals.to_parquet(path)
     n_long = int(signals["long_entry"].sum())
