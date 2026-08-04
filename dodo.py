@@ -5,6 +5,9 @@ Minimal end-to-end chain (issue #38):
 
     config -> pull_databento -> clean_mbp1 -> random_strategy -> random_strategy_plots
 
+Also includes the entry signal generator task (issue #13), which depends on
+clean_mbp1 and can run alongside the random strategy chain.
+
 Running plain `doit` executes the whole chain and ends with sample PNGs in
 _output/figures. The only external requirements are the packages in
 requirements.txt and DATABENTO_API_KEY in .env (used once; pulls are cached
@@ -36,6 +39,7 @@ from pull_databento import (
     _cache_path,
 )
 from random_strategy import result_path as strategy_result_path
+from signal_generator import signals_path
 
 # Run every action with the same interpreter that is running doit
 # (venv-safe on Windows, where bare `python` can resolve elsewhere).
@@ -129,6 +133,22 @@ def task_random_strategy_plots():
         ],
         "task_dep": ["random_strategy"],
         "targets": [OUTPUT_DIR / "figures" / f"{name}.png" for name in FIGURE_NAMES],
+        "clean": True,
+        "verbosity": 2,
+    }
+
+
+def task_signal_generator():
+    """Entry signals from rolling z-score of the 1m synthetic spread (issue #13)."""
+    return {
+        "actions": [f"{PYTHON} ./src/signal_generator.py"],
+        "file_dep": [
+            "./src/signal_generator.py",
+            "./src/clean_mbp1.py",
+            _aligned_path("1m"),
+        ],
+        "task_dep": ["clean_mbp1"],
+        "targets": [signals_path()],
         "clean": True,
         "verbosity": 2,
     }
