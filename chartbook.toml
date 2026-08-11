@@ -21,17 +21,10 @@ git_repo_URL = "https://github.com/andrewheekin/finm37000-grp-6-trading"
 README_file_path = "./README.md"
 site_dir = "./docs_src/"
 
+# The jupytext sources in src/*.ipynb.py are no longer executed by dodo.py, so
+# no built notebook exists at _output/ for chartbook to pick up. Re-add entries
+# here alongside a doit task that runs jupytext if the site is revived.
 [notebooks]
-
-[notebooks.02_brent_wti_data_pipeline]
-notebook_name = "Brent-WTI Data Pipeline Walkthrough"
-notebook_description = "What was pulled from Databento, how the CL/BZ legs are cleaned and aligned, missing-data conventions, spread diagnostics, and how to load the datasets (issue #4)."
-notebook_path = "_output/02_brent_wti_data_pipeline.ipynb"
-
-[notebooks.03_signal_generator]
-notebook_name = "Entry Signal Generator Walkthrough"
-notebook_description = "Rolling z-score entry signals on the 1-minute synthetic Brent-WTI spread: trailing μ/σ over the window ending at the decision bar, 30-bar window, ±2 entry bands, hygiene gates (issue #13)."
-notebook_path = "_output/03_signal_generator.ipynb"
 
 [dataframes]
 

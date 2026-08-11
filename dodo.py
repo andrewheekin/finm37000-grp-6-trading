@@ -13,9 +13,8 @@ _output/figures. The only external requirements are the packages in
 requirements.txt and DATABENTO_API_KEY in .env (used once; pulls are cached
 under _data/databento and skipped thereafter).
 
-Task definitions removed in the issue #38 slim-down (LaTeX, example tables,
-notebooks, chartbook site, pytest) live in git history and can be re-added
-incrementally.
+The exploratory notebooks under notebooks/ are research artifacts and are not
+part of this chain; they read the parquet files the chain produces.
 """
 
 #######################################
