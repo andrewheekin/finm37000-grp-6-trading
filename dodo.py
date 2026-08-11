@@ -161,7 +161,7 @@ def task_plot_strategy_results():
         "actions": [f"{PYTHON} ./src/plot_strategy_results.py"],
         "file_dep": [
             "./src/plot_strategy_results.py",
-            strategy_result_path(),
+            results_path(),
         ],
         "task_dep": ["run_strategy"],
         "targets": figure_targets,
