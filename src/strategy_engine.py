@@ -21,14 +21,16 @@ Usage:
 
 from __future__ import annotations
 
+import warnings
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from statsmodels.tools.sm_exceptions import InterpolationWarning
 from statsmodels.tsa.stattools import adfuller, kpss
 import statsmodels.api as sm
 
-from clean_mbp1 import load_aligned, regime_key, rolling_within_regime
+from clean_mbp1 import load_aligned, regime_key
 from settings import config
 
 
@@ -191,11 +193,17 @@ def stationarity_test(
 
     if use_kpss:
         try:
-            kpss_pvalue = kpss(
-                rolling_window,
-                regression="c",
-                nlags="auto",
-            )[1]
+            # A statistic outside KPSS's p-value lookup table warns and clips to
+            # the nearest tabulated bound. On a 30-bar window that is common and
+            # harmless -- a clipped p-value still lands on the correct side of
+            # KPSS_ALPHA -- so the warning is suppressed to keep doit logs clean.
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", InterpolationWarning)
+                kpss_pvalue = kpss(
+                    rolling_window,
+                    regression="c",
+                    nlags="auto",
+                )[1]
 
             test_results.append(kpss_pvalue > KPSS_ALPHA)
 
@@ -530,3 +538,30 @@ def run_strategy(
             }
 
     return tracker
+
+
+def main():
+    """Backtest the default parameters on the cleaned 1m dataset and save it."""
+    results = run_strategy(
+        data=load_aligned(FREQ),
+        window=DEFAULT_WINDOW,
+        deviation_threshold=DEFAULT_DEVIATION_THRESHOLD,
+        halflife_threshold=DEFAULT_HALF_LIFE_THRESHOLD,
+        exit_threshold=DEFAULT_EXIT_THRESHOLD,
+        stop_loss=DEFAULT_STOP_LOSS,
+        time_stop=DEFAULT_TIME_STOP,
+    )
+
+    path = results_path()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    results.to_parquet(path)
+
+    entries = int(results["long_entry"].sum() + results["short_entry"].sum())
+    print(
+        f"saved {path}: {len(results):,} bars, {entries} entries, "
+        f"cumulative PnL {results['cum_pnl'].ffill().fillna(0).iloc[-1]:,.2f}"
+    )
+
+
+if __name__ == "__main__":
+    main()
