@@ -6,6 +6,12 @@ This project builds and backtests an end-to-end **intraday mean-reversion strate
 
 The main result is a **negative but informative trading result**: over our June 1–5, 2026 pilot sample, the implemented mean-reversion specification did not generate robust positive P&L. We tested different entry thresholds, including 3.0 and 2.5 standard deviations; lowering the threshold created more opportunities but did not make the strategy reliably profitable. Rather than optimize aggressively to a five-day sample, we preserve a transparent baseline that demonstrates the full research and execution framework and highlights where the economic intuition does and does not survive realistic market-data and execution constraints.
 
+## Pipeline Overview
+
+The four bands below map to the `doit` task chain: data acquisition and cleaning, the three entry gates applied to every one-minute bar, position management through to an exit, and the saved outputs.
+
+![Brent-WTI strategy pipeline and entry/exit logic](docs_src/figures/07_strategy_flowchart.png)
+
 ## Data and Spread Construction
 
 The pipeline pulls Databento `GLBX.MDP3` **MBP-1** data for the volume-rolled front contracts `CL.v.0` (WTI) and `BZ.v.0` (Brent), together with exchange-listed Brent–WTI spread instruments. Raw DBN files are cached under `_data/databento/`, so subsequent runs do not repurchase data that is already present.
@@ -129,3 +135,15 @@ The Databento cache is intentionally not deleted by `doit clean`.
 - `src/strategy_engine.py` — entry tests, position state, exits, and P&L
 - `src/plot_strategy_results.py` — generates the four final backtest figures
 - `dodo.py` — defines the reproducible end-to-end task pipeline
+- `docs_src/figures/07_strategy_flowchart.mmd` — Mermaid source for the pipeline diagram
+
+## Regenerating the pipeline diagram
+
+The diagram in [Pipeline Overview](#pipeline-overview) is rendered from a committed Mermaid source file, so it can be edited and re-rendered when parameters change. Rendering needs Node, which is deliberately not a dependency of the `doit` pipeline:
+
+```bash
+npx -y @mermaid-js/mermaid-cli@11 \
+  -i docs_src/figures/07_strategy_flowchart.mmd \
+  -o docs_src/figures/07_strategy_flowchart.png \
+  -b white -s 3
+```
