@@ -1,14 +1,14 @@
 """Run or update the project. This file uses the `doit` Python package. It works
 like a Makefile, but is Python-based.
 
-Minimal end-to-end chain (issue #38):
+End-to-end chain:
 
-    config -> pull_databento -> clean_mbp1 -> random_strategy -> random_strategy_plots
+    config -> pull_databento -> clean_mbp1 -> run_strategy -> plot_strategy_results
 
 Also includes the entry signal generator task (issue #13), which depends on
-clean_mbp1 and can run alongside the random strategy chain.
+clean_mbp1 and runs alongside the strategy chain.
 
-Running plain `doit` executes the whole chain and ends with sample PNGs in
+Running plain `doit` executes the whole chain and ends with the strategy PNGs in
 _output/figures. The only external requirements are the packages in
 requirements.txt and DATABENTO_API_KEY in .env (used once; pulls are cached
 under _data/databento and skipped thereafter).
@@ -29,7 +29,7 @@ sys.path.insert(1, "./src/")
 from settings import config
 
 from clean_mbp1 import GRID_FREQS, _aligned_path, _events_path, _grid_path
-from plot_random_strategy import FIGURE_NAMES
+from plot_strategy_results import FIGURE_NAMES as STRATEGY_FIGURE_NAMES
 from pull_databento import (
     OUTRIGHTS,
     PILOT_END,
@@ -38,8 +38,8 @@ from pull_databento import (
     SPREADS,
     _cache_path,
 )
-from random_strategy import result_path as strategy_result_path
 from signal_generator import signals_path
+from strategy_engine import results_path
 
 # Run every action with the same interpreter that is running doit
 # (venv-safe on Windows, where bare `python` can resolve elsewhere).
@@ -106,33 +106,36 @@ def task_clean_mbp1():
     }
 
 
-def task_random_strategy():
-    """Placeholder random die-roll strategy on the front listed spread (issue #38)"""
+def task_run_strategy():
+    """Backtest the strategy on the cleaned 1-minute aligned dataset."""
     return {
-        "actions": [f"{PYTHON} ./src/random_strategy.py"],
+        "actions": [f"{PYTHON} ./src/strategy_engine.py"],
         "file_dep": [
-            "./src/random_strategy.py",
+            "./src/strategy_engine.py",
             "./src/clean_mbp1.py",
-            _grid_path(SPREADS[0], "1m"),
+            _aligned_path("1m"),
         ],
         "task_dep": ["clean_mbp1"],
-        "targets": [strategy_result_path()],
+        "targets": [results_path()],
         "clean": True,
         "verbosity": 2,
     }
 
 
-def task_random_strategy_plots():
-    """Sample plots (price/trades, position, cumulative PnL) for issue #38"""
+def task_plot_strategy_results():
+    """Plot the Brent-WTI strategy backtest results."""
+    figure_targets = [
+        OUTPUT_DIR / "figures" / f"{name}.png"
+        for name in STRATEGY_FIGURE_NAMES
+    ]
     return {
-        "actions": [f"{PYTHON} ./src/plot_random_strategy.py"],
+        "actions": [f"{PYTHON} ./src/plot_strategy_results.py"],
         "file_dep": [
-            "./src/plot_random_strategy.py",
-            "./src/random_strategy.py",
-            strategy_result_path(),
+            "./src/plot_strategy_results.py",
+            results_path(),
         ],
-        "task_dep": ["random_strategy"],
-        "targets": [OUTPUT_DIR / "figures" / f"{name}.png" for name in FIGURE_NAMES],
+        "task_dep": ["run_strategy"],
+        "targets": figure_targets,
         "clean": True,
         "verbosity": 2,
     }
