@@ -28,6 +28,7 @@ sys.path.insert(1, "./src/")
 from settings import config
 
 from clean_mbp1 import GRID_FREQS, _aligned_path, _events_path, _grid_path
+from plot_spread_diagnostics import FIGURE_NAMES as DIAGNOSTIC_FIGURE_NAMES
 from plot_strategy_results import FIGURE_NAMES as STRATEGY_FIGURE_NAMES
 from pull_databento import (
     OUTRIGHTS,
@@ -100,6 +101,25 @@ def task_clean_mbp1():
         "file_dep": ["./src/clean_mbp1.py", "./src/pull_databento.py", *MBP1_CACHE_FILES],
         "task_dep": ["pull_databento"],
         "targets": targets,
+        "clean": True,
+        "verbosity": 2,
+    }
+
+
+def task_spread_diagnostics():
+    """Mean-reversion diagnostic figures for the pilot week (issue #4)."""
+    return {
+        "actions": [f"{PYTHON} ./src/plot_spread_diagnostics.py"],
+        "file_dep": [
+            "./src/plot_spread_diagnostics.py",
+            "./src/clean_mbp1.py",
+            _aligned_path("1m"),
+        ],
+        "task_dep": ["clean_mbp1"],
+        "targets": [
+            OUTPUT_DIR / "figures" / f"{name}.png"
+            for name in DIAGNOSTIC_FIGURE_NAMES
+        ],
         "clean": True,
         "verbosity": 2,
     }

@@ -25,6 +25,15 @@ from settings import config
 OUTPUT_DIR = config("OUTPUT_DIR")
 FIG_DIR = OUTPUT_DIR / "figures"
 
+FIGURE_NAMES = [
+    "01_spread_week",
+    "02_rolling_deviations",
+    "03_deviation_histogram",
+    "04_pacf_deviation",
+    "05_activity_by_hour",
+    "06_width_by_hour",
+]
+
 PAL = {
     "hist": "steelblue",
     "hist_border": "#2F4F4F",
@@ -222,25 +231,25 @@ def main():
     aligned = load_aligned("1m")
     synth = aligned["synth_mid"].dropna()
 
-    figures = {
-        "01_spread_week": plot_week_series(
+    figures = dict(zip(FIGURE_NAMES, [
+        plot_week_series(
             synth, "Brent-WTI synthetic spread (CL.v.0 - BZ.v.0), 1-minute mid", "Spread ($/bbl)"
         ),
-        "02_rolling_deviations": plot_rolling_deviations(
+        plot_rolling_deviations(
             synth, "Spread minus trailing mean - does it pull back to zero?"
         ),
-        "03_deviation_histogram": plot_histogram(
+        plot_histogram(
             rolling_deviations(synth, ["2h"])["deviation"],
             "Distribution of 2h-window deviations",
             "Spread - 2h trailing mean ($/bbl)",
         ),
-        "04_pacf_deviation": plot_pacf(
+        plot_pacf(
             rolling_deviations(synth, ["2h"])["deviation"],
             "PACF - spread deviation from 2h trailing mean (1-minute lags)",
         ),
-        "05_activity_by_hour": plot_activity_by_hour(),
-        "06_width_by_hour": plot_width_by_hour(aligned),
-    }
+        plot_activity_by_hour(),
+        plot_width_by_hour(aligned),
+    ], strict=True))
     for name, fig in figures.items():
         path = FIG_DIR / f"{name}.png"
         fig.save(path, dpi=150, verbose=False)

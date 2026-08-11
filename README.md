@@ -4,7 +4,7 @@
 
 This project builds and backtests an end-to-end **intraday mean-reversion strategy on the Brent–WTI crude-oil spread** using CME Globex MBP-1 market data from Databento. The final pipeline downloads the market data, constructs synchronized one-minute datasets, generates statistically filtered trade signals, executes those signals against the exchange-listed Brent–WTI spread, calculates executable P&L, and produces a set of backtest figures. The entire production workflow is reproducible with a single `doit` command once a Databento API key is supplied.
 
-The main result is a **negative but informative trading result**: over our June 1–5, 2026 pilot sample, the implemented mean-reversion specification did not generate robust positive P&L. We tested different entry thresholds, including 3.0 and 2.5 standard deviations; lowering the threshold created more opportunities but did not make the strategy reliably profitable. Rather than optimize aggressively to a five-day sample, we preserve a transparent baseline that demonstrates the full research and execution framework and highlights where the economic intuition does and does not survive realistic market-data and execution constraints.
+The main result is **informative rather than profitable**: over our June 1–5, 2026 pilot sample the default specification takes just four trades and finishes at **+$330 gross, before fees**, with a single +$420 trade accounting for more than the whole total. That is not evidence of an edge. We tested different entry thresholds, including 3.0 and 2.5 standard deviations; lowering the threshold created more opportunities but did not make the strategy reliably profitable. Rather than optimize aggressively to a five-day sample, we preserve a transparent baseline that demonstrates the full research and execution framework and highlights where the economic intuition does and does not survive realistic market-data and execution constraints.
 
 ## Data and Spread Construction
 
@@ -19,6 +19,38 @@ $$
 using the midpoint of each outright's best bid and ask. During the pilot week, the front listed spread `CLN6-BZQ6` matches the contracts underlying the two continuous outrights, so it is used for trade execution. Long positions enter at the listed spread ask and exit at its bid; short positions enter at the bid and cover at the ask. This makes the backtest P&L reflect the observed bid–ask spread rather than midpoint-only execution.
 
 Contract rolls are handled explicitly. Each row retains the underlying CL and BZ instrument IDs, and a rolling window is valid only if all observations belong to the same `(CL contract, BZ contract)` regime. Windows also require consecutive one-minute bars and active, non-stale outright quotes. This prevents artificial spread jumps caused by continuous-contract splicing from being mistaken for mean-reversion signals.
+
+## What the Spread Looks Like
+
+`doit spread_diagnostics` regenerates six figures that motivate the design.
+Three of them carry most of the argument, and together they explain both why we
+expected an edge and why we did not find one.
+
+Over the pilot week the spread trended from about −$3.50/bbl on Monday to
+−$1.50/bbl on Thursday before retracing sharply. There is no stable level to
+revert to across the week, which rules out anchoring on a fixed long-run mean
+and pushes the design toward a trailing window.
+
+![Synthetic spread over the pilot week](docs_src/figures/01_spread_week.png)
+
+Choosing that window is the central trade-off. At a daily horizon the deviation
+sits on one side of zero for a full day at a time — persistent drift, not
+reversion. At 30 minutes it oscillates tightly around zero, which is the
+behavior the strategy wants, but the amplitude is mostly within ±$0.20/bbl.
+
+![Rolling deviations at three horizons](docs_src/figures/02_rolling_deviations.png)
+
+That small amplitude is the problem, because it has to cover execution. For
+most of the day the books are tight and nearly identical across venues, with a
+median quoted width around $0.05/bbl, then they blow out after 20:00 UTC — and
+in that window the front listed spread is the *worst* of the three, not the
+best. This is why the strategy stops trading at 19:59 UTC.
+
+![Quoted width by hour, synthetic vs listed](docs_src/figures/06_width_by_hour.png)
+
+The remaining three figures — the deviation histogram, the PACF of deviations,
+and top-of-book activity by hour — are documented in
+[`docs_src/spread_diagnostics.md`](docs_src/spread_diagnostics.md).
 
 ## Strategy Logic
 
