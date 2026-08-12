@@ -68,21 +68,6 @@ myst_markdown_demos.md
 apidocs/index
 ```
 
-
-## Pipeline Specs
-| Pipeline Name                   | FINM 37000 Group 6 Trading                       |
-|---------------------------------|--------------------------------------------------------|
-| Pipeline ID                     | [FI](./index.md)              |
-| Lead Pipeline Developer         | Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem             |
-| Contributors                    | Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem           |
-| Git Repo URL                    | https://github.com/andrewheekin/finm37000-grp-6-trading                        |
-| Pipeline Web Page               | <a href="https://andrewheekin.github.io/finm37000-grp-6-trading/">Pipeline Web Page      |
-| Date of Last Code Update        | 2026-08-12 08:22:01           |
-| OS Compatibility                |  |
-| Linked Dataframes               |  [FI:brent_wti_aligned_1m](cb/dataframes/FI/brent_wti_aligned_1m.md)<br>  [FI:brent_wti_aligned_1s](cb/dataframes/FI/brent_wti_aligned_1s.md)<br>  [FI:spread_events_front](cb/dataframes/FI/spread_events_front.md)<br>  [FI:entry_signals_1m](cb/dataframes/FI/entry_signals_1m.md)<br>  [FI:brent_wti_strategy_1m](cb/dataframes/FI/brent_wti_strategy_1m.md)<br>  |
-
-
-
 ## Overview and Results
 
 This project builds and backtests an end-to-end **intraday mean-reversion strategy on the Brent–WTI crude-oil spread** using CME Globex MBP-1 market data from Databento. The final pipeline downloads the market data, constructs synchronized one-minute datasets, generates statistically filtered trade signals, executes those signals against the exchange-listed Brent–WTI spread, calculates executable P&L, and produces a set of backtest figures. The entire production workflow is reproducible with a single `doit` command once a Databento API key is supplied.
