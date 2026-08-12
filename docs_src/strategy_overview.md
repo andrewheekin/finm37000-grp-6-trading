@@ -2,6 +2,8 @@
 
 This document provides a conceptual walkthrough of the intraday mean-reversion strategy used to trade the Brent–WTI spread. Its purpose is to document the full decision-making architecture of the strategy before implementation, so that each component can be understood independently and then translated cleanly into code.
 
+Thresholds and window lengths are deliberately left unspecified here, since the point of the document is the architecture rather than any single parameterization. For the values that were actually implemented and what they produced on the pilot week, see [Strategy Results](strategy_results.md).
+
 At a high level, the strategy searches for temporary dislocations in the spread and enters a position only when there is sufficient evidence that the deviation is both meaningful and likely to revert over a short horizon. Rather than treating every large movement in the spread as a trading opportunity, the strategy applies a sequence of filters designed to distinguish potentially mean-reverting deviations from movements that may reflect a genuine change in the relationship between the two markets.
 
 For each observation, the strategy evaluates the most recent rolling window of spread data and asks three questions:

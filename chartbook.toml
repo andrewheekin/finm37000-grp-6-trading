@@ -1,3 +1,8 @@
+# Read from the manifest root, not from [pipeline], so it has to stay above the
+# first table header. Left unset, chartbook substitutes a file:// URL pointing at
+# whichever machine ran the build and publishes that as the site's own address.
+webpage_URL = "https://andrewheekin.github.io/finm37000-grp-6-trading/"
+
 [config]
 type = "pipeline"
 chartbook_format_version = "0.0.2"
@@ -22,8 +27,9 @@ README_file_path = "./README.md"
 site_dir = "./docs_src/"
 
 # The jupytext sources in src/*.ipynb.py are no longer executed by dodo.py, so
-# no built notebook exists at _output/ for chartbook to pick up. Re-add entries
-# here alongside a doit task that runs jupytext if the site is revived.
+# no built notebook exists at _output/ for chartbook to pick up. Putting a
+# notebook back on the site (issue #29) means re-adding an entry here alongside
+# a doit task that runs jupytext.
 [notebooks]
 
 [dataframes]
@@ -80,8 +86,21 @@ topic_tags = ["Brent", "WTI", "Futures", "Spread", "Signals", "Mean Reversion"]
 path_to_parquet_data = "./_output/brent_wti_signals_1m.parquet"
 dataframe_docs_path = "./docs_src/dataframes/entry_signals_1m.md"
 
-# The mean-reversion diagnostics are matplotlib/plotnine PNGs, not HTML, so
-# they are documented on the Spread Diagnostics site page and rendered inside
-# the walkthrough notebook rather than as [charts] entries (which require
-# path_to_html_chart).
+[dataframes.brent_wti_strategy_1m]
+dataframe_name = "Brent-WTI Strategy Backtest (1-minute)"
+short_description_df = "Per-bar backtest of the final mean-reversion specification: rolling stats, z-score, half-life, entries, exits with reason, and executable P&L"
+data_sources = ["Brent-WTI aligned 1-minute parquet; CLN6-BZQ6 listed spread book"]
+data_providers = ["Derived from Databento GLBX.MDP3 mbp-1"]
+links_to_data_providers = ["https://databento.com"]
+data_license = "Derived course artifact; underlying market data subject to Databento terms"
+restriction_on_use = "Course project use; data files are not committed to the repository"
+how_is_pulled = "doit run_strategy (src/strategy_engine.py <- clean_mbp1 aligned 1m)"
+topic_tags = ["Brent", "WTI", "Futures", "Spread", "Mean Reversion", "Backtest", "PnL"]
+path_to_parquet_data = "./_output/brent_wti_strategy_1m.parquet"
+dataframe_docs_path = "./docs_src/dataframes/brent_wti_strategy_1m.md"
+
+# Every figure in this project is a matplotlib/plotnine PNG, not HTML, so the
+# diagnostics and backtest figures are embedded in the Spread Diagnostics and
+# Strategy Results site pages rather than registered as [charts] entries, which
+# require path_to_html_chart.
 [charts]

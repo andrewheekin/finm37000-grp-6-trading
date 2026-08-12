@@ -41,8 +41,10 @@ Two representations of the spread are carried side by side:
 ## Implementation Notes
 
 - Pipeline steps are chained with `doit`:
-  `pull_databento -> clean_mbp1 -> spread_diagnostics -> run_notebooks`.
-  `doit clean` never deletes the billable DBN cache.
+  `config -> pull_databento -> clean_mbp1 -> run_strategy ->
+  plot_strategy_results`, with `spread_diagnostics` and `signal_generator` as
+  side branches off `clean_mbp1`. `doit clean` never deletes the billable DBN
+  cache.
 - Pure-function tests (`src/test_pipeline.py`, no network or API key) cover
   cache naming, event cleaning, gridding and the forward-fill limit, roll
   flagging, alignment, spread filtering, and the rolling-deviation

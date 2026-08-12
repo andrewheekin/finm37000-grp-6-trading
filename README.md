@@ -4,7 +4,7 @@
 
 This project builds and backtests an end-to-end **intraday mean-reversion strategy on the Brent–WTI crude-oil spread** using CME Globex MBP-1 market data from Databento. The final pipeline downloads the market data, constructs synchronized one-minute datasets, generates statistically filtered trade signals, executes those signals against the exchange-listed Brent–WTI spread, calculates executable P&L, and produces a set of backtest figures. The entire production workflow is reproducible with a single `doit` command once a Databento API key is supplied.
 
-The main result is a **negative but informative trading result**: over our June 1–5, 2026 pilot sample, the implemented mean-reversion specification did not generate robust positive P&L. We tested different entry thresholds, including 3.0 and 2.5 standard deviations; lowering the threshold created more opportunities but did not make the strategy reliably profitable. Rather than optimize aggressively to a five-day sample, we preserve a transparent baseline that demonstrates the full research and execution framework and highlights where the economic intuition does and does not survive realistic market-data and execution constraints.
+The main result is **informative but statistically inconclusive**: over our June 1–5, 2026 pilot sample, the implemented mean-reversion specification did not generate robust positive P&L. The default 2.5σ specification fires only **4 trades in 6,000 eligible minutes** and finishes **+\$330**, but a single trade contributes +\$420 while the other three net −\$90 combined. A four-trade sample cannot distinguish that from zero. We tested different entry thresholds, including 3.0 and 2.5 standard deviations; lowering the threshold created more opportunities but did not make the strategy reliably profitable. Rather than optimize aggressively to a five-day sample, we preserve a transparent baseline that demonstrates the full research and execution framework and highlights where the economic intuition does and does not survive realistic market-data and execution constraints. The full trade log and entry-gate funnel are on the [Strategy Results](docs_src/strategy_results.md) page.
 
 ## Pipeline Overview
 
@@ -32,8 +32,8 @@ Contract rolls are handled explicitly. Each row retains the underlying CL and BZ
 Three of them carry most of the argument, and together they explain both why we
 expected an edge and why we did not find one.
 
-Over the pilot week the spread trended from about −$3.50/bbl on Monday to
-−$1.50/bbl on Thursday before retracing sharply. There is no stable level to
+Over the pilot week the spread trended from about −\$3.50/bbl on Monday to
+−\$1.50/bbl on Thursday before retracing sharply. There is no stable level to
 revert to across the week, which rules out anchoring on a fixed long-run mean
 and pushes the design toward a trailing window.
 
@@ -42,13 +42,13 @@ and pushes the design toward a trailing window.
 Choosing that window is the central trade-off. At a daily horizon the deviation
 sits on one side of zero for a full day at a time — persistent drift, not
 reversion. At 30 minutes it oscillates tightly around zero, which is the
-behavior the strategy wants, but the amplitude is mostly within ±$0.20/bbl.
+behavior the strategy wants, but the amplitude is mostly within ±\$0.20/bbl.
 
 ![Rolling deviations at three horizons](docs_src/figures/02_rolling_deviations.png)
 
 That small amplitude is the problem, because it has to cover execution. For
 most of the day the books are tight and nearly identical across venues, with a
-median quoted width around $0.05/bbl, then they blow out after 20:00 UTC — and
+median quoted width around \$0.05/bbl, then they blow out after 20:00 UTC — and
 in that window the front listed spread is the *worst* of the three, not the
 best. This is why the strategy stops trading at 19:59 UTC.
 
@@ -66,7 +66,7 @@ The strategy operates only from **00:00 through 19:59 UTC** and holds at most on
 2. **Stationarity:** by default, the rolling window must pass both an Augmented Dickey–Fuller test and a KPSS test at the 5% level. Either test can be disabled in `src/strategy_engine.py`.
 3. **Half-life:** fit an AR(1) model to the spread window and convert the autoregressive coefficient to an estimated mean-reversion half-life. Entry is allowed only when the estimate is positive and below the configured maximum.
 
-The default specification uses a **30-minute window**, **2.5σ entry threshold**, and **15-minute maximum half-life**. Once entered, a trade exits when the absolute z-score returns to **0.5 or less**, when mark-to-market loss reaches **$1,000**, after **30 minutes**, or at the end of the trading session. P&L uses the listed-spread bid/ask and a **1,000-barrel contract multiplier**. All rolling calculations use only observations available through the current timestamp.
+The default specification uses a **30-minute window**, **2.5σ entry threshold**, and **15-minute maximum half-life**. Once entered, a trade exits when the absolute z-score returns to **0.5 or less**, when mark-to-market loss reaches **\$1,000**, after **30 minutes**, or at the end of the trading session. P&L uses the listed-spread bid/ask and a **1,000-barrel contract multiplier**. All rolling calculations use only observations available through the current timestamp.
 
 ## Outputs
 
@@ -195,3 +195,38 @@ npx -y @mermaid-js/mermaid-cli@11 \
   -o docs_src/figures/07_strategy_flowchart.png \
   -b white -s 3
 ```
+
+## Publishing the documentation site
+
+The site at
+[andrewheekin.github.io/finm37000-grp-6-trading](https://andrewheekin.github.io/finm37000-grp-6-trading/)
+is served from the `gh-pages` branch. Publishing is manual
+([issue #34](https://github.com/andrewheekin/finm37000-grp-6-trading/issues/34)
+tracks automating it). Build from an activated virtualenv, because `chartbook`
+shells out to `sphinx-build` and needs it on `PATH`:
+
+```bash
+source .venv/bin/activate
+chartbook build -f          # -> ./docs (gitignored)
+
+# The index page is generated from README.md, which references figures by their
+# repo-root-relative paths. Sphinx does not copy those, so mirror them or every
+# image on the landing page 404s.
+mkdir -p docs/docs_src/figures
+cp docs_src/figures/*.png docs/docs_src/figures/
+```
+
+Preview locally with `python -m http.server` inside `docs/`, then publish the
+build to `gh-pages` using a worktree, since `docs/` is gitignored on `main`:
+
+```bash
+git worktree add ../gh-pages-build gh-pages
+rsync -a --delete --exclude .git docs/ ../gh-pages-build/
+touch ../gh-pages-build/.nojekyll
+cd ../gh-pages-build && git add -A && git commit -m "Update documentation" && git push
+cd - && git worktree remove ../gh-pages-build
+```
+
+Note that figures embedded in the site's own pages must live under
+`docs_src/figures/` and be committed, since `_output/` is not. After running
+`doit`, copy any regenerated figures across before rebuilding the site.

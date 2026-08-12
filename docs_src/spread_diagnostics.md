@@ -3,7 +3,8 @@
 Six figures produced by `doit spread_diagnostics`
 (`src/plot_spread_diagnostics.py`) from the pilot-week aligned dataset. The
 question they address: does the spread visually mean-revert, and at what
-horizon? The same figures render with narration in the walkthrough notebook.
+horizon? What the strategy built on these observations went on to do is
+reported in [Strategy Results](strategy_results.md).
 
 ## 1. The spread over the week
 
