@@ -1,3 +1,5 @@
+# Brent-WTI Strategy Backtest (1-minute)
+
 ## Description
 
 Per-bar output of the final Brent–WTI mean-reversion backtest
