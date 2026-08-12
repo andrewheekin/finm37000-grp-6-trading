@@ -53,8 +53,4 @@ myst_markdown_demos.md
 apidocs/index
 ```
 
-
-## Pipeline Specs
-{% include "_docs_src/_templates/pipeline_manifest.md" with context %}
-
 {{readme_text}}
