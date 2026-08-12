@@ -1,0 +1,65 @@
+flowchart TB
+    subgraph DATA["1 &nbsp; Data pipeline &nbsp; (doit)"]
+        direction LR
+        A["Databento GLBX.MDP3 MBP-1<br/>CL.v.0, BZ.v.0, CLN6-BZQ6"] --> B["pull_databento.py<br/>cached in _data/databento"]
+        B --> C["clean_mbp1.py<br/>1s / 1m grids, aligned dataset,<br/>contract-roll regimes"]
+        C --> D["Synthetic spread<br/>S = CL_mid - BZ_mid"]
+    end
+
+    subgraph GATES["2 &nbsp; Entry gates &nbsp; (all must pass, each 1m bar, 00:00-19:59 UTC)"]
+        direction LR
+        E{"Window valid?<br/>30 bars, one regime,<br/>fresh quotes"}
+        F{"Deviation<br/>abs z-score >= 2.5"}
+        G{"Stationarity<br/>ADF p < 0.05<br/>KPSS p > 0.05"}
+        H{"Half-life<br/>0 < HL <= 15 min"}
+        Z(["No trade this bar"])
+        E -- yes --> F -- yes --> G -- yes --> H
+        E -- no --> Z
+        F -- no --> Z
+        G -- no --> Z
+        H -- no --> Z
+    end
+
+    subgraph TRADE["3 &nbsp; Position management &nbsp; (max one contract at a time)"]
+        direction LR
+        I["Enter listed spread<br/>z &lt; 0 long at ask<br/>z &gt; 0 short at bid"]
+        J{"Exit check<br/>every bar"}
+        K["mean_reversion<br/>abs z &lt;= 0.5"]
+        L["stop_loss<br/>MTM loss &gt;= 1000 USD"]
+        M["time_stop<br/>age &gt;= 30 bars"]
+        N["session_end<br/>last bar of session"]
+        O["Close at listed bid/ask<br/>x 1000 bbl multiplier"]
+        I --> J
+        J --> K --> O
+        J --> L --> O
+        J --> M --> O
+        J --> N --> O
+    end
+
+    subgraph OUT["4 &nbsp; Outputs"]
+        direction LR
+        P[("_output/brent_wti_strategy_1m.parquet")]
+        Q["plot_strategy_results.py<br/>4 figures in _output/figures"]
+        P --> Q
+    end
+
+    D ==> E
+    H == "yes" ==> I
+    O ==> P
+
+    classDef data fill:#e8f0fe,stroke:#4a72c4,stroke-width:1.5px,color:#12263f
+    classDef gate fill:#fff4e0,stroke:#d99100,stroke-width:1.5px,color:#4a3200
+    classDef trade fill:#e6f4ea,stroke:#2e7d46,stroke-width:1.5px,color:#10331d
+    classDef exitnode fill:#fdeaea,stroke:#c1443b,stroke-width:1.5px,color:#4a1512
+    classDef skip fill:#f1f3f4,stroke:#9aa0a6,stroke-width:1.5px,color:#3c4043
+
+    class A,B,C,D,P,Q data
+    class E,F,G,H,J gate
+    class I,O trade
+    class K,L,M,N exitnode
+    class Z skip
+
+    style DATA fill:#fbfcfe,stroke:#c7d2e5,color:#12263f
+    style GATES fill:#fffdf7,stroke:#e8d3a8,color:#4a3200
+    style TRADE fill:#fbfefb,stroke:#c3e0cc,color:#10331d
+    style OUT fill:#fbfcfe,stroke:#c7d2e5,color:#12263f
