@@ -1,5 +1,3 @@
-# Dataframe: `FI:brent_wti_aligned_1m` - Brent-WTI Aligned (1-minute)
-
 # Brent-WTI Aligned (1-minute)
 
 ## Description
@@ -32,7 +30,7 @@ regeneration and the `_data` junction setup.)
   two contracts, so a rolling window spanning a roll mixes them. Use
   `regime_key` + `rolling_within_regime` / `zscore_within_regime` from
   `clean_mbp1` rather than a bare `.rolling()` — see
-  [Contract Rolls](../contract_rolls.md).
+  [Contract Rolls](../../../contract_rolls.md).
 
 ## Data Dictionary
 
@@ -107,15 +105,12 @@ $ ts_recv          <datetime[ns, UTC]> 2026-06-05 21:00:00+00:00
 
 | Dataframe Name                 | Brent-WTI Aligned (1-minute)                                                   |
 |--------------------------------|--------------------------------------------------------------------------------------|
-| Dataframe ID                   | [brent_wti_aligned_1m](../dataframes/FI/brent_wti_aligned_1m.md)                                       |
+| Dataframe ID                   | `FI:brent_wti_aligned_1m`                                       |
 | Data Sources                   | Databento GLBX.MDP3 (CME Globex), schema mbp-1                                        |
 | Data Providers                 | Databento                                      |
 | Links to Providers             | https://databento.com                             |
 | Topic Tags                     | Brent, Wti, Futures, Spread, Market Data                                          |
-| Type of Data Access            |                                   |
 | How is data pulled?            | doit pull_databento clean_mbp1 (src/pull_databento.py -> src/clean_mbp1.py)                                                    |
-| Data available up to (min)     | N/A                                                             |
-| Data available up to (max)     | N/A                                                             |
-| Dataframe Path                 | /Users/andrewheekin/heekscripts/uchicago/2026q3_finm37000_futures_derivatives/finm37000-grp-6-trading/_data/clean/brent_wti_aligned_1m_2026-06-01_2026-06-06.parquet                                                   |
+| Dataframe Path                 | `./_data/clean/brent_wti_aligned_1m_2026-06-01_2026-06-06.parquet`                                                   |
 
 

@@ -11,54 +11,29 @@ By Michael Dowling, Andrew Heekin, Bhuvanesh Kodem, Sam Zhang
 :hidden:
 
 project_overview
-strategy_overview
-strategy_results
 data_pipeline
 contract_rolls
 spread_diagnostics
+strategy_overview
+strategy_results
 how_to_run
 ```
 
-```{toctree}
-:maxdepth: 1
-:caption: Strategy Dataframes
-:hidden:
 
-dataframes/brent_wti_aligned_1m
-dataframes/brent_wti_aligned_1s
-dataframes/spread_events_front
-dataframes/entry_signals_1m
-dataframes/brent_wti_strategy_1m
-```
+
+
 
 
 
 ```{toctree}
 :maxdepth: 1
-:caption: Notebooks
-:hidden:
-
-```
-
-
-
-```{toctree}
-:maxdepth: 1
-:caption: Pipeline Dataframes
+:caption: Dataframes
 :hidden:
 cb/dataframes/FI/brent_wti_aligned_1m.md
 cb/dataframes/FI/brent_wti_aligned_1s.md
 cb/dataframes/FI/brent_wti_strategy_1m.md
 cb/dataframes/FI/entry_signals_1m.md
 cb/dataframes/FI/spread_events_front.md
-```
-
-```{toctree}
-:maxdepth: 1
-:caption: Appendix
-:hidden:
-myst_markdown_demos.md
-apidocs/index
 ```
 
 ## Overview and Results

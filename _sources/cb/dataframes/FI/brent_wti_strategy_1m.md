@@ -1,5 +1,3 @@
-# Dataframe: `FI:brent_wti_strategy_1m` - Brent-WTI Strategy Backtest (1-minute)
-
 # Brent-WTI Strategy Backtest (1-minute)
 
 ## Description
@@ -10,7 +8,7 @@ UTC session, carrying the rolling statistics the entry gates saw, the position
 state, the exit that closed it, and executable P&L.
 
 This is the artifact behind every number on the
-[Strategy Results](../strategy_results.md) page: 6,000 bars over June 1–5,
+[Strategy Results](../../../strategy_results.md) page: 6,000 bars over June 1–5,
 2026, 4 trades, +\$330 cumulative P&L.
 
 Signals come from the synthetic spread (`synth_mid = cl_mid − bz_mid`), but
@@ -133,15 +131,12 @@ $ ts_recv      <datetime[ns, UTC]> 2026-06-05 19:59:00+00:00
 
 | Dataframe Name                 | Brent-WTI Strategy Backtest (1-minute)                                                   |
 |--------------------------------|--------------------------------------------------------------------------------------|
-| Dataframe ID                   | [brent_wti_strategy_1m](../dataframes/FI/brent_wti_strategy_1m.md)                                       |
+| Dataframe ID                   | `FI:brent_wti_strategy_1m`                                       |
 | Data Sources                   | Brent-WTI aligned 1-minute parquet; CLN6-BZQ6 listed spread book                                        |
 | Data Providers                 | Derived from Databento GLBX.MDP3 mbp-1                                      |
 | Links to Providers             | https://databento.com                             |
 | Topic Tags                     | Brent, Wti, Futures, Spread, Mean Reversion, Backtest, Pnl                                          |
-| Type of Data Access            |                                   |
 | How is data pulled?            | doit run_strategy (src/strategy_engine.py <- clean_mbp1 aligned 1m)                                                    |
-| Data available up to (min)     | N/A                                                             |
-| Data available up to (max)     | N/A                                                             |
-| Dataframe Path                 | /Users/andrewheekin/heekscripts/uchicago/2026q3_finm37000_futures_derivatives/finm37000-grp-6-trading/_output/brent_wti_strategy_1m.parquet                                                   |
+| Dataframe Path                 | `./_output/brent_wti_strategy_1m.parquet`                                                   |
 
 

@@ -1,5 +1,3 @@
-# Dataframe: `FI:brent_wti_aligned_1s` - Brent-WTI Aligned (1-second)
-
 # Brent-WTI Aligned (1-second)
 
 ## Description
@@ -26,7 +24,7 @@ Rolling windows expressed as an **observation count** mean something different
 here than on the 1-minute grid: `window=120` is two *minutes* of this grid but
 two *hours* of the 1-minute one. Pass a time offset (`window="2h"`) to get the
 same duration on either grid — that is the default for
-`zscore_within_regime`. See [Contract Rolls](../contract_rolls.md).
+`zscore_within_regime`. See [Contract Rolls](../../../contract_rolls.md).
 
 
 
@@ -78,15 +76,12 @@ $ ts_recv          <datetime[ns, UTC]> 2026-06-05 21:00:00+00:00
 
 | Dataframe Name                 | Brent-WTI Aligned (1-second)                                                   |
 |--------------------------------|--------------------------------------------------------------------------------------|
-| Dataframe ID                   | [brent_wti_aligned_1s](../dataframes/FI/brent_wti_aligned_1s.md)                                       |
+| Dataframe ID                   | `FI:brent_wti_aligned_1s`                                       |
 | Data Sources                   | Databento GLBX.MDP3 (CME Globex), schema mbp-1                                        |
 | Data Providers                 | Databento                                      |
 | Links to Providers             | https://databento.com                             |
 | Topic Tags                     | Brent, Wti, Futures, Spread, Market Data                                          |
-| Type of Data Access            |                                   |
 | How is data pulled?            | doit pull_databento clean_mbp1 (src/pull_databento.py -> src/clean_mbp1.py)                                                    |
-| Data available up to (min)     | N/A                                                             |
-| Data available up to (max)     | N/A                                                             |
-| Dataframe Path                 | /Users/andrewheekin/heekscripts/uchicago/2026q3_finm37000_futures_derivatives/finm37000-grp-6-trading/_data/clean/brent_wti_aligned_1s_2026-06-01_2026-06-06.parquet                                                   |
+| Dataframe Path                 | `./_data/clean/brent_wti_aligned_1s_2026-06-01_2026-06-06.parquet`                                                   |
 
 

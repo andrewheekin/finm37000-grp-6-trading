@@ -1,5 +1,3 @@
-# Dataframe: `FI:entry_signals_1m` - Entry Signals (1-minute)
-
 # Entry Signals (1-minute)
 
 ## Description
@@ -86,15 +84,12 @@ $ ts_recv         <datetime[ns, UTC]> 2026-06-05 21:00:00+00:00
 
 | Dataframe Name                 | Entry Signals (1-minute)                                                   |
 |--------------------------------|--------------------------------------------------------------------------------------|
-| Dataframe ID                   | [entry_signals_1m](../dataframes/FI/entry_signals_1m.md)                                       |
+| Dataframe ID                   | `FI:entry_signals_1m`                                       |
 | Data Sources                   | Brent-WTI aligned 1-minute parquet (issue #4 pipeline)                                        |
 | Data Providers                 | Derived from Databento GLBX.MDP3 mbp-1                                      |
 | Links to Providers             | https://databento.com                             |
 | Topic Tags                     | Brent, Wti, Futures, Spread, Signals, Mean Reversion                                          |
-| Type of Data Access            |                                   |
 | How is data pulled?            | doit signal_generator (src/signal_generator.py <- clean_mbp1 aligned 1m)                                                    |
-| Data available up to (min)     | N/A                                                             |
-| Data available up to (max)     | N/A                                                             |
-| Dataframe Path                 | /Users/andrewheekin/heekscripts/uchicago/2026q3_finm37000_futures_derivatives/finm37000-grp-6-trading/_output/brent_wti_signals_1m.parquet                                                   |
+| Dataframe Path                 | `./_output/brent_wti_signals_1m.parquet`                                                   |
 
 
