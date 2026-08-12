@@ -196,6 +196,13 @@ npx -y @mermaid-js/mermaid-cli@11 \
   -b white -s 3
 ```
 
+## Regenerating the logo
+
+`assets/logo.png` (site sidebar) and `assets/favicon.ico` (browser tab) are
+drawn by `python src/make_logo.py`, using the same palette as the strategy
+figures. Both are committed, so this only needs re-running if the wordmark or
+colors change.
+
 ## Publishing the documentation site
 
 The site at

@@ -11,8 +11,8 @@ chartbook_format_version = "0.0.2"
 title = "FINM 37000 Group 6 Trading"
 author = "Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem"
 copyright = "2026"
-logo_path = ""
-favicon_path = ""
+logo_path = "./assets/logo.png"
+favicon_path = "./assets/favicon.ico"
 
 [pipeline]
 id = "FI"
