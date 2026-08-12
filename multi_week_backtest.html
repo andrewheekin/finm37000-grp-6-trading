@@ -1,0 +1,821 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Multi-Week Backtest &#8212; Trading Brent-WTI Intraday Mean Reversion</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=2ef1ee83" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="_static/documentation_options.js?v=b9472d72"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'multi_week_backtest';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="How to Run" href="how_to_run.html" />
+    <link rel="prev" title="Strategy Results" href="strategy_results.html" /> 
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+     
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Trading Brent-WTI Intraday Mean Reversion - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="Trading Brent-WTI Intraday Mean Reversion - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="index.html">
+                    Trading Brent-WTI Intraday Mean Reversion
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Project Notes</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="project_overview.html">Project Overview</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="project_overview/goals.html">Goals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_overview/data_sources.html">Data Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_overview/methodology.html">Methodology</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="data_pipeline.html">Data Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contract_rolls.html">Contract Rolls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spread_diagnostics.html">Spread Diagnostics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="strategy_overview.html">Full Strategy Overview - A Walkthrough of the Architecture from Signal to Exit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="strategy_results.html">Strategy Results</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Multi-Week Backtest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how_to_run.html">How to Run</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cb/notebooks/FI/backtesting_period_analysis.html">Multi-Week Backtest (2023-2026)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cb/notebooks/FI/ewm_7d_zscore_backtest.html">EWM Z-Score Sensitivity Check</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Dataframes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/brent_wti_aligned_1m.html">Brent-WTI Aligned (1-minute)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/brent_wti_aligned_1s.html">Brent-WTI Aligned (1-second)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/brent_wti_strategy_1m.html">Brent-WTI Strategy Backtest (1-minute)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/entry_signals_1m.html">Entry Signals (1-minute)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/spread_events_front.html">Listed Spread Events (CLN6-BZQ6)</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/multi_week_backtest.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Multi-Week Backtest</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#by-year">By year</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#by-block">By block</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-average-trade-pays-the-spread-and-captures-nothing">The average trade pays the spread and captures nothing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#yearly-figures">Yearly figures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#an-alternative-specification">An alternative specification</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#caveats">Caveats</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproducing">Reproducing</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                   <section class="tex2jax_ignore mathjax_ignore" id="multi-week-backtest">
+<h1>Multi-Week Backtest<a class="headerlink" href="#multi-week-backtest" title="Link to this heading">#</a></h1>
+<p><a class="reference internal" href="strategy_results.html"><span class="std std-doc">Strategy Results</span></a> reports the June 1–5, 2026 pilot week
+and closes by asking for a larger sample, on the grounds that four trades
+cannot support a conclusion. This page answers that question. The same
+specification — 30-minute window, ±2.5σ entry, 15-minute maximum half-life —
+was run over <strong>twelve independent weekly blocks spanning 2023 through 2026</strong>.</p>
+<p>The answer is negative. Across the twelve weeks the strategy completes <strong>145
+trades for −$1,900</strong>, winning <strong>12 of them</strong>. The pilot week’s +$330 is the
+exception, not the rule.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These results come from
+<a class="reference external" href="https://github.com/andrewheekin/finm37000-grp-6-trading/blob/main/notebooks/backtesting_period_analysis.ipynb"><code class="docutils literal notranslate"><span class="pre">notebooks/backtesting_period_analysis.ipynb</span></code></a>,
+not from the <code class="docutils literal notranslate"><span class="pre">doit</span></code> chain. The historical weeks are downloaded by
+<code class="docutils literal notranslate"><span class="pre">src/extend_backtest_periods.py</span></code>, which is deliberately outside the pipeline
+because it spends Databento credits on data the graded pipeline does not need.
+See <a class="reference internal" href="#caveats"><span class="xref myst">Caveats</span></a> for what this changes.</p>
+</div>
+<section id="by-year">
+<h2>By year<a class="headerlink" href="#by-year" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Year</p></th>
+<th class="head text-right"><p>Blocks</p></th>
+<th class="head text-right"><p>Trades</p></th>
+<th class="head text-right"><p>Winners</p></th>
+<th class="head text-right"><p>Win rate</p></th>
+<th class="head text-right"><p>Mean trade</p></th>
+<th class="head text-right"><p>P&amp;L</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>2023</p></td>
+<td class="text-right"><p>3</p></td>
+<td class="text-right"><p>33</p></td>
+<td class="text-right"><p>4</p></td>
+<td class="text-right"><p>12.1%</p></td>
+<td class="text-right"><p>−$16.67</p></td>
+<td class="text-right"><p>−$550</p></td>
+</tr>
+<tr class="row-odd"><td><p>2024</p></td>
+<td class="text-right"><p>3</p></td>
+<td class="text-right"><p>48</p></td>
+<td class="text-right"><p>0</p></td>
+<td class="text-right"><p>0.0%</p></td>
+<td class="text-right"><p>−$19.58</p></td>
+<td class="text-right"><p>−$940</p></td>
+</tr>
+<tr class="row-even"><td><p>2025</p></td>
+<td class="text-right"><p>3</p></td>
+<td class="text-right"><p>50</p></td>
+<td class="text-right"><p>2</p></td>
+<td class="text-right"><p>4.0%</p></td>
+<td class="text-right"><p>−$11.60</p></td>
+<td class="text-right"><p>−$580</p></td>
+</tr>
+<tr class="row-odd"><td><p>2026</p></td>
+<td class="text-right"><p>3</p></td>
+<td class="text-right"><p>14</p></td>
+<td class="text-right"><p>6</p></td>
+<td class="text-right"><p>42.9%</p></td>
+<td class="text-right"><p>+$12.14</p></td>
+<td class="text-right"><p>+$170</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Total</strong></p></td>
+<td class="text-right"><p><strong>12</strong></p></td>
+<td class="text-right"><p><strong>145</strong></p></td>
+<td class="text-right"><p><strong>12</strong></p></td>
+<td class="text-right"><p><strong>8.3%</strong></p></td>
+<td class="text-right"><p><strong>−$13.10</strong></p></td>
+<td class="text-right"><p><strong>−$1,900</strong></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Only 2026 is profitable, and it is the year containing the pilot week. <strong>2024
+is the clearest result on this page: 48 trades, not one of them a winner.</strong> A
+specification with any genuine edge does not go 0-for-48.</p>
+</section>
+<section id="by-block">
+<h2>By block<a class="headerlink" href="#by-block" title="Link to this heading">#</a></h2>
+<p>Each block is an independent backtest — rolling statistics, position state, and
+cumulative P&amp;L all reset at the boundary, so no trade spans two blocks.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Year</p></th>
+<th class="head"><p>Block (UTC)</p></th>
+<th class="head text-right"><p>Trades</p></th>
+<th class="head text-right"><p>Winners</p></th>
+<th class="head text-right"><p>Mean width</p></th>
+<th class="head text-right"><p>Mean hold</p></th>
+<th class="head text-right"><p>P&amp;L</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>2023</p></td>
+<td><p>05-01 → 05-05</p></td>
+<td class="text-right"><p>13</p></td>
+<td class="text-right"><p>1</p></td>
+<td class="text-right"><p>$0.0163</p></td>
+<td class="text-right"><p>9.0 min</p></td>
+<td class="text-right"><p>−$210</p></td>
+</tr>
+<tr class="row-odd"><td><p>2023</p></td>
+<td><p>05-07 → 05-12</p></td>
+<td class="text-right"><p>12</p></td>
+<td class="text-right"><p>2</p></td>
+<td class="text-right"><p>$0.0155</p></td>
+<td class="text-right"><p>11.2 min</p></td>
+<td class="text-right"><p>−$210</p></td>
+</tr>
+<tr class="row-even"><td><p>2023</p></td>
+<td><p>05-14 → 05-19</p></td>
+<td class="text-right"><p>8</p></td>
+<td class="text-right"><p>1</p></td>
+<td class="text-right"><p>$0.0213</p></td>
+<td class="text-right"><p>11.6 min</p></td>
+<td class="text-right"><p>−$130</p></td>
+</tr>
+<tr class="row-odd"><td><p>2024</p></td>
+<td><p>05-06 → 05-12</p></td>
+<td class="text-right"><p>23</p></td>
+<td class="text-right"><p>0</p></td>
+<td class="text-right"><p>$0.0164</p></td>
+<td class="text-right"><p>12.3 min</p></td>
+<td class="text-right"><p>−$450</p></td>
+</tr>
+<tr class="row-even"><td><p>2024</p></td>
+<td><p>05-13 → 05-19</p></td>
+<td class="text-right"><p>8</p></td>
+<td class="text-right"><p>0</p></td>
+<td class="text-right"><p>$0.0159</p></td>
+<td class="text-right"><p>5.1 min</p></td>
+<td class="text-right"><p>−$100</p></td>
+</tr>
+<tr class="row-odd"><td><p>2024</p></td>
+<td><p>05-20 → 05-26</p></td>
+<td class="text-right"><p>17</p></td>
+<td class="text-right"><p>0</p></td>
+<td class="text-right"><p>$0.0179</p></td>
+<td class="text-right"><p>11.2 min</p></td>
+<td class="text-right"><p>−$390</p></td>
+</tr>
+<tr class="row-even"><td><p>2025</p></td>
+<td><p>04-28 → 05-04</p></td>
+<td class="text-right"><p>20</p></td>
+<td class="text-right"><p>1</p></td>
+<td class="text-right"><p>$0.0118</p></td>
+<td class="text-right"><p>8.1 min</p></td>
+<td class="text-right"><p>−$220</p></td>
+</tr>
+<tr class="row-odd"><td><p>2025</p></td>
+<td><p>05-05 → 05-11</p></td>
+<td class="text-right"><p>16</p></td>
+<td class="text-right"><p>1</p></td>
+<td class="text-right"><p>$0.0116</p></td>
+<td class="text-right"><p>7.4 min</p></td>
+<td class="text-right"><p>−$160</p></td>
+</tr>
+<tr class="row-even"><td><p>2025</p></td>
+<td><p>05-12 → 05-18</p></td>
+<td class="text-right"><p>14</p></td>
+<td class="text-right"><p>0</p></td>
+<td class="text-right"><p>$0.0113</p></td>
+<td class="text-right"><p>9.9 min</p></td>
+<td class="text-right"><p>−$200</p></td>
+</tr>
+<tr class="row-odd"><td><p>2026</p></td>
+<td><p>06-01 → 06-05</p></td>
+<td class="text-right"><p>4</p></td>
+<td class="text-right"><p>2</p></td>
+<td class="text-right"><p>$0.0247</p></td>
+<td class="text-right"><p>16.2 min</p></td>
+<td class="text-right"><p>+$330</p></td>
+</tr>
+<tr class="row-even"><td><p>2026</p></td>
+<td><p>06-06 → 06-12</p></td>
+<td class="text-right"><p>4</p></td>
+<td class="text-right"><p>2</p></td>
+<td class="text-right"><p>$0.0273</p></td>
+<td class="text-right"><p>2.0 min</p></td>
+<td class="text-right"><p>+$30</p></td>
+</tr>
+<tr class="row-odd"><td><p>2026</p></td>
+<td><p>06-14 → 06-19</p></td>
+<td class="text-right"><p>6</p></td>
+<td class="text-right"><p>2</p></td>
+<td class="text-right"><p>$0.0270</p></td>
+<td class="text-right"><p>16.3 min</p></td>
+<td class="text-right"><p>−$190</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Mean width is the average quoted width of the listed spread over the block, in
+$/bbl. The 06-01 → 06-05 row is the pilot week, and it reproduces
+<a class="reference internal" href="strategy_results.html"><span class="std std-doc">Strategy Results</span></a> exactly: 4 trades, +$330, 16.2-minute
+mean hold.</p>
+<p>Ten of the twelve blocks lose money. The two that do not are the pilot week and
+the week immediately after it.</p>
+</section>
+<section id="the-average-trade-pays-the-spread-and-captures-nothing">
+<h2>The average trade pays the spread and captures nothing<a class="headerlink" href="#the-average-trade-pays-the-spread-and-captures-nothing" title="Link to this heading">#</a></h2>
+<p>The per-trade average is the most informative number in the table. Across all
+145 trades the strategy averages <strong>−$13.10</strong>, while the mean quoted width of
+the listed spread is <strong>$0.0181/bbl</strong>. At the 1,000-barrel multiplier, a
+round trip that enters at the ask and exits at the bid pays that full width:</p>
+<div class="math notranslate nohighlight">
+\[
+\$0.0181/\text{bbl} \times 1{,}000\ \text{bbl} \approx \$18\ \text{per round trip}
+\]</div>
+<p>So the average trade recovers roughly $5 of the $18 it spends getting in and
+out. The signal is not worthless — it is just far smaller than the cost of
+acting on it. This is the same mechanism <a class="reference internal" href="strategy_results.html"><span class="std std-doc">Strategy Results</span></a>
+identified in trade 1 of the pilot week, which reverted exactly as designed and
+still lost $100. What the twelve-week sample adds is that the pilot week was
+not unlucky; paying more than the edge is the strategy’s normal behavior.</p>
+<p>It also reframes the trade count. The pilot week’s four trades looked like a
+problem of an over-restrictive stationarity gate, and
+<a class="reference internal" href="strategy_results.html"><span class="std std-doc">Strategy Results</span></a> shows ADF rejecting 227 of 232
+candidate windows. The other blocks fire 8 to 23 trades each, so the gate is not
+uniformly binding — and the blocks that trade <em>more</em> lose <em>more</em>. Loosening the
+gate to generate more trades would have made the result worse, not better.</p>
+</section>
+<section id="yearly-figures">
+<h2>Yearly figures<a class="headerlink" href="#yearly-figures" title="Link to this heading">#</a></h2>
+<p>Each figure connects the three blocks within a year. The upper panel shows the
+synthetic spread with its rolling mean, green and red markers for long and
+short entries, and purple crosses for exits. The lower panel shows cumulative
+P&amp;L. Dashed vertical lines mark block boundaries, and the gaps between blocks
+are calendar time that was not traded.</p>
+<p><img alt="2023 connected spread, trades, and cumulative P&amp;L" src="_images/strategy_yearly_spread_pnl_2023.png" /></p>
+<p><img alt="2024 connected spread, trades, and cumulative P&amp;L" src="_images/strategy_yearly_spread_pnl_2024.png" /></p>
+<p>The 2024 panel is the cleanest illustration of the cost argument: the
+cumulative P&amp;L line is a monotone staircase down, with no offsetting winners at
+all.</p>
+<p><img alt="2025 connected spread, trades, and cumulative P&amp;L" src="_images/strategy_yearly_spread_pnl_2025.png" /></p>
+<p><img alt="2026 connected spread, trades, and cumulative P&amp;L" src="_images/strategy_yearly_spread_pnl_2026.png" /></p>
+<p>2026 stands apart on the spread panel rather than the P&amp;L panel. Its synthetic
+spread volatility averages about $0.47/bbl across the three blocks against
+roughly $0.07/bbl in 2025 — six to seven times as much — and its quoted width
+is more than twice as wide.
+The strategy needs deviations large enough to clear a wider book, and 2026 is
+the only sampled year that supplies them. Whether that is a regime worth
+targeting or simply the year we happened to sample most heavily is not
+answerable from three weeks.</p>
+</section>
+<section id="an-alternative-specification">
+<h2>An alternative specification<a class="headerlink" href="#an-alternative-specification" title="Link to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/andrewheekin/finm37000-grp-6-trading/blob/main/notebooks/ewm_7d_zscore_backtest.ipynb"><code class="docutils literal notranslate"><span class="pre">notebooks/ewm_7d_zscore_backtest.ipynb</span></code></a>
+tests a different parameterization on the same data: a five-trading-day
+exponentially weighted z-score instead of a 30-bar rolling window, a looser
+±2.0 entry threshold, a tighter $100 stop loss, and a 120-minute time stop.
+The longer EWM baseline is the direct response to the statistical-power problem
+in <a class="reference internal" href="strategy_results.html"><span class="std std-doc">Strategy Results</span></a>, where ADF is asked to reject a unit
+root from only 30 observations.</p>
+<p>These are sensitivity checks, not a tuned replacement specification. Reporting
+them that way is deliberate: with twelve weeks of data and a cost floor of
+about $18 per round trip, a search over thresholds that found a profitable
+combination would more likely be fitting the sample than finding an edge.</p>
+</section>
+<section id="caveats">
+<h2>Caveats<a class="headerlink" href="#caveats" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>The pilot week is inside the sample.</strong> The 2026 total includes the +$330
+week, so the twelve-week result is not independent evidence about it. The
+other eleven weeks total <strong>−$2,230</strong>.</p></li>
+<li><p><strong>Different market-data schema.</strong> The pilot pipeline builds its grids from
+<code class="docutils literal notranslate"><span class="pre">mbp-1</span></code> event data. <code class="docutils literal notranslate"><span class="pre">src/extend_backtest_periods.py</span></code> pulls <code class="docutils literal notranslate"><span class="pre">bbo-1m</span></code> for the
+historical weeks, which gives one quote observation per minute and carries no
+trade-action flag. The one-minute strategy inputs are comparable, but the
+historical blocks cannot support the microstructure work in
+<a class="reference internal" href="spread_diagnostics.html"><span class="std std-doc">Spread Diagnostics</span></a>.</p></li>
+<li><p><strong>Seasonally concentrated.</strong> Nine of the twelve blocks fall in late April and
+May; the 2026 blocks are in June. The sample says little about the rest of the
+calendar.</p></li>
+<li><p><strong>Not reproducible from <code class="docutils literal notranslate"><span class="pre">doit</span></code> alone.</strong> Regenerating these results requires
+running <code class="docutils literal notranslate"><span class="pre">src/extend_backtest_periods.py</span></code> first, which spends Databento
+credits. See <a class="reference internal" href="how_to_run.html"><span class="std std-doc">How to Run</span></a>.</p></li>
+</ul>
+</section>
+<section id="reproducing">
+<h2>Reproducing<a class="headerlink" href="#reproducing" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>src/extend_backtest_periods.py<span class="w"> </span>--estimate-only<span class="w">  </span><span class="c1"># price the pull first</span>
+python<span class="w"> </span>src/extend_backtest_periods.py<span class="w">                  </span><span class="c1"># -&gt; _data/clean/*.parquet</span>
+jupyter<span class="w"> </span>nbconvert<span class="w"> </span>--execute<span class="w"> </span>--inplace<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>notebooks/backtesting_period_analysis.ipynb
+</pre></div>
+</div>
+<p>The notebook writes its tables to <code class="docutils literal notranslate"><span class="pre">_output/backtesting_period_analysis/</span></code> and the
+four yearly figures to <code class="docutils literal notranslate"><span class="pre">docs_src/figures/</span></code>. Neither step is part of the default
+<code class="docutils literal notranslate"><span class="pre">doit</span></code> chain.</p>
+</section>
+</section>
+
+<div class="section ablog__blog_comments">
+   
+</div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="strategy_results.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Strategy Results</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="how_to_run.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">How to Run</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#by-year">By year</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#by-block">By block</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-average-trade-pays-the-spread-and-captures-nothing">The average trade pays the spread and captures nothing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#yearly-figures">Yearly figures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#an-alternative-specification">An alternative specification</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#caveats">Caveats</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproducing">Reproducing</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Michael Dowling, Andrew Heekin, Bhuvanesh Kodem, Sam Zhang
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Michael Dowling, Andrew Heekin, Bhuvanesh Kodem, Sam Zhang.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

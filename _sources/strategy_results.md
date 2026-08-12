@@ -7,19 +7,27 @@ number on this page comes from `_output/brent_wti_strategy_1m.parquet`.
 
 [Full Strategy Overview](strategy_overview.md) documents the design with the
 thresholds deliberately left open. This page pins them down and reports what
-the specification actually did.
+the specification actually did over the pilot week;
+[Multi-Week Backtest](multi_week_backtest.md) runs the same settings over
+twelve weekly blocks from 2023 to 2026.
 
 ## Headline
 
 The strategy finished the week at **+\$330** on **4 trades** across 6,000
 eligible minutes. That number should not be read as an edge. One trade
 contributed **+\$420**; the other three combined for **−\$90**. With a sample
-this small, the result is indistinguishable from zero, and the honest
-conclusion is that the pilot week neither confirms nor refutes the economic
-intuition.
+this small, the pilot week alone is indistinguishable from zero.
 
-The more useful output is *why* only four trades fired. See
-[Why only four trades](#why-only-four-trades) below.
+It no longer has to stand alone. Running the same specification over
+[twelve weekly blocks from 2023 to 2026](multi_week_backtest.md) produces
+**145 trades for −\$1,900**, with 12 winners and not a single winning trade in
+the 48 taken during 2024. **The specification does not earn its execution
+costs**, and this week is the exception rather than the rule.
+
+Two outputs from this page survive that verdict and explain it: *why* only four
+trades fired, in [Why only four trades](#why-only-four-trades), and what trade 1
+shows about reversion that does not cover its own cost, in
+[Trade log](#trade-log).
 
 ## Final parameters
 
@@ -181,9 +189,14 @@ sweep:
   dollars against the listed spread's quoted width — which
   [Spread Diagnostics](spread_diagnostics.md) shows is around \$0.05/bbl, or
   \$50 per contract, in the liquid hours — would have declined it.
-- **Extend the sample.** Four trades cannot support any conclusion. The costly
-  input is Databento data, not compute; the pipeline is already
-  parameterized by date range in `src/pull_databento.py`.
+- **Extend the sample.** *Done — see [Multi-Week Backtest](multi_week_backtest.md).*
+  Twelve weekly blocks across 2023–2026 give 145 trades and settle the question
+  in the negative at −\$1,900. That result also qualifies the first two bullets:
+  the other blocks fire 8 to 23 trades each without the gate being loosened, and
+  the ones that trade more lose more, so raising the candidate count is unlikely
+  to help on its own. The average trade loses \$13.10 against a mean quoted
+  width worth about \$18 per round trip, which makes the cost filter the more
+  promising of the two changes.
 
 ## Output files
 

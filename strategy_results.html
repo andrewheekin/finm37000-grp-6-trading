@@ -57,7 +57,7 @@
     <link rel="icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="How to Run" href="how_to_run.html" />
+    <link rel="next" title="Multi-Week Backtest" href="multi_week_backtest.html" />
     <link rel="prev" title="Full Strategy Overview - A Walkthrough of the Architecture from Signal to Exit" href="strategy_overview.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -225,7 +225,13 @@
 <li class="toctree-l1"><a class="reference internal" href="spread_diagnostics.html">Spread Diagnostics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="strategy_overview.html">Full Strategy Overview - A Walkthrough of the Architecture from Signal to Exit</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Strategy Results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multi_week_backtest.html">Multi-Week Backtest</a></li>
 <li class="toctree-l1"><a class="reference internal" href="how_to_run.html">How to Run</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cb/notebooks/FI/backtesting_period_analysis.html">Multi-Week Backtest (2023-2026)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cb/notebooks/FI/ewm_7d_zscore_backtest.html">EWM Z-Score Sensitivity Check</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Dataframes</span></p>
 <ul class="nav bd-sidenav">
@@ -416,17 +422,24 @@ by <code class="docutils literal notranslate"><span class="pre">doit</span> <spa
 number on this page comes from <code class="docutils literal notranslate"><span class="pre">_output/brent_wti_strategy_1m.parquet</span></code>.</p>
 <p><a class="reference internal" href="strategy_overview.html"><span class="std std-doc">Full Strategy Overview</span></a> documents the design with the
 thresholds deliberately left open. This page pins them down and reports what
-the specification actually did.</p>
+the specification actually did over the pilot week;
+<a class="reference internal" href="multi_week_backtest.html"><span class="std std-doc">Multi-Week Backtest</span></a> runs the same settings over
+twelve weekly blocks from 2023 to 2026.</p>
 <section id="headline">
 <h2>Headline<a class="headerlink" href="#headline" title="Link to this heading">#</a></h2>
 <p>The strategy finished the week at <strong>+$330</strong> on <strong>4 trades</strong> across 6,000
 eligible minutes. That number should not be read as an edge. One trade
 contributed <strong>+$420</strong>; the other three combined for <strong>−$90</strong>. With a sample
-this small, the result is indistinguishable from zero, and the honest
-conclusion is that the pilot week neither confirms nor refutes the economic
-intuition.</p>
-<p>The more useful output is <em>why</em> only four trades fired. See
-<a class="reference internal" href="#why-only-four-trades"><span class="xref myst">Why only four trades</span></a> below.</p>
+this small, the pilot week alone is indistinguishable from zero.</p>
+<p>It no longer has to stand alone. Running the same specification over
+<a class="reference internal" href="multi_week_backtest.html"><span class="std std-doc">twelve weekly blocks from 2023 to 2026</span></a> produces
+<strong>145 trades for −$1,900</strong>, with 12 winners and not a single winning trade in
+the 48 taken during 2024. <strong>The specification does not earn its execution
+costs</strong>, and this week is the exception rather than the rule.</p>
+<p>Two outputs from this page survive that verdict and explain it: <em>why</em> only four
+trades fired, in <a class="reference internal" href="#why-only-four-trades"><span class="xref myst">Why only four trades</span></a>, and what trade 1
+shows about reversion that does not cover its own cost, in
+<a class="reference internal" href="#trade-log"><span class="xref myst">Trade log</span></a>.</p>
 </section>
 <section id="final-parameters">
 <h2>Final parameters<a class="headerlink" href="#final-parameters" title="Link to this heading">#</a></h2>
@@ -755,9 +768,14 @@ and still lost money. An entry filter comparing the expected reversion in
 dollars against the listed spread’s quoted width — which
 <a class="reference internal" href="spread_diagnostics.html"><span class="std std-doc">Spread Diagnostics</span></a> shows is around $0.05/bbl, or
 $50 per contract, in the liquid hours — would have declined it.</p></li>
-<li><p><strong>Extend the sample.</strong> Four trades cannot support any conclusion. The costly
-input is Databento data, not compute; the pipeline is already
-parameterized by date range in <code class="docutils literal notranslate"><span class="pre">src/pull_databento.py</span></code>.</p></li>
+<li><p><strong>Extend the sample.</strong> <em>Done — see <a class="reference internal" href="multi_week_backtest.html"><span class="std std-doc">Multi-Week Backtest</span></a>.</em>
+Twelve weekly blocks across 2023–2026 give 145 trades and settle the question
+in the negative at −$1,900. That result also qualifies the first two bullets:
+the other blocks fire 8 to 23 trades each without the gate being loosened, and
+the ones that trade more lose more, so raising the candidate count is unlikely
+to help on its own. The average trade loses $13.10 against a mean quoted
+width worth about $18 per round trip, which makes the cost filter the more
+promising of the two changes.</p></li>
 </ul>
 </section>
 <section id="output-files">
@@ -812,11 +830,11 @@ doit<span class="w"> </span>plot_strategy_results<span class="w">  </span><span 
       </div>
     </a>
     <a class="right-next"
-       href="how_to_run.html"
+       href="multi_week_backtest.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">How to Run</p>
+        <p class="prev-next-title">Multi-Week Backtest</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

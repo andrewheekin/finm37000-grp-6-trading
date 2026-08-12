@@ -57,8 +57,8 @@
     <link rel="icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Brent-WTI Aligned (1-minute)" href="cb/dataframes/FI/brent_wti_aligned_1m.html" />
-    <link rel="prev" title="Strategy Results" href="strategy_results.html" /> 
+    <link rel="next" title="Brent–WTI Backtest: Period Returns, P&amp;L, Spread, and Trade Log" href="cb/notebooks/FI/backtesting_period_analysis.html" />
+    <link rel="prev" title="Multi-Week Backtest" href="multi_week_backtest.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -225,7 +225,13 @@
 <li class="toctree-l1"><a class="reference internal" href="spread_diagnostics.html">Spread Diagnostics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="strategy_overview.html">Full Strategy Overview - A Walkthrough of the Architecture from Signal to Exit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="strategy_results.html">Strategy Results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multi_week_backtest.html">Multi-Week Backtest</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">How to Run</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cb/notebooks/FI/backtesting_period_analysis.html">Multi-Week Backtest (2023-2026)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cb/notebooks/FI/ewm_7d_zscore_backtest.html">EWM Z-Score Sensitivity Check</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Dataframes</span></p>
 <ul class="nav bd-sidenav">
@@ -390,6 +396,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#add-your-databento-api-key">2. Add your Databento API key</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#set-strategy-parameters">3. Set strategy parameters</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-the-complete-project">4. Run the complete project</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-extend-the-sample-beyond-the-pilot-week">5. Optional: extend the sample beyond the pilot week</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#repository-layout">Repository layout</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regenerating-the-pipeline-diagram">Regenerating the pipeline diagram</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regenerating-the-logo">Regenerating the logo</a></li>
@@ -496,6 +503,23 @@ doit
 </div>
 <p>The Databento cache is intentionally not deleted by <code class="docutils literal notranslate"><span class="pre">doit</span> <span class="pre">clean</span></code>.</p>
 </section>
+<section id="optional-extend-the-sample-beyond-the-pilot-week">
+<h2>5. Optional: extend the sample beyond the pilot week<a class="headerlink" href="#optional-extend-the-sample-beyond-the-pilot-week" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">doit</span></code> covers the June 1–5, 2026 pilot week only. The historical weeks behind
+<a class="reference internal" href="multi_week_backtest.html"><span class="std std-doc">Multi-Week Backtest</span></a> are pulled separately, because
+each one spends Databento credits on data the graded pipeline does not need.
+Price the request before committing to it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>src/extend_backtest_periods.py<span class="w"> </span>--estimate-only
+python<span class="w"> </span>src/extend_backtest_periods.py
+</pre></div>
+</div>
+<p>For each week the script resolves the <code class="docutils literal notranslate"><span class="pre">CL.v.0</span></code> and <code class="docutils literal notranslate"><span class="pre">BZ.v.0</span></code> contracts, pulls
+those two continuous outrights plus the matching listed CL-BZ spread at the
+<code class="docutils literal notranslate"><span class="pre">bbo-1m</span></code> schema, and writes a strategy-ready aligned one-minute parquet to
+<code class="docutils literal notranslate"><span class="pre">_data/clean/</span></code>. Weeks already cached there are skipped. Then execute
+<code class="docutils literal notranslate"><span class="pre">notebooks/backtesting_period_analysis.ipynb</span></code>, which reads those parquets and
+regenerates the four yearly figures in <code class="docutils literal notranslate"><span class="pre">docs_src/figures/</span></code>.</p>
+</section>
 <section id="repository-layout">
 <h2>Repository layout<a class="headerlink" href="#repository-layout" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="table">
@@ -541,6 +565,8 @@ doit
 <li><p><code class="docutils literal notranslate"><span class="pre">src/signal_generator.py</span></code> — standalone rolling z-score entry signals (<code class="docutils literal notranslate"><span class="pre">doit</span> <span class="pre">signal_generator</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">docs_src/figures/07_strategy_flowchart.mmd</span></code> — Mermaid source for the pipeline diagram</p></li>
 </ul>
+<p>Outside the chain, <code class="docutils literal notranslate"><span class="pre">src/extend_backtest_periods.py</span></code> downloads the historical
+weeks used by <a class="reference internal" href="multi_week_backtest.html"><span class="std std-doc">Multi-Week Backtest</span></a>.</p>
 <p>Run the test suite with <code class="docutils literal notranslate"><span class="pre">pytest</span> <span class="pre">src/</span></code>.</p>
 <p>For the design rationale behind the entry stack and exit rules, see
 <a class="reference internal" href="strategy_overview.html"><span class="std std-doc">Full Strategy Overview</span></a>.</p>
@@ -615,20 +641,20 @@ touch<span class="w"> </span>../gh-pages-build/.nojekyll
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="strategy_results.html"
+       href="multi_week_backtest.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Strategy Results</p>
+        <p class="prev-next-title">Multi-Week Backtest</p>
       </div>
     </a>
     <a class="right-next"
-       href="cb/dataframes/FI/brent_wti_aligned_1m.html"
+       href="cb/notebooks/FI/backtesting_period_analysis.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Brent-WTI Aligned (1-minute)</p>
+        <p class="prev-next-title">Brent–WTI Backtest: Period Returns, P&amp;L, Spread, and Trade Log</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -654,6 +680,7 @@ touch<span class="w"> </span>../gh-pages-build/.nojekyll
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#add-your-databento-api-key">2. Add your Databento API key</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#set-strategy-parameters">3. Set strategy parameters</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-the-complete-project">4. Run the complete project</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-extend-the-sample-beyond-the-pilot-week">5. Optional: extend the sample beyond the pilot week</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#repository-layout">Repository layout</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regenerating-the-pipeline-diagram">Regenerating the pipeline diagram</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regenerating-the-logo">Regenerating the logo</a></li>

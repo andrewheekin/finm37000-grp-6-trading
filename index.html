@@ -228,7 +228,13 @@
 <li class="toctree-l1"><a class="reference internal" href="spread_diagnostics.html">Spread Diagnostics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="strategy_overview.html">Full Strategy Overview - A Walkthrough of the Architecture from Signal to Exit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="strategy_results.html">Strategy Results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multi_week_backtest.html">Multi-Week Backtest</a></li>
 <li class="toctree-l1"><a class="reference internal" href="how_to_run.html">How to Run</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cb/notebooks/FI/backtesting_period_analysis.html">Multi-Week Backtest (2023-2026)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cb/notebooks/FI/ewm_7d_zscore_backtest.html">EWM Z-Score Sensitivity Check</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Dataframes</span></p>
 <ul class="nav bd-sidenav">
@@ -412,10 +418,12 @@
 </div>
 <div class="toctree-wrapper compound">
 </div>
+<div class="toctree-wrapper compound">
+</div>
 <section id="overview-and-results">
 <h2>Overview and Results<a class="headerlink" href="#overview-and-results" title="Link to this heading">#</a></h2>
 <p>This project builds and backtests an end-to-end <strong>intraday mean-reversion strategy on the Brent–WTI crude-oil spread</strong> using CME Globex MBP-1 market data from Databento. The final pipeline downloads the market data, constructs synchronized one-minute datasets, generates statistically filtered trade signals, executes those signals against the exchange-listed Brent–WTI spread, calculates executable P&amp;L, and produces a set of backtest figures. The entire production workflow is reproducible with a single <code class="docutils literal notranslate"><span class="pre">doit</span></code> command once a Databento API key is supplied.</p>
-<p>The main result is <strong>informative but statistically inconclusive</strong>: over our June 1–5, 2026 pilot sample, the implemented mean-reversion specification did not generate robust positive P&amp;L. The default 2.5σ specification fires only <strong>4 trades in 6,000 eligible minutes</strong> and finishes <strong>+$330</strong>, but a single trade contributes +$420 while the other three net −$90 combined. A four-trade sample cannot distinguish that from zero. We tested different entry thresholds, including 3.0 and 2.5 standard deviations; lowering the threshold created more opportunities but did not make the strategy reliably profitable. Rather than optimize aggressively to a five-day sample, we preserve a transparent baseline that demonstrates the full research and execution framework and highlights where the economic intuition does and does not survive realistic market-data and execution constraints. The full trade log and entry-gate funnel are on the <a class="reference internal" href="#docs_src/strategy_results.md"><span class="xref myst">Strategy Results</span></a> page.</p>
+<p>The main result is <strong>negative</strong>: the implemented mean-reversion specification does not earn its execution costs. Over the June 1–5, 2026 pilot week the default 2.5σ specification fires only <strong>4 trades in 6,000 eligible minutes</strong> and finishes <strong>+$330</strong>, but a single trade contributes +$420 while the other three net −$90 combined — a sample too small to distinguish from zero. Extending the same specification to twelve weekly blocks spanning 2023–2026 settles the question: <strong>145 trades for −$1,900</strong>, with only 2026 profitable. Lowering the entry threshold created more opportunities without making the strategy reliably profitable. Rather than optimize aggressively to a small sample, we preserve a transparent baseline that demonstrates the full research and execution framework and shows where the economic intuition does not survive realistic market-data and execution constraints. The trade log and entry-gate funnel are on the <a class="reference internal" href="#docs_src/strategy_results.md"><span class="xref myst">Strategy Results</span></a> page, the twelve-week runs on <a class="reference internal" href="#docs_src/multi_week_backtest.md"><span class="xref myst">Multi-Week Backtest</span></a>.</p>
 </section>
 <section id="pipeline-overview">
 <h2>Pipeline Overview<a class="headerlink" href="#pipeline-overview" title="Link to this heading">#</a></h2>
@@ -424,43 +432,28 @@
 </section>
 <section id="data-and-spread-construction">
 <h2>Data and Spread Construction<a class="headerlink" href="#data-and-spread-construction" title="Link to this heading">#</a></h2>
-<p>The pipeline pulls Databento <code class="docutils literal notranslate"><span class="pre">GLBX.MDP3</span></code> <strong>MBP-1</strong> data for the volume-rolled front contracts <code class="docutils literal notranslate"><span class="pre">CL.v.0</span></code> (WTI) and <code class="docutils literal notranslate"><span class="pre">BZ.v.0</span></code> (Brent), together with exchange-listed Brent–WTI spread instruments. Raw DBN files are cached under <code class="docutils literal notranslate"><span class="pre">_data/databento/</span></code>, so subsequent runs do not repurchase data that is already present.</p>
+<p>The pipeline pulls Databento <code class="docutils literal notranslate"><span class="pre">GLBX.MDP3</span></code> <strong>MBP-1</strong> data for the volume-rolled front contracts <code class="docutils literal notranslate"><span class="pre">CL.v.0</span></code> (WTI) and <code class="docutils literal notranslate"><span class="pre">BZ.v.0</span></code> (Brent), together with exchange-listed Brent–WTI spread instruments. Raw DBN files are cached under <code class="docutils literal notranslate"><span class="pre">_data/databento/</span></code>, so subsequent runs do not repurchase data.</p>
 <p><code class="docutils literal notranslate"><span class="pre">src/clean_mbp1.py</span></code> converts the event data to fixed <strong>1-second and 1-minute</strong> grids and builds an aligned dataset. The strategy signal is based on the synthetic spread</p>
 <div class="math notranslate nohighlight">
 \[
 S_t = CL_t - BZ_t,
 \]</div>
-<p>using the midpoint of each outright’s best bid and ask. During the pilot week, the front listed spread <code class="docutils literal notranslate"><span class="pre">CLN6-BZQ6</span></code> matches the contracts underlying the two continuous outrights, so it is used for trade execution. Long positions enter at the listed spread ask and exit at its bid; short positions enter at the bid and cover at the ask. This makes the backtest P&amp;L reflect the observed bid–ask spread rather than midpoint-only execution.</p>
-<p>Contract rolls are handled explicitly. Each row retains the underlying CL and BZ instrument IDs, and a rolling window is valid only if all observations belong to the same <code class="docutils literal notranslate"><span class="pre">(CL</span> <span class="pre">contract,</span> <span class="pre">BZ</span> <span class="pre">contract)</span></code> regime. Windows also require consecutive one-minute bars and active, non-stale outright quotes. This prevents artificial spread jumps caused by continuous-contract splicing from being mistaken for mean-reversion signals.</p>
+<p>using the midpoint of each outright’s best bid and ask. During the pilot week the front listed spread <code class="docutils literal notranslate"><span class="pre">CLN6-BZQ6</span></code> matches the contracts underlying the two continuous outrights, so it is used for execution: long positions enter at its ask and exit at its bid, short positions the reverse. Backtest P&amp;L pays the observed bid–ask spread rather than assuming midpoint fills.</p>
+<p>Contract rolls are handled explicitly: each row retains the underlying CL and BZ instrument IDs, and a rolling window is valid only if every observation belongs to the same <code class="docutils literal notranslate"><span class="pre">(CL</span> <span class="pre">contract,</span> <span class="pre">BZ</span> <span class="pre">contract)</span></code> regime, with consecutive one-minute bars and active, non-stale outright quotes. This prevents spread jumps from continuous-contract splicing being mistaken for mean-reversion signals.</p>
 </section>
 <section id="what-the-spread-looks-like">
 <h2>What the Spread Looks Like<a class="headerlink" href="#what-the-spread-looks-like" title="Link to this heading">#</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">doit</span> <span class="pre">spread_diagnostics</span></code> regenerates six figures that motivate the design.
-Three of them carry most of the argument, and together they explain both why we
-expected an edge and why we did not find one.</p>
-<p>Over the pilot week the spread trended from about −$3.50/bbl on Monday to
-−$1.50/bbl on Thursday before retracing sharply. There is no stable level to
-revert to across the week, which rules out anchoring on a fixed long-run mean
-and pushes the design toward a trailing window.</p>
+<p><code class="docutils literal notranslate"><span class="pre">doit</span> <span class="pre">spread_diagnostics</span></code> regenerates six figures that motivate the design; two carry most of the argument.</p>
+<p>Over the pilot week the spread trended from about −$3.50/bbl to −$1.50/bbl before retracing sharply. With no stable level to revert to, the design anchors on a trailing window rather than a long-run mean.</p>
 <p><img alt="Synthetic spread over the pilot week" src="docs_src/figures/01_spread_week.png" /></p>
-<p>Choosing that window is the central trade-off. At a daily horizon the deviation
-sits on one side of zero for a full day at a time — persistent drift, not
-reversion. At 30 minutes it oscillates tightly around zero, which is the
-behavior the strategy wants, but the amplitude is mostly within ±$0.20/bbl.</p>
+<p>Choosing that window is a key trade-off: daily-horizon deviations may have no zero-crossings for a full day, while 30-minute deviations oscillate around zero with amplitude mostly within ±$0.20/bbl. That small amplitude has to cover execution cost.</p>
 <p><img alt="Rolling deviations at three horizons" src="docs_src/figures/02_rolling_deviations.png" /></p>
-<p>That small amplitude is the problem, because it has to cover execution. For
-most of the day the books are tight and nearly identical across venues, with a
-median quoted width around $0.05/bbl, then they blow out after 20:00 UTC — and
-in that window the front listed spread is the <em>worst</em> of the three, not the
-best. This is why the strategy stops trading at 19:59 UTC.</p>
-<p><img alt="Quoted width by hour, synthetic vs listed" src="docs_src/figures/06_width_by_hour.png" /></p>
-<p>The remaining three figures — the deviation histogram, the PACF of deviations,
-and top-of-book activity by hour — are documented in
+<p>The remaining figures are documented in
 <a class="reference internal" href="#docs_src/spread_diagnostics.md"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">docs_src/spread_diagnostics.md</span></code></span></a>.</p>
 </section>
 <section id="strategy-logic">
 <h2>Strategy Logic<a class="headerlink" href="#strategy-logic" title="Link to this heading">#</a></h2>
-<p>The strategy operates only from <strong>00:00 through 19:59 UTC</strong> and holds at most one listed-spread contract at a time. At every eligible minute, it forms a trailing rolling window and applies three entry gates:</p>
+<p>The strategy operates only from <strong>00:00 through 19:59 UTC</strong> and holds at most one listed-spread contract. The cutoff avoids the hour before the daily Globex maintenance halt at 21:00 UTC, when median quoted width blows out (see <a class="reference internal" href="#docs_src/spread_diagnostics.md"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">docs_src/spread_diagnostics.md</span></code></span></a>). At every eligible minute, it forms a trailing rolling window and applies three entry gates:</p>
 <ol class="arabic simple">
 <li><p><strong>Deviation:</strong> compute the spread z-score relative to its rolling mean and sample standard deviation. A sufficiently negative z-score proposes a long spread; a sufficiently positive z-score proposes a short spread.</p></li>
 <li><p><strong>Stationarity:</strong> by default, the rolling window must pass both an Augmented Dickey–Fuller test and a KPSS test at the 5% level. Either test can be disabled in <code class="docutils literal notranslate"><span class="pre">src/strategy_engine.py</span></code>.</p></li>
@@ -468,7 +461,9 @@ and top-of-book activity by hour — are documented in
 </ol>
 <p>The default specification uses a <strong>30-minute window</strong>, <strong>2.5σ entry threshold</strong>, and <strong>15-minute maximum half-life</strong>. Once entered, a trade exits when the absolute z-score returns to <strong>0.5 or less</strong>, when mark-to-market loss reaches <strong>$1,000</strong>, after <strong>30 minutes</strong>, or at the end of the trading session. P&amp;L uses the listed-spread bid/ask and a <strong>1,000-barrel contract multiplier</strong>. All rolling calculations use only observations available through the current timestamp.</p>
 <p>Backtest artifacts are listed on
-<a class="reference internal" href="#docs_src/strategy_results.md"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">docs_src/strategy_results.md</span></code></span></a>.
+<a class="reference internal" href="#docs_src/strategy_results.md"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">docs_src/strategy_results.md</span></code></span></a>, and the
+2023–2026 weekly-block runs, which sit outside the <code class="docutils literal notranslate"><span class="pre">doit</span></code> chain, on
+<a class="reference internal" href="#docs_src/multi_week_backtest.md"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">docs_src/multi_week_backtest.md</span></code></span></a>.
 Setup and publishing instructions are in
 <a class="reference internal" href="#docs_src/how_to_run.md"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">docs_src/how_to_run.md</span></code></span></a>.</p>
 </section>
