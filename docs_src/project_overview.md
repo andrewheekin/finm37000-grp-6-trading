@@ -33,7 +33,9 @@ project_overview/methodology
   and the Brent-WTI Data Pipeline Walkthrough notebook
 - [x] Build initial charts and notebooks — see
   [Spread Diagnostics](spread_diagnostics.md)
-- [x] Define entry rules (issue #13 signal generator) — exits and backtest still open
-- [ ] Define exit rules and backtest the strategy
-- [ ] Extend the data window beyond the pilot week
-- [x] Write up findings — see [Strategy Essay](strategy_essay.md)
+- [x] Define entry rules (issue #13 signal generator)
+- [x] Define exit rules and backtest the strategy — see
+  [Strategy Overview](strategy_overview.md)
+  ([PR #43](https://github.com/andrewheekin/finm37000-grp-6-trading/pull/43))
+- [ ] Extend the data window beyond the June 1-5 pilot week
+- [x] Write up findings — see the repository README
