@@ -4,9 +4,11 @@ import numpy as np
 import pandas as pd
 import pytest
 
+import signal_generator
 from signal_generator import (
     DEFAULT_ENTRY_Z,
     DEFAULT_WINDOW,
+    build_stationarity_mask,
     generate_signal_at,
     generate_signals,
     signals_from_aligned,
@@ -160,6 +162,35 @@ def test_is_stationary_mask_suppresses_entry():
     assert not out["short_entry"].iloc[-1]
     assert out["signal"].iloc[-1] == 0
     assert not out["valid"].iloc[-1]
+
+
+def test_build_stationarity_mask_aligns_to_signal_index(monkeypatch):
+    series = _noise_then_spike(6, spike=2.0)
+    rolling_result = pd.DataFrame(
+        {"is_stationary": [True, False]},
+        index=[series.index[2], series.index[4]],
+    )
+
+    def fake_rolling_test(spread, *, window, step):
+        pd.testing.assert_series_equal(spread, series.rename("spread"))
+        assert window == 3
+        assert step == 2
+        return rolling_result
+
+    monkeypatch.setattr(
+        signal_generator,
+        "rolling_stationarity_test",
+        fake_rolling_test,
+    )
+
+    mask = build_stationarity_mask(series, window=3, step=2)
+
+    expected = pd.Series(
+        [False, False, True, False, False, False],
+        index=series.index,
+        name="is_stationary",
+    )
+    pd.testing.assert_series_equal(mask, expected)
 
 
 def test_point_api_matches_vectorized_row():
