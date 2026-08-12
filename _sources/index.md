@@ -17,7 +17,6 @@ data_pipeline
 contract_rolls
 spread_diagnostics
 how_to_run
-team_discussion
 ```
 
 ```{toctree}

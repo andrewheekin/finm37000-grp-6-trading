@@ -57,7 +57,7 @@
     <link rel="icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Team Discussion Archive" href="team_discussion.html" />
+    <link rel="next" title="Brent-WTI Aligned (1-minute)" href="dataframes/brent_wti_aligned_1m.html" />
     <link rel="prev" title="Spread Diagnostics" href="spread_diagnostics.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -226,7 +226,6 @@
 <li class="toctree-l1"><a class="reference internal" href="contract_rolls.html">Contract Rolls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="spread_diagnostics.html">Spread Diagnostics</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">How to Run</a></li>
-<li class="toctree-l1"><a class="reference internal" href="team_discussion.html">Team Discussion Archive</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Strategy Dataframes</span></p>
 <ul class="nav bd-sidenav">
@@ -580,10 +579,9 @@ tracks automating it). Build from an activated virtualenv, because <code class="
 shells out to <code class="docutils literal notranslate"><span class="pre">sphinx-build</span></code> and needs it on <code class="docutils literal notranslate"><span class="pre">PATH</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
 
-<span class="c1"># ChartBook&#39;s stock index captions ship with emoji; overlay our plain-text</span>
-<span class="c1"># copy (docs_src/_chartbook/index.md) before building.</span>
-cp<span class="w"> </span>docs_src/_chartbook/index.md<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>.venv/lib/python*/site-packages/chartbook/docs_src_pipeline/index.md
+<span class="c1"># ChartBook ships stock index captions and repeats a Pipeline Manifest table</span>
+<span class="c1"># on every dataframe page. Apply our overlays before building.</span>
+python<span class="w"> </span>docs_src/_chartbook/apply_overlays.py
 
 chartbook<span class="w"> </span>build<span class="w"> </span>-f<span class="w">          </span><span class="c1"># -&gt; ./docs (gitignored)</span>
 
@@ -633,11 +631,11 @@ touch<span class="w"> </span>../gh-pages-build/.nojekyll
       </div>
     </a>
     <a class="right-next"
-       href="team_discussion.html"
+       href="dataframes/brent_wti_aligned_1m.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Team Discussion Archive</p>
+        <p class="prev-next-title">Brent-WTI Aligned (1-minute)</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
