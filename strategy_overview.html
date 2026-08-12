@@ -449,8 +449,11 @@
 <li><p>The primary exit occurs when the <strong>z-score returns to a configurable reverted level</strong>, indicating that the dislocation has largely closed.</p></li>
 <li><p>Additional safeguards include a <strong>maximum holding-period time stop</strong> and a <strong>stop-loss rule</strong> designed to limit losses when the spread moves further away from equilibrium rather than reverting.</p></li>
 </ul>
-<p>The architecture can therefore be summarized as:
-$<span class="math notranslate nohighlight">\( \text{Rolling Window} → \text{Z-Score Signal} → \text{Stationarity Check} → \text{Half-Life Check} → \text{Trade Entry} → \text{Exit Management} \)</span>$</p>
+<p>The architecture can therefore be summarized as:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{Rolling Window} → \text{Z-Score Signal} → \text{Stationarity Check} → \text{Half-Life Check} → \text{Trade Entry} → \text{Exit Management}
+\]</div>
 <p>All thresholds, window lengths, significance levels, holding-period limits, and risk parameters are intentionally left unspecified in this document. These values are intended to be configurable inputs within implementation so that the strategy can be tested, tuned, and compared across different parameter choices without changing its underlying logic.</p>
 <p>The remainder of this document walks through each stage of this process in detail, beginning with the rolling window that supplies the data used by every subsequent decision.</p>
 <section id="rolling-window-anatomy">
@@ -469,8 +472,11 @@ $<span class="math notranslate nohighlight">\( \text{Rolling Window} → \text{Z
 W_t = \{S_{t-n+1}, \ldots, S_t\}
 \]</div>
 <p>where (n) is a configurable window length.
-The windows are overlapping rather than divided into fixed blocks. In live trading, every new minute causes the window to roll forward by one observation. The strategy then restarts its decision process from the top using the newly formed window:
-$<span class="math notranslate nohighlight">\( \text{New observation} → \text{Update spread} → \text{Roll window} → \text{Run signal checks} \)</span>$</p>
+The windows are overlapping rather than divided into fixed blocks. In live trading, every new minute causes the window to roll forward by one observation. The strategy then restarts its decision process from the top using the newly formed window:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{New observation} → \text{Update spread} → \text{Roll window} → \text{Run signal checks}
+\]</div>
 <p><strong>Window Validity</strong></p>
 <p>A rolling window should only be used if:</p>
 <ul class="simple">
@@ -531,15 +537,17 @@ The z-score therefore acts as the first filter in the strategy architecture.</p>
 <section id="test-3-half-life-estimation">
 <h2>Test 3: Half-Life Estimation<a class="headerlink" href="#test-3-half-life-estimation" title="Link to this heading">#</a></h2>
 <p>The mean-reversion half-life represents the estimated amount of time required for a deviation from equilibrium to shrink by one-half. For an intraday strategy, this provides a practical measure of whether the spread is expected to revert quickly enough for the candidate trade to be worthwhile. A spread may appear stationary while still reverting too slowly for the intended holding horizon. The half-life check therefore acts as the final validation step before trade entry.</p>
-<p>For the current rolling window, define the one-period change in the spread as:
-$<span class="math notranslate nohighlight">\(
+<p>For the current rolling window, define the one-period change in the spread as:</p>
+<div class="math notranslate nohighlight">
+\[
 \Delta S_t = S_t - S_{t-1}
-\)</span><span class="math notranslate nohighlight">\(
-The strategy estimates the relationship:
-\)</span><span class="math notranslate nohighlight">\(
+\]</div>
+<p>The strategy estimates the relationship:</p>
+<div class="math notranslate nohighlight">
+\[
 \Delta S_t = \alpha + \beta S_{t-1} + \varepsilon_t
-\)</span>$
-where:</p>
+\]</div>
+<p>where:</p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(S_{t-1}\)</span> is the lagged spread midpoint,</p></li>
 <li><p><span class="math notranslate nohighlight">\(\Delta S_t\)</span> is the subsequent one-minute change in the spread,</p></li>
@@ -547,28 +555,33 @@ where:</p>
 <li><p><span class="math notranslate nohighlight">\(\beta\)</span> measures the tendency of the spread to move back toward equilibrium,</p></li>
 <li><p><span class="math notranslate nohighlight">\(\varepsilon_t\)</span> is the residual term.</p></li>
 </ul>
-<p>For mean reversion to be present, the estimated coefficient (\beta) should be negative. This means that when the spread is relatively high, its subsequent expected change is downward, and when the spread is relatively low, its subsequent expected change is upward.</p>
-<p>The estimated half-life is then:
-$<span class="math notranslate nohighlight">\(
+<p>For mean reversion to be present, the estimated coefficient <span class="math notranslate nohighlight">\(\beta\)</span> should be negative. This means that when the spread is relatively high, its subsequent expected change is downward, and when the spread is relatively low, its subsequent expected change is upward.</p>
+<p>The estimated half-life is then:</p>
+<div class="math notranslate nohighlight">
+\[
 h = \frac{\ln(2)}{-\beta}
-\)</span><span class="math notranslate nohighlight">\(
-Because the strategy uses one-minute observations, \)</span>h$ is interpreted in minutes.</p>
-<p>The estimated half-life is compared against a configurable maximum acceptable value:
-$<span class="math notranslate nohighlight">\(
+\]</div>
+<p>Because the strategy uses one-minute observations, <span class="math notranslate nohighlight">\(h\)</span> is interpreted in minutes.</p>
+<p>The estimated half-life is compared against a configurable maximum acceptable value:</p>
+<div class="math notranslate nohighlight">
+\[
 0 &lt; h \leq h_{\text{max}}
-\)</span><span class="math notranslate nohighlight">\(
-where \)</span>h_{\text{max}}$ represents the longest expected reversion period that the strategy is willing to accept.</p>
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(h_{\text{max}}\)</span> represents the longest expected reversion period that the strategy is willing to accept.</p>
 <p>If the estimated half-life exceeds this limit, the candidate signal is rejected. Although the spread may exhibit mean-reverting behavior, the expected convergence would be too slow for the strategy’s intended short-term horizon, making the spread increasingly vulnerable to regime changes and less likely to cleanly mean revert.</p>
 <p>The signal will also be rejected when the half-life cannot be interpreted meaningfully. This includes cases where:</p>
 <ul class="simple">
-<li><p>the estimated (\beta) is zero or positive;</p></li>
+<li><p>the estimated <span class="math notranslate nohighlight">\(\beta\)</span> is zero or positive;</p></li>
 <li><p>the resulting half-life is nonpositive;</p></li>
 <li><p>the estimate is missing, infinite, or otherwise numerically invalid.</p></li>
 </ul>
 <p>If the estimate is valid and falls within the configured limit, the candidate signal passes the final entry check.</p>
 <p>This check will also come with a Boolean toggle when running the strategy, so that backtesting will allow the user to explore cases in which half-life isn’t used as a filter and compare results.</p>
-<p>The half-life stage completes the sequence of entry checks:
-$<span class="math notranslate nohighlight">\( \text{Stationarity Criteria Met → Estimate Half-Life → Half-Life Acceptable?} \)</span>$</p>
+<p>The half-life stage completes the sequence of entry checks:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{Stationarity Criteria Met → Estimate Half-Life → Half-Life Acceptable?}
+\]</div>
 <p>No → reject the signal and restart on the next observation.</p>
 <p>Yes → approve the signal for trade entry.</p>
 <p>Together, these conditions require the spread to be meaningfully displaced, statistically consistent with mean reversion, and expected to revert within an acceptable intraday timeframe.</p>
@@ -586,22 +599,26 @@ The purpose of the exit framework is to close the position when:</p>
 <p>Each exit rule should be configurable so that alternative specifications can be compared during backtesting.</p>
 <section id="z-score-reversion-exit">
 <h3>Z-Score Reversion Exit<a class="headerlink" href="#z-score-reversion-exit" title="Link to this heading">#</a></h3>
-<p>The primary exit occurs when the spread returns sufficiently close to its recent equilibrium. Because the trade was entered after the z-score crossed an extreme entry threshold, the position is expected to profit as the z-score moves back toward zero. The strategy should therefore define a configurable exit level:
-$<span class="math notranslate nohighlight">\(
+<p>The primary exit occurs when the spread returns sufficiently close to its recent equilibrium. Because the trade was entered after the z-score crossed an extreme entry threshold, the position is expected to profit as the z-score moves back toward zero. The strategy should therefore define a configurable exit level:</p>
+<div class="math notranslate nohighlight">
+\[
 z_{\text{exit}}
-\)</span>$</p>
-<p>The exit threshold will generally be closer to zero than the entry threshold. For a trade entered when the spread was above its rolling mean, the position should be closed once the z-score falls to the configured reverted level:
-$<span class="math notranslate nohighlight">\(
+\]</div>
+<p>The exit threshold will generally be closer to zero than the entry threshold. For a trade entered when the spread was above its rolling mean, the position should be closed once the z-score falls to the configured reverted level:</p>
+<div class="math notranslate nohighlight">
+\[
 z_t \leq z_{\text{exit}}
-\)</span>$</p>
-<p>For a trade entered when the spread was below its rolling mean, the position should be closed once the z-score rises to the corresponding lower-side exit level:
-$<span class="math notranslate nohighlight">\(
+\]</div>
+<p>For a trade entered when the spread was below its rolling mean, the position should be closed once the z-score rises to the corresponding lower-side exit level:</p>
+<div class="math notranslate nohighlight">
+\[
 z_t \geq -z_{\text{exit}}
-\)</span>$</p>
-<p>Equivalently, a symmetric specification may close the trade when:
-$<span class="math notranslate nohighlight">\(
+\]</div>
+<p>Equivalently, a symmetric specification may close the trade when:</p>
+<div class="math notranslate nohighlight">
+\[
 |z_t| \leq z_{\text{exit}}
-\)</span>$</p>
+\]</div>
 <p>This does not require the z-score to return exactly to zero. Requiring complete convergence may cause the strategy to remain in a trade after most of the expected reversion has already occurred.</p>
 <p>The exit threshold should remain configurable so backtesting can evaluate the trade-off between:</p>
 <ul class="simple">
@@ -611,10 +628,11 @@ $<span class="math notranslate nohighlight">\(
 </section>
 <section id="time-stop-exit">
 <h3>Time Stop Exit<a class="headerlink" href="#time-stop-exit" title="Link to this heading">#</a></h3>
-<p>A time stop closes a position once it has been held for longer than a configurable maximum duration:
-$<span class="math notranslate nohighlight">\(
+<p>A time stop closes a position once it has been held for longer than a configurable maximum duration:</p>
+<div class="math notranslate nohighlight">
+\[
 T_{\text{held}} \geq T_{\text{max}}
-\)</span>$</p>
+\]</div>
 <p>where:</p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(T_{\text{held}}\)</span> is the number of minutes elapsed since entry;</p></li>
@@ -626,10 +644,11 @@ The time stop also prevents capital from remaining tied up in stale positions an
 </section>
 <section id="stop-loss-exit">
 <h3>Stop-Loss Exit<a class="headerlink" href="#stop-loss-exit" title="Link to this heading">#</a></h3>
-<p>The stop-loss rule closes the position when the loss reaches a configurable limit. A stop loss may be defined using realized and unrealized trade P&amp;L:
-$<span class="math notranslate nohighlight">\(
+<p>The stop-loss rule closes the position when the loss reaches a configurable limit. A stop loss may be defined using realized and unrealized trade P&amp;L:</p>
+<div class="math notranslate nohighlight">
+\[
 \text{PnL}_t \leq -L_{\text{max}}
-\)</span>$</p>
+\]</div>
 <p>where <span class="math notranslate nohighlight">\(L_{\text{max}}\)</span> is the maximum acceptable loss per trade.</p>
 <p>Alternatively, the stop may be expressed in terms of additional spread or z-score movement against the position. The implementation should allow the chosen stop-loss specification and its associated limit to remain configurable.
 The purpose of this rule is to protect the strategy when the spread does not revert as expected and instead continues moving away from the entry level. This may occur because of a structural market move, a breakdown in the recent relationship between Brent and WTI, or an unusually large short-term shock.
@@ -650,9 +669,12 @@ The session-ending time should be configurable alongside the daily start and end
 </ul>
 <p>The associated thresholds and limits should also remain configurable.</p>
 <p>This design allows the team to compare different exit specifications without rewriting the core strategy. For example, backtesting can determine whether the time stop improves performance, whether a stop loss is too restrictive, or whether a partial z-score reversion is a better exit target than a return to zero.</p>
-<p>The exit process can therefore be summarized as:
-$<span class="math notranslate nohighlight">\( \text{Open Position → Update Position Each Minute → Evaluate Exit Conditions → Close Position When Any Enabled Rule Is Triggered} \)</span>$
-Once the trade is closed, the strategy returns to its normal signal-generation process and begins searching for the next valid entry opportunity.</p>
+<p>The exit process can therefore be summarized as:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{Open Position → Update Position Each Minute → Evaluate Exit Conditions → Close Position When Any Enabled Rule Is Triggered}
+\]</div>
+<p>Once the trade is closed, the strategy returns to its normal signal-generation process and begins searching for the next valid entry opportunity.</p>
 </section>
 </section>
 </section>
