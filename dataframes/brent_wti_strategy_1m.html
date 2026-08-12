@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Description &#8212; FINM 37000 Group 6 Trading</title>
+    <title>Brent-WTI Strategy Backtest (1-minute) &#8212; FINM 37000 Group 6 Trading</title>
   
   
   
@@ -60,7 +60,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Chart List" href="../cb/charts.html" />
-    <link rel="prev" title="Description" href="entry_signals_1m.html" /> 
+    <link rel="prev" title="Entry Signals (1-minute)" href="entry_signals_1m.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -231,20 +231,11 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Strategy Dataframes</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="brent_wti_aligned_1m.html">Description</a></li>
-
-
-<li class="toctree-l1"><a class="reference internal" href="brent_wti_aligned_1s.html">Description</a></li>
-
-
-<li class="toctree-l1"><a class="reference internal" href="spread_events_front.html">Description</a></li>
-
-<li class="toctree-l1"><a class="reference internal" href="entry_signals_1m.html">Description</a></li>
-
-
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Description</a></li>
-
-
+<li class="toctree-l1"><a class="reference internal" href="brent_wti_aligned_1m.html">Brent-WTI Aligned (1-minute)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brent_wti_aligned_1s.html">Brent-WTI Aligned (1-second)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spread_events_front.html">Listed Spread Events (CLN6-BZQ6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entry_signals_1m.html">Entry Signals (1-minute)</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Brent-WTI Strategy Backtest (1-minute)</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Charts 📈</span></p>
 <ul class="nav bd-sidenav">
@@ -253,10 +244,15 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Dataframes 📊</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../cb/dataframes/FI/brent_wti_aligned_1m.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_aligned_1m</span></code> - Brent-WTI Aligned (1-minute)</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../cb/dataframes/FI/brent_wti_aligned_1s.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_aligned_1s</span></code> - Brent-WTI Aligned (1-second)</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../cb/dataframes/FI/brent_wti_strategy_1m.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_strategy_1m</span></code> - Brent-WTI Strategy Backtest (1-minute)</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../cb/dataframes/FI/entry_signals_1m.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:entry_signals_1m</span></code> - Entry Signals (1-minute)</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../cb/dataframes/FI/spread_events_front.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:spread_events_front</span></code> - Listed Spread Events (CLN6-BZQ6)</a></li>
+
 </ul>
 
     </div>
@@ -399,7 +395,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Description</h1>
+    <h1>Brent-WTI Strategy Backtest (1-minute)</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -409,11 +405,10 @@
             </div>
             <nav aria-label="Page">
                 <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Description</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#conventions">Conventions</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#data-dictionary">Data Dictionary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#description">Description</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conventions">Conventions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-dictionary">Data Dictionary</a></li>
 </ul>
-
             </nav>
         </div>
     </div>
@@ -423,8 +418,10 @@
                 
 <div id="searchbox"></div>
                 <article class="bd-article">
-                   <section id="description">
-<h1>Description<a class="headerlink" href="#description" title="Link to this heading">#</a></h1>
+                   <section class="tex2jax_ignore mathjax_ignore" id="brent-wti-strategy-backtest-1-minute">
+<h1>Brent-WTI Strategy Backtest (1-minute)<a class="headerlink" href="#brent-wti-strategy-backtest-1-minute" title="Link to this heading">#</a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Link to this heading">#</a></h2>
 <p>Per-bar output of the final Brent–WTI mean-reversion backtest
 (<code class="docutils literal notranslate"><span class="pre">src/strategy_engine.py</span></code>). One row per one-minute bar inside the 00:00–19:59
 UTC session, carrying the rolling statistics the entry gates saw, the position
@@ -462,7 +459,7 @@ parquet:</p>
 <code class="docutils literal notranslate"><span class="pre">doit</span> <span class="pre">run_strategy</span></code>.</p>
 </section>
 <section id="conventions">
-<h1>Conventions<a class="headerlink" href="#conventions" title="Link to this heading">#</a></h1>
+<h2>Conventions<a class="headerlink" href="#conventions" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p><strong>No lookahead.</strong> Rolling <span class="math notranslate nohighlight">\(\mu\)</span> / <span class="math notranslate nohighlight">\(\sigma\)</span> at time <span class="math notranslate nohighlight">\(t\)</span> use the 30 bars ending
 at <span class="math notranslate nohighlight">\(t\)</span>, including <span class="math notranslate nohighlight">\(S_t\)</span> itself, which is observed at decision time.</p></li>
@@ -483,7 +480,7 @@ session end. <code class="docutils literal notranslate"><span class="pre">exit_f
 </ul>
 </section>
 <section id="data-dictionary">
-<h1>Data Dictionary<a class="headerlink" href="#data-dictionary" title="Link to this heading">#</a></h1>
+<h2>Data Dictionary<a class="headerlink" href="#data-dictionary" title="Link to this heading">#</a></h2>
 <p>Index: <code class="docutils literal notranslate"><span class="pre">ts_recv</span></code> — <code class="docutils literal notranslate"><span class="pre">datetime64[ns,</span> <span class="pre">UTC]</span></code>, 1-minute buckets, restricted to
 00:00–19:59 UTC (same buckets as the aligned source).</p>
 <p>Market data:</p>
@@ -516,6 +513,7 @@ session end. <code class="docutils literal notranslate"><span class="pre">exit_f
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">cum_pnl</span></code></strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> — running sum of <code class="docutils literal notranslate"><span class="pre">step_pnl</span></code> across the whole backtest</p></li>
 </ul>
 </section>
+</section>
 
 <div class="section ablog__blog_comments">
    
@@ -537,7 +535,7 @@ session end. <code class="docutils literal notranslate"><span class="pre">exit_f
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Description</p>
+        <p class="prev-next-title">Entry Signals (1-minute)</p>
       </div>
     </a>
     <a class="right-next"
@@ -567,11 +565,10 @@ session end. <code class="docutils literal notranslate"><span class="pre">exit_f
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Description</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#conventions">Conventions</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#data-dictionary">Data Dictionary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#description">Description</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conventions">Conventions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-dictionary">Data Dictionary</a></li>
 </ul>
-
   </nav></div>
 
 </div></div>

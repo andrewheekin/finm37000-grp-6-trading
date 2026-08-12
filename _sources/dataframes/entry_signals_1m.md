@@ -1,3 +1,5 @@
+# Entry Signals (1-minute)
+
 ## Description
 
 Entry signals for the Brent–WTI mean-reversion strategy (issue #13): trailing

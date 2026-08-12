@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Description &#8212; FINM 37000 Group 6 Trading</title>
+    <title>Brent-WTI Aligned (1-second) &#8212; FINM 37000 Group 6 Trading</title>
   
   
   
@@ -57,8 +57,8 @@
     <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Description" href="spread_events_front.html" />
-    <link rel="prev" title="Description" href="brent_wti_aligned_1m.html" /> 
+    <link rel="next" title="Listed Spread Events (CLN6-BZQ6)" href="spread_events_front.html" />
+    <link rel="prev" title="Brent-WTI Aligned (1-minute)" href="brent_wti_aligned_1m.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -229,20 +229,11 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Strategy Dataframes</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="brent_wti_aligned_1m.html">Description</a></li>
-
-
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Description</a></li>
-
-
-<li class="toctree-l1"><a class="reference internal" href="spread_events_front.html">Description</a></li>
-
-<li class="toctree-l1"><a class="reference internal" href="entry_signals_1m.html">Description</a></li>
-
-
-<li class="toctree-l1"><a class="reference internal" href="brent_wti_strategy_1m.html">Description</a></li>
-
-
+<li class="toctree-l1"><a class="reference internal" href="brent_wti_aligned_1m.html">Brent-WTI Aligned (1-minute)</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Brent-WTI Aligned (1-second)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spread_events_front.html">Listed Spread Events (CLN6-BZQ6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entry_signals_1m.html">Entry Signals (1-minute)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brent_wti_strategy_1m.html">Brent-WTI Strategy Backtest (1-minute)</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Charts 📈</span></p>
 <ul class="nav bd-sidenav">
@@ -251,10 +242,15 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Dataframes 📊</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../cb/dataframes/FI/brent_wti_aligned_1m.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_aligned_1m</span></code> - Brent-WTI Aligned (1-minute)</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../cb/dataframes/FI/brent_wti_aligned_1s.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_aligned_1s</span></code> - Brent-WTI Aligned (1-second)</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../cb/dataframes/FI/brent_wti_strategy_1m.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_strategy_1m</span></code> - Brent-WTI Strategy Backtest (1-minute)</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../cb/dataframes/FI/entry_signals_1m.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:entry_signals_1m</span></code> - Entry Signals (1-minute)</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../cb/dataframes/FI/spread_events_front.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:spread_events_front</span></code> - Listed Spread Events (CLN6-BZQ6)</a></li>
+
 </ul>
 
     </div>
@@ -397,7 +393,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Description</h1>
+    <h1>Brent-WTI Aligned (1-second)</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -407,11 +403,10 @@
             </div>
             <nav aria-label="Page">
                 <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Description</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#data-dictionary">Data Dictionary</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#window-sizes-on-this-grid">Window sizes on this grid</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#description">Description</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-dictionary">Data Dictionary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#window-sizes-on-this-grid">Window sizes on this grid</a></li>
 </ul>
-
             </nav>
         </div>
     </div>
@@ -421,8 +416,10 @@
                 
 <div id="searchbox"></div>
                 <article class="bd-article">
-                   <section id="description">
-<h1>Description<a class="headerlink" href="#description" title="Link to this heading">#</a></h1>
+                   <section class="tex2jax_ignore mathjax_ignore" id="brent-wti-aligned-1-second">
+<h1>Brent-WTI Aligned (1-second)<a class="headerlink" href="#brent-wti-aligned-1-second" title="Link to this heading">#</a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Link to this heading">#</a></h2>
 <p>Identical layout to the Brent-WTI Aligned (1-minute) dataset, on a
 1-second grid — ~430,000 rows over the pilot week. Intended for signal
 work and microstructure checks where 1-minute buckets are too coarse.</p>
@@ -432,19 +429,20 @@ work and microstructure checks where 1-minute buckets are too coarse.</p>
 </div>
 </section>
 <section id="data-dictionary">
-<h1>Data Dictionary<a class="headerlink" href="#data-dictionary" title="Link to this heading">#</a></h1>
+<h2>Data Dictionary<a class="headerlink" href="#data-dictionary" title="Link to this heading">#</a></h2>
 <p>See the Brent-WTI Aligned (1-minute) page — columns, conventions, and the
 missing-data rules are identical; only the bucket size differs. The
 600-second forward-fill limit spans 600 buckets on this grid (vs 10 on the
 1-minute grid).</p>
 </section>
 <section id="window-sizes-on-this-grid">
-<h1>Window sizes on this grid<a class="headerlink" href="#window-sizes-on-this-grid" title="Link to this heading">#</a></h1>
+<h2>Window sizes on this grid<a class="headerlink" href="#window-sizes-on-this-grid" title="Link to this heading">#</a></h2>
 <p>Rolling windows expressed as an <strong>observation count</strong> mean something different
 here than on the 1-minute grid: <code class="docutils literal notranslate"><span class="pre">window=120</span></code> is two <em>minutes</em> of this grid but
 two <em>hours</em> of the 1-minute one. Pass a time offset (<code class="docutils literal notranslate"><span class="pre">window=&quot;2h&quot;</span></code>) to get the
 same duration on either grid — that is the default for
 <code class="docutils literal notranslate"><span class="pre">zscore_within_regime</span></code>. See <a class="reference internal" href="../contract_rolls.html"><span class="std std-doc">Contract Rolls</span></a>.</p>
+</section>
 </section>
 
 <div class="section ablog__blog_comments">
@@ -467,7 +465,7 @@ same duration on either grid — that is the default for
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Description</p>
+        <p class="prev-next-title">Brent-WTI Aligned (1-minute)</p>
       </div>
     </a>
     <a class="right-next"
@@ -475,7 +473,7 @@ same duration on either grid — that is the default for
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Description</p>
+        <p class="prev-next-title">Listed Spread Events (CLN6-BZQ6)</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -497,11 +495,10 @@ same duration on either grid — that is the default for
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Description</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#data-dictionary">Data Dictionary</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#window-sizes-on-this-grid">Window sizes on this grid</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#description">Description</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-dictionary">Data Dictionary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#window-sizes-on-this-grid">Window sizes on this grid</a></li>
 </ul>
-
   </nav></div>
 
 </div></div>

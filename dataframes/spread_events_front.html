@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Description &#8212; FINM 37000 Group 6 Trading</title>
+    <title>Listed Spread Events (CLN6-BZQ6) &#8212; FINM 37000 Group 6 Trading</title>
   
   
   
@@ -57,8 +57,8 @@
     <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Description" href="entry_signals_1m.html" />
-    <link rel="prev" title="Description" href="brent_wti_aligned_1s.html" /> 
+    <link rel="next" title="Entry Signals (1-minute)" href="entry_signals_1m.html" />
+    <link rel="prev" title="Brent-WTI Aligned (1-second)" href="brent_wti_aligned_1s.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -229,20 +229,11 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Strategy Dataframes</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="brent_wti_aligned_1m.html">Description</a></li>
-
-
-<li class="toctree-l1"><a class="reference internal" href="brent_wti_aligned_1s.html">Description</a></li>
-
-
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Description</a></li>
-
-<li class="toctree-l1"><a class="reference internal" href="entry_signals_1m.html">Description</a></li>
-
-
-<li class="toctree-l1"><a class="reference internal" href="brent_wti_strategy_1m.html">Description</a></li>
-
-
+<li class="toctree-l1"><a class="reference internal" href="brent_wti_aligned_1m.html">Brent-WTI Aligned (1-minute)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brent_wti_aligned_1s.html">Brent-WTI Aligned (1-second)</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Listed Spread Events (CLN6-BZQ6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entry_signals_1m.html">Entry Signals (1-minute)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brent_wti_strategy_1m.html">Brent-WTI Strategy Backtest (1-minute)</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Charts 📈</span></p>
 <ul class="nav bd-sidenav">
@@ -251,10 +242,15 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Dataframes 📊</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../cb/dataframes/FI/brent_wti_aligned_1m.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_aligned_1m</span></code> - Brent-WTI Aligned (1-minute)</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../cb/dataframes/FI/brent_wti_aligned_1s.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_aligned_1s</span></code> - Brent-WTI Aligned (1-second)</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../cb/dataframes/FI/brent_wti_strategy_1m.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_strategy_1m</span></code> - Brent-WTI Strategy Backtest (1-minute)</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../cb/dataframes/FI/entry_signals_1m.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:entry_signals_1m</span></code> - Entry Signals (1-minute)</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="../cb/dataframes/FI/spread_events_front.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:spread_events_front</span></code> - Listed Spread Events (CLN6-BZQ6)</a></li>
+
 </ul>
 
     </div>
@@ -397,7 +393,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Description</h1>
+    <h1>Listed Spread Events (CLN6-BZQ6)</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -407,10 +403,9 @@
             </div>
             <nav aria-label="Page">
                 <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Description</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#data-dictionary">Data Dictionary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#description">Description</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-dictionary">Data Dictionary</a></li>
 </ul>
-
             </nav>
         </div>
     </div>
@@ -420,8 +415,10 @@
                 
 <div id="searchbox"></div>
                 <article class="bd-article">
-                   <section id="description">
-<h1>Description<a class="headerlink" href="#description" title="Link to this heading">#</a></h1>
+                   <section class="tex2jax_ignore mathjax_ignore" id="listed-spread-events-cln6-bzq6">
+<h1>Listed Spread Events (CLN6-BZQ6)<a class="headerlink" href="#listed-spread-events-cln6-bzq6" title="Link to this heading">#</a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Link to this heading">#</a></h2>
 <p>Raw cleaned top-of-book event series for the front exchange-listed
 Brent-WTI spread instrument (<code class="docutils literal notranslate"><span class="pre">CLN6-BZQ6</span></code>) over the pilot week — every MBP-1
 book event as it occurred, no gridding or forward-filling. This book <em>is</em>
@@ -436,7 +433,7 @@ exist under the same naming scheme:
 <code class="docutils literal notranslate"><span class="pre">load_spread_events(&quot;CLQ6-BZQ6&quot;)</span></code>.</p>
 </section>
 <section id="data-dictionary">
-<h1>Data Dictionary<a class="headerlink" href="#data-dictionary" title="Link to this heading">#</a></h1>
+<h2>Data Dictionary<a class="headerlink" href="#data-dictionary" title="Link to this heading">#</a></h2>
 <p>Index: <code class="docutils literal notranslate"><span class="pre">ts_recv</span></code> — <code class="docutils literal notranslate"><span class="pre">datetime64[ns,</span> <span class="pre">UTC]</span></code>, one row per book event.</p>
 <ul class="simple">
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">instrument_id</span></code></strong>: <code class="docutils literal notranslate"><span class="pre">uint32</span></code> — the spread instrument’s id</p></li>
@@ -449,6 +446,7 @@ exist under the same naming scheme:
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">mid</span></code></strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> — (bid + ask) / 2</p></li>
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">is_crossed</span></code></strong>: <code class="docutils literal notranslate"><span class="pre">bool</span></code> — bid ≥ ask (flagged, not dropped)</p></li>
 </ul>
+</section>
 </section>
 
 <div class="section ablog__blog_comments">
@@ -471,7 +469,7 @@ exist under the same naming scheme:
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Description</p>
+        <p class="prev-next-title">Brent-WTI Aligned (1-second)</p>
       </div>
     </a>
     <a class="right-next"
@@ -479,7 +477,7 @@ exist under the same naming scheme:
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Description</p>
+        <p class="prev-next-title">Entry Signals (1-minute)</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -501,10 +499,9 @@ exist under the same naming scheme:
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Description</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#data-dictionary">Data Dictionary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#description">Description</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-dictionary">Data Dictionary</a></li>
 </ul>
-
   </nav></div>
 
 </div></div>

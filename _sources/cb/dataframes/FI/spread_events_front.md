@@ -1,5 +1,7 @@
 # Dataframe: `FI:spread_events_front` - Listed Spread Events (CLN6-BZQ6)
 
+# Listed Spread Events (CLN6-BZQ6)
+
 ## Description
 
 Raw cleaned top-of-book event series for the front exchange-listed
@@ -84,7 +86,7 @@ $ ts_recv       <datetime[ns, UTC]> 2026-06-05 21:00:00.185201+00:00
 | Contributors                    | Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem           |
 | Git Repo URL                    | https://github.com/andrewheekin/finm37000-grp-6-trading                        |
 | Pipeline Web Page               | <a href="https://andrewheekin.github.io/finm37000-grp-6-trading/">Pipeline Web Page      |
-| Date of Last Code Update        | 2026-08-11 21:50:55           |
+| Date of Last Code Update        | 2026-08-11 21:57:43           |
 | OS Compatibility                |  |
 | Linked Dataframes               |  [FI:brent_wti_aligned_1m](../../dataframes/FI/brent_wti_aligned_1m.md)<br>  [FI:brent_wti_aligned_1s](../../dataframes/FI/brent_wti_aligned_1s.md)<br>  [FI:spread_events_front](../../dataframes/FI/spread_events_front.md)<br>  [FI:entry_signals_1m](../../dataframes/FI/entry_signals_1m.md)<br>  [FI:brent_wti_strategy_1m](../../dataframes/FI/brent_wti_strategy_1m.md)<br>  |
 
