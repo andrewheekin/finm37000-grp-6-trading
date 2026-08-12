@@ -185,6 +185,24 @@ sweep:
   input is Databento data, not compute; the pipeline is already
   parameterized by date range in `src/pull_databento.py`.
 
+## Output files
+
+Running the full pipeline writes cleaned parquet datasets under `_data/clean/`,
+the backtest results at `_output/brent_wti_strategy_1m.parquet`, and four
+figures under `_output/figures/` (copied into `docs_src/figures/` for this
+site):
+
+- `strategy_01_spread_trades.png` — synthetic spread, rolling mean, entries, and exits
+- `strategy_02_position.png` — long/short/flat position through time
+- `strategy_03_cum_pnl.png` — cumulative executable P&L
+- `strategy_04_trade_pnl.png` — realized P&L for each completed trade
+
+The backtest parquet also records the rolling mean and standard deviation,
+z-score, estimated half-life, entry/exit flags, exit reason, position age,
+position P&L, step P&L, and cumulative P&L for each one-minute observation.
+The per-bar schema is documented in
+[Brent-WTI Strategy Backtest (1-minute)](dataframes/brent_wti_strategy_1m.md).
+
 ## Reproducing
 
 ```bash
@@ -192,6 +210,4 @@ doit run_strategy           # -> _output/brent_wti_strategy_1m.parquet
 doit plot_strategy_results  # -> _output/figures/strategy_0*.png
 ```
 
-Both are part of the default `doit` chain. The per-bar backtest output is
-documented in
-[Brent-WTI Strategy Backtest (1-minute)](dataframes/brent_wti_strategy_1m.md).
+Both are part of the default `doit` chain.

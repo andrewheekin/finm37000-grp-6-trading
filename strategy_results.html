@@ -409,6 +409,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#per-trade-p-l">Per-trade P&amp;L</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-only-four-trades">Why only four trades</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-we-would-change-next">What we would change next</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#output-files">Output files</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproducing">Reproducing</a></li>
 </ul>
             </nav>
@@ -772,15 +773,31 @@ input is Databento data, not compute; the pipeline is already
 parameterized by date range in <code class="docutils literal notranslate"><span class="pre">src/pull_databento.py</span></code>.</p></li>
 </ul>
 </section>
+<section id="output-files">
+<h2>Output files<a class="headerlink" href="#output-files" title="Link to this heading">#</a></h2>
+<p>Running the full pipeline writes cleaned parquet datasets under <code class="docutils literal notranslate"><span class="pre">_data/clean/</span></code>,
+the backtest results at <code class="docutils literal notranslate"><span class="pre">_output/brent_wti_strategy_1m.parquet</span></code>, and four
+figures under <code class="docutils literal notranslate"><span class="pre">_output/figures/</span></code> (copied into <code class="docutils literal notranslate"><span class="pre">docs_src/figures/</span></code> for this
+site):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">strategy_01_spread_trades.png</span></code> — synthetic spread, rolling mean, entries, and exits</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">strategy_02_position.png</span></code> — long/short/flat position through time</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">strategy_03_cum_pnl.png</span></code> — cumulative executable P&amp;L</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">strategy_04_trade_pnl.png</span></code> — realized P&amp;L for each completed trade</p></li>
+</ul>
+<p>The backtest parquet also records the rolling mean and standard deviation,
+z-score, estimated half-life, entry/exit flags, exit reason, position age,
+position P&amp;L, step P&amp;L, and cumulative P&amp;L for each one-minute observation.
+The per-bar schema is documented in
+<a class="reference internal" href="dataframes/brent_wti_strategy_1m.html"><span class="std std-doc">Brent-WTI Strategy Backtest (1-minute)</span></a>.</p>
+</section>
 <section id="reproducing">
 <h2>Reproducing<a class="headerlink" href="#reproducing" title="Link to this heading">#</a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>doit<span class="w"> </span>run_strategy<span class="w">           </span><span class="c1"># -&gt; _output/brent_wti_strategy_1m.parquet</span>
 doit<span class="w"> </span>plot_strategy_results<span class="w">  </span><span class="c1"># -&gt; _output/figures/strategy_0*.png</span>
 </pre></div>
 </div>
-<p>Both are part of the default <code class="docutils literal notranslate"><span class="pre">doit</span></code> chain. The per-bar backtest output is
-documented in
-<a class="reference internal" href="dataframes/brent_wti_strategy_1m.html"><span class="std std-doc">Brent-WTI Strategy Backtest (1-minute)</span></a>.</p>
+<p>Both are part of the default <code class="docutils literal notranslate"><span class="pre">doit</span></code> chain.</p>
 </section>
 </section>
 
@@ -844,6 +861,7 @@ documented in
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#per-trade-p-l">Per-trade P&amp;L</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-only-four-trades">Why only four trades</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-we-would-change-next">What we would change next</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#output-files">Output files</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproducing">Reproducing</a></li>
 </ul>
   </nav></div>

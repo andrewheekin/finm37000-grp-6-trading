@@ -129,20 +129,7 @@ The strategy operates only from **00:00 through 19:59 UTC** and holds at most on
 
 The default specification uses a **30-minute window**, **2.5σ entry threshold**, and **15-minute maximum half-life**. Once entered, a trade exits when the absolute z-score returns to **0.5 or less**, when mark-to-market loss reaches **\$1,000**, after **30 minutes**, or at the end of the trading session. P&L uses the listed-spread bid/ask and a **1,000-barrel contract multiplier**. All rolling calculations use only observations available through the current timestamp.
 
-## Outputs
-
-Running the full pipeline creates the cleaned parquet datasets under `_data/clean/`, the backtest results at:
-
-`_output/brent_wti_strategy_1m.parquet`
-
-and four figures under `_output/figures/`:
-
-- `strategy_01_spread_trades.png` — synthetic spread, rolling mean, entries, and exits
-- `strategy_02_position.png` — long/short/flat position through time
-- `strategy_03_cum_pnl.png` — cumulative executable P&L
-- `strategy_04_trade_pnl.png` — realized P&L for each completed trade
-
-The backtest parquet also records the rolling mean and standard deviation, z-score, estimated half-life, entry/exit flags, exit reason, position age, position P&L, step P&L, and cumulative P&L for each one-minute observation.
-
-Setup, parameters, repository layout, and publishing instructions live in
+Backtest artifacts are listed on
+[`docs_src/strategy_results.md`](docs_src/strategy_results.md).
+Setup and publishing instructions are in
 [`docs_src/how_to_run.md`](docs_src/how_to_run.md).

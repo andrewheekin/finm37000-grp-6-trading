@@ -407,7 +407,6 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-and-spread-construction">Data and Spread Construction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-the-spread-looks-like">What the Spread Looks Like</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#strategy-logic">Strategy Logic</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#outputs">Outputs</a></li>
 </ul>
             </nav>
         </div>
@@ -487,20 +486,9 @@ and top-of-book activity by hour — are documented in
 <li><p><strong>Half-life:</strong> fit an AR(1) model to the spread window and convert the autoregressive coefficient to an estimated mean-reversion half-life. Entry is allowed only when the estimate is positive and below the configured maximum.</p></li>
 </ol>
 <p>The default specification uses a <strong>30-minute window</strong>, <strong>2.5σ entry threshold</strong>, and <strong>15-minute maximum half-life</strong>. Once entered, a trade exits when the absolute z-score returns to <strong>0.5 or less</strong>, when mark-to-market loss reaches <strong>$1,000</strong>, after <strong>30 minutes</strong>, or at the end of the trading session. P&amp;L uses the listed-spread bid/ask and a <strong>1,000-barrel contract multiplier</strong>. All rolling calculations use only observations available through the current timestamp.</p>
-</section>
-<section id="outputs">
-<h2>Outputs<a class="headerlink" href="#outputs" title="Link to this heading">#</a></h2>
-<p>Running the full pipeline creates the cleaned parquet datasets under <code class="docutils literal notranslate"><span class="pre">_data/clean/</span></code>, the backtest results at:</p>
-<p><code class="docutils literal notranslate"><span class="pre">_output/brent_wti_strategy_1m.parquet</span></code></p>
-<p>and four figures under <code class="docutils literal notranslate"><span class="pre">_output/figures/</span></code>:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">strategy_01_spread_trades.png</span></code> — synthetic spread, rolling mean, entries, and exits</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">strategy_02_position.png</span></code> — long/short/flat position through time</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">strategy_03_cum_pnl.png</span></code> — cumulative executable P&amp;L</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">strategy_04_trade_pnl.png</span></code> — realized P&amp;L for each completed trade</p></li>
-</ul>
-<p>The backtest parquet also records the rolling mean and standard deviation, z-score, estimated half-life, entry/exit flags, exit reason, position age, position P&amp;L, step P&amp;L, and cumulative P&amp;L for each one-minute observation.</p>
-<p>Setup, parameters, repository layout, and publishing instructions live in
+<p>Backtest artifacts are listed on
+<a class="reference internal" href="#docs_src/strategy_results.md"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">docs_src/strategy_results.md</span></code></span></a>.
+Setup and publishing instructions are in
 <a class="reference internal" href="#docs_src/how_to_run.md"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">docs_src/how_to_run.md</span></code></span></a>.</p>
 </section>
 </section>
@@ -551,7 +539,6 @@ and top-of-book activity by hour — are documented in
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-and-spread-construction">Data and Spread Construction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-the-spread-looks-like">What the Spread Looks Like</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#strategy-logic">Strategy Logic</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#outputs">Outputs</a></li>
 </ul>
   </nav></div>
 
