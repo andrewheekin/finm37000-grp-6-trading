@@ -1,0 +1,82 @@
+/* Make blog post links match toctree styling */
+.ablog-post-title a.reference.internal {
+    font-weight: normal;
+    font-size: 0.9em;
+    color: #176de8;
+    text-decoration: underline;
+    font-family: inherit;
+}
+
+/* Full-width layout (from ChartBook's pipeline template) plus smaller headings.
+   This file lives in docs_src/_static/ so it overwrites the package template's
+   custom.css when chartbook copies site_dir into the Sphinx build. */
+
+:root {
+    --pst-body-max-width: none !important;
+    --pst-sidebar-primary-width: 20rem !important;
+    --pst-sidebar-secondary-width: 20rem !important;
+
+    /* Theme defaults: h1 2.625rem / h2 2.125rem / h3 1.75rem — too large for
+       dense project notes with many section breaks. */
+    --pst-font-size-h1: 1.75rem;
+    --pst-font-size-h2: 1.4rem;
+    --pst-font-size-h3: 1.25rem;
+    --pst-font-size-h4: 1.1rem;
+}
+
+.bd-main .bd-content {
+    max-width: none !important;
+    width: 100% !important;
+    flex-grow: 1;
+}
+
+.bd-article-container {
+    max-width: none !important;
+    width: 100% !important;
+}
+
+.bd-container {
+    max-width: none !important;
+    width: 100% !important;
+}
+
+div#main-content,
+main.bd-main,
+div.bd-content {
+    max-width: none !important;
+    width: 100% !important;
+}
+
+.container,
+.container-fluid,
+.container-lg,
+.container-xl {
+    max-width: none !important;
+    width: 100% !important;
+}
+
+article.bd-article {
+    max-width: none !important;
+    width: 100% !important;
+}
+
+.bd-page-width {
+    max-width: none !important;
+}
+
+.bd-sidebar-primary,
+.bd-sidebar-secondary {
+    flex: 0 0 20rem !important;
+    min-width: 20rem !important;
+    max-width: 20rem !important;
+}
+
+.bd-content {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+}
+
+.bd-content-container {
+    max-width: none !important;
+    width: 100% !important;
+}
