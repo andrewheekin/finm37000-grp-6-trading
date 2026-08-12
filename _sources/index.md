@@ -33,7 +33,7 @@ dataframes/brent_wti_strategy_1m
 
 ```{toctree}
 :maxdepth: 1
-:caption: Notebooks 📖
+:caption: Notebooks
 
 ```
 
@@ -41,7 +41,7 @@ dataframes/brent_wti_strategy_1m
 
 ```{toctree}
 :maxdepth: 1
-:caption: Pipeline Charts 📈
+:caption: Pipeline Charts
 cb/charts.md
 ```
 
@@ -52,7 +52,7 @@ cb/charts.md
 
 ```{toctree}
 :maxdepth: 1
-:caption: Pipeline Dataframes 📊
+:caption: Pipeline Dataframes
 cb/dataframes/FI/brent_wti_aligned_1m.md
 cb/dataframes/FI/brent_wti_aligned_1s.md
 cb/dataframes/FI/brent_wti_strategy_1m.md
@@ -63,7 +63,7 @@ cb/dataframes/FI/spread_events_front.md
 
 ```{toctree}
 :maxdepth: 1
-:caption: Appendix 💡
+:caption: Appendix
 myst_markdown_demos.md
 apidocs/index
 ```
@@ -77,7 +77,7 @@ apidocs/index
 | Contributors                    | Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem           |
 | Git Repo URL                    | https://github.com/andrewheekin/finm37000-grp-6-trading                        |
 | Pipeline Web Page               | <a href="https://andrewheekin.github.io/finm37000-grp-6-trading/">Pipeline Web Page      |
-| Date of Last Code Update        | 2026-08-12 08:10:19           |
+| Date of Last Code Update        | 2026-08-12 08:15:15           |
 | OS Compatibility                |  |
 | Linked Dataframes               |  [FI:brent_wti_aligned_1m](cb/dataframes/FI/brent_wti_aligned_1m.md)<br>  [FI:brent_wti_aligned_1s](cb/dataframes/FI/brent_wti_aligned_1s.md)<br>  [FI:spread_events_front](cb/dataframes/FI/spread_events_front.md)<br>  [FI:entry_signals_1m](cb/dataframes/FI/entry_signals_1m.md)<br>  [FI:brent_wti_strategy_1m](cb/dataframes/FI/brent_wti_strategy_1m.md)<br>  |
 
@@ -297,6 +297,12 @@ shells out to `sphinx-build` and needs it on `PATH`:
 
 ```bash
 source .venv/bin/activate
+
+# ChartBook's stock index captions ship with emoji; overlay our plain-text
+# copy (docs_src/_chartbook/index.md) before building.
+cp docs_src/_chartbook/index.md \
+  .venv/lib/python*/site-packages/chartbook/docs_src_pipeline/index.md
+
 chartbook build -f          # -> ./docs (gitignored)
 
 # The index page is generated from README.md, which references figures by their

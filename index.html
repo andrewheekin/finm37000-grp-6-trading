@@ -238,11 +238,11 @@
 <li class="toctree-l1"><a class="reference internal" href="dataframes/entry_signals_1m.html">Entry Signals (1-minute)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dataframes/brent_wti_strategy_1m.html">Brent-WTI Strategy Backtest (1-minute)</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Charts 📈</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Charts</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="cb/charts.html">Chart List</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Dataframes 📊</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Dataframes</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/brent_wti_aligned_1m.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_aligned_1m</span></code> - Brent-WTI Aligned (1-minute)</a></li>
 
@@ -443,7 +443,7 @@
                 <article class="bd-article">
                    <section class="tex2jax_ignore mathjax_ignore" id="finm-37000-group-6-trading">
 <h1>FINM 37000 Group 6 Trading<a class="headerlink" href="#finm-37000-group-6-trading" title="Link to this heading">#</a></h1>
-<p>Last updated: Aug 12, 2026, 12:10:27 PM</p>
+<p>Last updated: Aug 12, 2026, 12:15:34 PM</p>
 <div class="toctree-wrapper compound">
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Project Notes</span></p>
 <ul>
@@ -471,7 +471,7 @@
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Charts 📈</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Charts</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="cb/charts.html">Chart List</a></li>
 </ul>
@@ -479,7 +479,7 @@
 <ul class="postlist-style-none postlist simple">
 </ul>
 <div class="toctree-wrapper compound">
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Dataframes 📊</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Dataframes</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/brent_wti_aligned_1m.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_aligned_1m</span></code> - Brent-WTI Aligned (1-minute)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/brent_wti_aligned_1m.html#brent-wti-aligned-1-minute">Brent-WTI Aligned (1-minute)</a></li>
@@ -521,7 +521,7 @@
 <td><p><a href="https://andrewheekin.github.io/finm37000-grp-6-trading/">Pipeline Web Page</p></td>
 </tr>
 <tr class="row-odd"><td><p>Date of Last Code Update</p></td>
-<td><p>2026-08-12 08:10:19</p></td>
+<td><p>2026-08-12 08:15:15</p></td>
 </tr>
 <tr class="row-even"><td><p>OS Compatibility</p></td>
 <td><p></p></td>
@@ -765,6 +765,12 @@ is served from the <code class="docutils literal notranslate"><span class="pre">
 tracks automating it). Build from an activated virtualenv, because <code class="docutils literal notranslate"><span class="pre">chartbook</span></code>
 shells out to <code class="docutils literal notranslate"><span class="pre">sphinx-build</span></code> and needs it on <code class="docutils literal notranslate"><span class="pre">PATH</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+
+<span class="c1"># ChartBook&#39;s stock index captions ship with emoji; overlay our plain-text</span>
+<span class="c1"># copy (docs_src/_chartbook/index.md) before building.</span>
+cp<span class="w"> </span>docs_src/_chartbook/index.md<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>.venv/lib/python*/site-packages/chartbook/docs_src_pipeline/index.md
+
 chartbook<span class="w"> </span>build<span class="w"> </span>-f<span class="w">          </span><span class="c1"># -&gt; ./docs (gitignored)</span>
 
 <span class="c1"># The index page is generated from README.md, which references figures by their</span>
