@@ -4,7 +4,29 @@
 
 This project builds and backtests an end-to-end **intraday mean-reversion strategy on the Brent–WTI crude-oil spread** using CME Globex MBP-1 market data from Databento. The pipeline downloads the market data, constructs synchronized one-minute datasets, generates statistically filtered trade signals, executes them against the exchange-listed Brent–WTI spread, and produces executable P&L and backtest figures. The workflow is reproducible with a single `doit` command once a Databento API key is supplied.
 
-The main result is a **negative but informative trading result**: over the June 1–5, 2026 pilot sample, the implemented mean-reversion specification did not generate robust positive P&L. We tested entry thresholds of 3.0 and 2.5 standard deviations; lowering the threshold created more opportunities but did not make it reliably profitable. Rather than optimize aggressively to a five-day sample, we preserve a transparent baseline that shows where the economic intuition does and does not survive realistic market-data and execution constraints.
+The main result is **negative but informative**. The current period analysis tests three consecutive data blocks in each year from 2023 through 2026. The baseline completes 125 trades and produces **−$1,470** after executable bid/ask fills. Only 2026 is positive, so the specification does not show robust profitability across the sampled years.
+
+## Backtesting Analysis Results
+
+[`notebooks/backtesting_period_analysis.ipynb`](notebooks/backtesting_period_analysis.ipynb) uses the same 30-minute strategy in every period. Each block is an independent backtest, so rolling state, positions, and cumulative P&L reset at block boundaries. Later downloaded extensions are excluded.
+
+| Year | Data blocks | Trades | Winning trades | P&L |
+|---|---:|---:|---:|---:|
+| 2023 | 3 | 33 | 4 | −$550 |
+| 2024 | 3 | 37 | 1 | −$630 |
+| 2025 | 3 | 41 | 2 | −$460 |
+| 2026 | 3 | 14 | 6 | +$170 |
+| **Total** | **12** | **125** | **13** | **−$1,470** |
+
+The figures connect the three periods within each year. Green and red markers show long and short entries, purple crosses show exits, and dashed vertical lines mark period boundaries.
+
+![2023 connected spread, trades, and cumulative P&L](docs_src/figures/strategy_yearly_spread_pnl_2023.png)
+
+![2024 connected spread, trades, and cumulative P&L](docs_src/figures/strategy_yearly_spread_pnl_2024.png)
+
+![2025 connected spread, trades, and cumulative P&L](docs_src/figures/strategy_yearly_spread_pnl_2025.png)
+
+![2026 connected spread, trades, and cumulative P&L](docs_src/figures/strategy_yearly_spread_pnl_2026.png)
 
 ## Pipeline Overview
 
