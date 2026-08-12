@@ -7,6 +7,11 @@
     font-family: inherit;
 }
 
+/* Authors are shown under the landing-page title; hide the footer byline. */
+.component-author {
+    display: none !important;
+}
+
 /* Computer Modern (CMU Serif) — same family as classic LaTeX CMR/CMBX.
    Self-declared @font-face so weight/style match browser defaults
    (the upstream package uses nonstandard font-style: roman / weight 500). */
