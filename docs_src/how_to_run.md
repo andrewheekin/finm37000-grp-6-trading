@@ -128,10 +128,9 @@ shells out to `sphinx-build` and needs it on `PATH`:
 ```bash
 source .venv/bin/activate
 
-# ChartBook's stock index captions ship with emoji; overlay our plain-text
-# copy (docs_src/_chartbook/index.md) before building.
-cp docs_src/_chartbook/index.md \
-  .venv/lib/python*/site-packages/chartbook/docs_src_pipeline/index.md
+# ChartBook ships stock index captions and repeats a Pipeline Manifest table
+# on every dataframe page. Apply our overlays before building.
+python docs_src/_chartbook/apply_overlays.py
 
 chartbook build -f          # -> ./docs (gitignored)
 
