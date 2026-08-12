@@ -116,9 +116,12 @@ the affected rows; prefer `regime_key` for anything statistical.
 
 ## Reproducing
 
+Both are standalone scripts rather than `doit` tasks, since each calls the
+Databento symbology API and neither feeds the backtest:
+
 ```
-doit instrument_discovery   # symbology -> _output/roll_dates_c_vs_n.csv
-doit roll_analysis          # splice sizes + cost of the convention
+python src/instrument_discovery.py   # symbology -> _output/roll_dates_c_vs_n.csv
+python src/roll_analysis.py          # splice sizes + cost of the convention
 
 python src/roll_analysis.py --mbp1   # adds the intraday June 2026 check (~93 MB)
 ```
