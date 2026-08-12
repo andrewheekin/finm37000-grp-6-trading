@@ -2,7 +2,7 @@
 
 Run from the repo root with the project virtualenv active:
 
-    python docs_src/_chartbook/apply_overlays.py
+    python chartbook_overlays/apply_overlays.py
 
 What it does:
 1. Replaces chartbook's pipeline index.md with our emoji-free / no-Pipeline-Specs
@@ -11,6 +11,8 @@ What it does:
    (hardcoded in chartbook.markdown_generator).
 3. Replaces the dataframe manifest template so empty "Linked Charts" blocks
    are not rendered.
+4. Strips the generated "# Dataframe: id - name" heading that chartbook prepends
+   to every catalog page, which otherwise sits above the page's own H1.
 """
 
 from __future__ import annotations
@@ -21,9 +23,14 @@ import sys
 from pathlib import Path
 
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+REPO_ROOT = Path(__file__).resolve().parents[1]
 OUR_INDEX = Path(__file__).resolve().parent / "index.md"
-OUR_DF_MANIFEST = REPO_ROOT / "docs_src" / "_templates" / "dataframe_manifest.md"
+OUR_DF_MANIFEST = Path(__file__).resolve().parent / "dataframe_manifest.md"
+
+# The exact source literal chartbook prepends to every dataframe catalog page.
+DATAFRAME_TITLE_LITERAL = (
+    '"""# Dataframe: `{{pipeline_id}}:{{dataframe_id}}` - {{dataframe_name}}\\n\\n"""'
+)
 
 
 def _chartbook_package_dir() -> Path:
@@ -68,6 +75,18 @@ def strip_pipeline_manifest(package_dir: Path) -> None:
     print(f"stripped Pipeline Manifest block from {path}")
 
 
+def strip_dataframe_title(package_dir: Path) -> None:
+    path = package_dir / "markdown_generator.py"
+    text = path.read_text(encoding="utf-8")
+    if DATAFRAME_TITLE_LITERAL not in text:
+        print(f"dataframe title already stripped in {path}")
+        return
+
+    new_text = text.replace(DATAFRAME_TITLE_LITERAL, '""', 1)
+    path.write_text(new_text, encoding="utf-8")
+    print(f"stripped generated dataframe title from {path}")
+
+
 def main() -> None:
     if not OUR_INDEX.is_file():
         raise SystemExit(f"missing overlay source: {OUR_INDEX}")
@@ -75,6 +94,7 @@ def main() -> None:
     overlay_index(package_dir)
     overlay_dataframe_manifest(package_dir)
     strip_pipeline_manifest(package_dir)
+    strip_dataframe_title(package_dir)
 
 
 if __name__ == "__main__":

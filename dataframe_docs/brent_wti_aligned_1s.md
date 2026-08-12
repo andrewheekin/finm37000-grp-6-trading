@@ -24,4 +24,4 @@ Rolling windows expressed as an **observation count** mean something different
 here than on the 1-minute grid: `window=120` is two *minutes* of this grid but
 two *hours* of the 1-minute one. Pass a time offset (`window="2h"`) to get the
 same duration on either grid — that is the default for
-`zscore_within_regime`. See [Contract Rolls](../contract_rolls.md).
+`zscore_within_regime`. See [Contract Rolls](../../../contract_rolls.md).

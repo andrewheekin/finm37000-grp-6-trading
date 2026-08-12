@@ -30,7 +30,7 @@ regeneration and the `_data` junction setup.)
   two contracts, so a rolling window spanning a roll mixes them. Use
   `regime_key` + `rolling_within_regime` / `zscore_within_regime` from
   `clean_mbp1` rather than a bare `.rolling()` — see
-  [Contract Rolls](../contract_rolls.md).
+  [Contract Rolls](../../../contract_rolls.md).
 
 ## Data Dictionary
 

@@ -8,7 +8,7 @@ UTC session, carrying the rolling statistics the entry gates saw, the position
 state, the exit that closed it, and executable P&L.
 
 This is the artifact behind every number on the
-[Strategy Results](../strategy_results.md) page: 6,000 bars over June 1–5,
+[Strategy Results](../../../strategy_results.md) page: 6,000 bars over June 1–5,
 2026, 4 trades, +\$330 cumulative P&L.
 
 Signals come from the synthetic spread (`synth_mid = cl_mid − bz_mid`), but

@@ -15,12 +15,14 @@ By Michael Dowling, Andrew Heekin, Bhuvanesh Kodem, Sam Zhang
 ```
 {% endif %}
 
+{% if notebook_list %}
 ```{toctree}
 :maxdepth: 1
 :caption: Notebooks
 :hidden:
 {{ notebook_list | join("\n")}}
 ```
+{% endif %}
 
 {% if notes_list %}
 ```{toctree}
@@ -33,17 +35,9 @@ By Michael Dowling, Andrew Heekin, Bhuvanesh Kodem, Sam Zhang
 
 ```{toctree}
 :maxdepth: 1
-:caption: Pipeline Dataframes
+:caption: Dataframes
 :hidden:
 {{dataframe_file_list | sort | join("\n")}}
-```
-
-```{toctree}
-:maxdepth: 1
-:caption: Appendix
-:hidden:
-myst_markdown_demos.md
-apidocs/index
 ```
 
 {{readme_text}}

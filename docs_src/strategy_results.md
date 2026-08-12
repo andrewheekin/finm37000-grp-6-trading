@@ -201,7 +201,7 @@ The backtest parquet also records the rolling mean and standard deviation,
 z-score, estimated half-life, entry/exit flags, exit reason, position age,
 position P&L, step P&L, and cumulative P&L for each one-minute observation.
 The per-bar schema is documented in
-[Brent-WTI Strategy Backtest (1-minute)](dataframes/brent_wti_strategy_1m.md).
+[Brent-WTI Strategy Backtest (1-minute)](cb/dataframes/FI/brent_wti_strategy_1m.md).
 
 ## Reproducing
 

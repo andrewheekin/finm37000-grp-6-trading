@@ -45,7 +45,7 @@ restriction_on_use = "Course project use; data files are not committed to the re
 how_is_pulled = "doit pull_databento clean_mbp1 (src/pull_databento.py -> src/clean_mbp1.py)"
 topic_tags = ["Brent", "WTI", "Futures", "Spread", "Market Data"]
 path_to_parquet_data = "./_data/clean/brent_wti_aligned_1m_2026-06-01_2026-06-06.parquet"
-dataframe_docs_path = "./docs_src/dataframes/brent_wti_aligned_1m.md"
+dataframe_docs_path = "./dataframe_docs/brent_wti_aligned_1m.md"
 
 [dataframes.brent_wti_aligned_1s]
 dataframe_name = "Brent-WTI Aligned (1-second)"
@@ -58,7 +58,7 @@ restriction_on_use = "Course project use; data files are not committed to the re
 how_is_pulled = "doit pull_databento clean_mbp1 (src/pull_databento.py -> src/clean_mbp1.py)"
 topic_tags = ["Brent", "WTI", "Futures", "Spread", "Market Data"]
 path_to_parquet_data = "./_data/clean/brent_wti_aligned_1s_2026-06-01_2026-06-06.parquet"
-dataframe_docs_path = "./docs_src/dataframes/brent_wti_aligned_1s.md"
+dataframe_docs_path = "./dataframe_docs/brent_wti_aligned_1s.md"
 
 [dataframes.spread_events_front]
 dataframe_name = "Listed Spread Events (CLN6-BZQ6)"
@@ -71,7 +71,7 @@ restriction_on_use = "Course project use; data files are not committed to the re
 how_is_pulled = "doit pull_databento clean_mbp1 (src/pull_databento.py -> src/clean_mbp1.py)"
 topic_tags = ["Brent", "WTI", "Futures", "Spread", "Market Data", "Microstructure"]
 path_to_parquet_data = "./_data/clean/cln6-bzq6_events_2026-06-01_2026-06-06.parquet"
-dataframe_docs_path = "./docs_src/dataframes/spread_events_front.md"
+dataframe_docs_path = "./dataframe_docs/spread_events_front.md"
 
 [dataframes.entry_signals_1m]
 dataframe_name = "Entry Signals (1-minute)"
@@ -84,7 +84,7 @@ restriction_on_use = "Course project use; data files are not committed to the re
 how_is_pulled = "doit signal_generator (src/signal_generator.py <- clean_mbp1 aligned 1m)"
 topic_tags = ["Brent", "WTI", "Futures", "Spread", "Signals", "Mean Reversion"]
 path_to_parquet_data = "./_output/brent_wti_signals_1m.parquet"
-dataframe_docs_path = "./docs_src/dataframes/entry_signals_1m.md"
+dataframe_docs_path = "./dataframe_docs/entry_signals_1m.md"
 
 [dataframes.brent_wti_strategy_1m]
 dataframe_name = "Brent-WTI Strategy Backtest (1-minute)"
@@ -97,7 +97,7 @@ restriction_on_use = "Course project use; data files are not committed to the re
 how_is_pulled = "doit run_strategy (src/strategy_engine.py <- clean_mbp1 aligned 1m)"
 topic_tags = ["Brent", "WTI", "Futures", "Spread", "Mean Reversion", "Backtest", "PnL"]
 path_to_parquet_data = "./_output/brent_wti_strategy_1m.parquet"
-dataframe_docs_path = "./docs_src/dataframes/brent_wti_strategy_1m.md"
+dataframe_docs_path = "./dataframe_docs/brent_wti_strategy_1m.md"
 
 # Every figure in this project is a matplotlib/plotnine PNG, not HTML, so the
 # diagnostics and backtest figures are embedded in the Spread Diagnostics and
