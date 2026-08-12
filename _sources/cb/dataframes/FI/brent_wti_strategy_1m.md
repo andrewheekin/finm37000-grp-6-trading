@@ -159,7 +159,7 @@ $ ts_recv      <datetime[ns, UTC]> 2026-06-05 19:59:00+00:00
 | Contributors                    | Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem           |
 | Git Repo URL                    | https://github.com/andrewheekin/finm37000-grp-6-trading                        |
 | Pipeline Web Page               | <a href="https://andrewheekin.github.io/finm37000-grp-6-trading/">Pipeline Web Page      |
-| Date of Last Code Update        | 2026-08-12 08:15:15           |
+| Date of Last Code Update        | 2026-08-12 08:22:01           |
 | OS Compatibility                |  |
 | Linked Dataframes               |  [FI:brent_wti_aligned_1m](../../dataframes/FI/brent_wti_aligned_1m.md)<br>  [FI:brent_wti_aligned_1s](../../dataframes/FI/brent_wti_aligned_1s.md)<br>  [FI:spread_events_front](../../dataframes/FI/spread_events_front.md)<br>  [FI:entry_signals_1m](../../dataframes/FI/entry_signals_1m.md)<br>  [FI:brent_wti_strategy_1m](../../dataframes/FI/brent_wti_strategy_1m.md)<br>  |
 
