@@ -214,6 +214,12 @@ shells out to `sphinx-build` and needs it on `PATH`:
 
 ```bash
 source .venv/bin/activate
+
+# ChartBook's stock index captions ship with emoji; overlay our plain-text
+# copy (docs_src/_chartbook/index.md) before building.
+cp docs_src/_chartbook/index.md \
+  .venv/lib/python*/site-packages/chartbook/docs_src_pipeline/index.md
+
 chartbook build -f          # -> ./docs (gitignored)
 
 # The index page is generated from README.md, which references figures by their
