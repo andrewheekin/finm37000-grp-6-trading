@@ -26,7 +26,10 @@ Once a trade is open, the entry filters are replaced by a separate set of exit r
 - Additional safeguards include a **maximum holding-period time stop** and a **stop-loss rule** designed to limit losses when the spread moves further away from equilibrium rather than reverting.
 
 The architecture can therefore be summarized as:
-$$ \text{Rolling Window} → \text{Z-Score Signal} → \text{Stationarity Check} → \text{Half-Life Check} → \text{Trade Entry} → \text{Exit Management} $$
+
+$$
+\text{Rolling Window} → \text{Z-Score Signal} → \text{Stationarity Check} → \text{Half-Life Check} → \text{Trade Entry} → \text{Exit Management}
+$$
 
 All thresholds, window lengths, significance levels, holding-period limits, and risk parameters are intentionally left unspecified in this document. These values are intended to be configurable inputs within implementation so that the strategy can be tested, tuned, and compared across different parameter choices without changing its underlying logic.
 
@@ -52,7 +55,10 @@ $$
 
 where (n) is a configurable window length.
 The windows are overlapping rather than divided into fixed blocks. In live trading, every new minute causes the window to roll forward by one observation. The strategy then restarts its decision process from the top using the newly formed window:
-$$ \text{New observation} → \text{Update spread} → \text{Roll window} → \text{Run signal checks} $$
+
+$$
+\text{New observation} → \text{Update spread} → \text{Roll window} → \text{Run signal checks}
+$$
 
 **Window Validity**
 
@@ -121,13 +127,17 @@ If the window fails the configured stationarity criteria, no position is entered
 The mean-reversion half-life represents the estimated amount of time required for a deviation from equilibrium to shrink by one-half. For an intraday strategy, this provides a practical measure of whether the spread is expected to revert quickly enough for the candidate trade to be worthwhile. A spread may appear stationary while still reverting too slowly for the intended holding horizon. The half-life check therefore acts as the final validation step before trade entry.
 
 For the current rolling window, define the one-period change in the spread as:
+
 $$
 \Delta S_t = S_t - S_{t-1}
 $$
+
 The strategy estimates the relationship:
+
 $$
 \Delta S_t = \alpha + \beta S_{t-1} + \varepsilon_t
 $$
+
 where:
 
 - $S_{t-1}$ is the lagged spread midpoint,
@@ -136,24 +146,28 @@ where:
 - $\beta$ measures the tendency of the spread to move back toward equilibrium,
 - $\varepsilon_t$ is the residual term.
 
-For mean reversion to be present, the estimated coefficient (\beta) should be negative. This means that when the spread is relatively high, its subsequent expected change is downward, and when the spread is relatively low, its subsequent expected change is upward.
+For mean reversion to be present, the estimated coefficient $\beta$ should be negative. This means that when the spread is relatively high, its subsequent expected change is downward, and when the spread is relatively low, its subsequent expected change is upward.
 
 The estimated half-life is then:
+
 $$
 h = \frac{\ln(2)}{-\beta}
 $$
+
 Because the strategy uses one-minute observations, $h$ is interpreted in minutes.
 
 The estimated half-life is compared against a configurable maximum acceptable value:
+
 $$
 0 < h \leq h_{\text{max}}
 $$
+
 where $h_{\text{max}}$ represents the longest expected reversion period that the strategy is willing to accept.
 
 If the estimated half-life exceeds this limit, the candidate signal is rejected. Although the spread may exhibit mean-reverting behavior, the expected convergence would be too slow for the strategy's intended short-term horizon, making the spread increasingly vulnerable to regime changes and less likely to cleanly mean revert. 
 
 The signal will also be rejected when the half-life cannot be interpreted meaningfully. This includes cases where:
-- the estimated (\beta) is zero or positive;
+- the estimated $\beta$ is zero or positive;
 - the resulting half-life is nonpositive;
 - the estimate is missing, infinite, or otherwise numerically invalid.
 
@@ -162,7 +176,10 @@ If the estimate is valid and falls within the configured limit, the candidate si
 This check will also come with a Boolean toggle when running the strategy, so that backtesting will allow the user to explore cases in which half-life isn't used as a filter and compare results.
 
 The half-life stage completes the sequence of entry checks:
-$$ \text{Stationarity Criteria Met → Estimate Half-Life → Half-Life Acceptable?} $$
+
+$$
+\text{Stationarity Criteria Met → Estimate Half-Life → Half-Life Acceptable?}
+$$
 
 No → reject the signal and restart on the next observation.
 
@@ -184,21 +201,25 @@ Each exit rule should be configurable so that alternative specifications can be 
 ### Z-Score Reversion Exit
 
 The primary exit occurs when the spread returns sufficiently close to its recent equilibrium. Because the trade was entered after the z-score crossed an extreme entry threshold, the position is expected to profit as the z-score moves back toward zero. The strategy should therefore define a configurable exit level:
+
 $$
 z_{\text{exit}}
 $$
 
 The exit threshold will generally be closer to zero than the entry threshold. For a trade entered when the spread was above its rolling mean, the position should be closed once the z-score falls to the configured reverted level:
+
 $$
 z_t \leq z_{\text{exit}}
 $$
 
 For a trade entered when the spread was below its rolling mean, the position should be closed once the z-score rises to the corresponding lower-side exit level:
+
 $$
 z_t \geq -z_{\text{exit}}
 $$
 
 Equivalently, a symmetric specification may close the trade when:
+
 $$
 |z_t| \leq z_{\text{exit}}
 $$
@@ -212,6 +233,7 @@ The exit threshold should remain configurable so backtesting can evaluate the tr
 ### Time Stop Exit
 
 A time stop closes a position once it has been held for longer than a configurable maximum duration:
+
 $$
 T_{\text{held}} \geq T_{\text{max}}
 $$
@@ -228,6 +250,7 @@ The maximum holding period should be configurable and may be informed by the hal
 ### Stop-Loss Exit
 
 The stop-loss rule closes the position when the loss reaches a configurable limit. A stop loss may be defined using realized and unrealized trade P&L:
+
 $$
 \text{PnL}_t \leq -L_{\text{max}}
 $$
@@ -257,5 +280,9 @@ The associated thresholds and limits should also remain configurable.
 This design allows the team to compare different exit specifications without rewriting the core strategy. For example, backtesting can determine whether the time stop improves performance, whether a stop loss is too restrictive, or whether a partial z-score reversion is a better exit target than a return to zero.
 
 The exit process can therefore be summarized as:
-$$ \text{Open Position → Update Position Each Minute → Evaluate Exit Conditions → Close Position When Any Enabled Rule Is Triggered} $$
+
+$$
+\text{Open Position → Update Position Each Minute → Evaluate Exit Conditions → Close Position When Any Enabled Rule Is Triggered}
+$$
+
 Once the trade is closed, the strategy returns to its normal signal-generation process and begins searching for the next valid entry opportunity.
