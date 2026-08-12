@@ -34,7 +34,7 @@ Over the pilot week the spread trended from about −$3.50/bbl to −$1.50/bbl b
 
 ![Synthetic spread over the pilot week](docs_src/figures/01_spread_week.png)
 
-Choosing that window is the central trade-off: daily-horizon deviations sit on one side of zero for a full day, while 30-minute deviations oscillate around zero with amplitude mostly within ±$0.20/bbl.
+Choosing that window is a key trade-off: daily-horizon deviations may have no zero-crossings for a full day, while 30-minute deviations oscillate around zero with amplitude mostly within ±$0.20/bbl.
 
 ![Rolling deviations at three horizons](docs_src/figures/02_rolling_deviations.png)
 
