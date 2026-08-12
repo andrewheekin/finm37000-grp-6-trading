@@ -26,11 +26,23 @@ git_repo_URL = "https://github.com/andrewheekin/finm37000-grp-6-trading"
 README_file_path = "./README.md"
 site_dir = "./docs_src/"
 
-# The jupytext sources in src/*.ipynb.py are no longer executed by dodo.py, so
-# no built notebook exists at _output/ for chartbook to pick up. Putting a
-# notebook back on the site (issue #29) means re-adding an entry here alongside
-# a doit task that runs jupytext.
+# These two are committed with their outputs intact and are registered straight
+# from notebooks/ rather than from _output/, because no doit task executes them:
+# the historical weeks they read are pulled by src/extend_backtest_periods.py,
+# which spends Databento credits and is deliberately outside the pipeline. The
+# other notebooks under notebooks/ stay unregistered until they are rerun
+# against the current cleaned data (issue #29).
 [notebooks]
+
+[notebooks.backtesting_period_analysis]
+notebook_name = "Multi-Week Backtest (2023-2026)"
+notebook_description = "Runs the final 30-minute, 2.5-sigma specification over twelve independent weekly blocks: per-period P&L, win rates, quoted widths, and the full 145-trade round-trip log"
+notebook_path = "./notebooks/backtesting_period_analysis.ipynb"
+
+[notebooks.ewm_7d_zscore_backtest]
+notebook_name = "EWM Z-Score Sensitivity Check"
+notebook_description = "Alternative parameterization on the same data: five-trading-day exponentially weighted z-score, 2.0-sigma entry, $100 stop loss, and 120-minute time stop"
+notebook_path = "./notebooks/ewm_7d_zscore_backtest.ipynb"
 
 [dataframes]
 

@@ -9,5 +9,6 @@ contract_rolls
 spread_diagnostics
 strategy_overview
 strategy_results
+multi_week_backtest
 how_to_run
 ```

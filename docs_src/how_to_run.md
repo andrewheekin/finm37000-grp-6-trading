@@ -73,6 +73,25 @@ doit
 
 The Databento cache is intentionally not deleted by `doit clean`.
 
+## 5. Optional: extend the sample beyond the pilot week
+
+`doit` covers the June 1–5, 2026 pilot week only. The historical weeks behind
+[Multi-Week Backtest](multi_week_backtest.md) are pulled separately, because
+each one spends Databento credits on data the graded pipeline does not need.
+Price the request before committing to it:
+
+```bash
+python src/extend_backtest_periods.py --estimate-only
+python src/extend_backtest_periods.py
+```
+
+For each week the script resolves the `CL.v.0` and `BZ.v.0` contracts, pulls
+those two continuous outrights plus the matching listed CL-BZ spread at the
+`bbo-1m` schema, and writes a strategy-ready aligned one-minute parquet to
+`_data/clean/`. Weeks already cached there are skipped. Then execute
+`notebooks/backtesting_period_analysis.ipynb`, which reads those parquets and
+regenerates the four yearly figures in `docs_src/figures/`.
+
 ## Repository layout
 
 | Path | Contents |
@@ -94,6 +113,9 @@ The pipeline modules, in the order the chain runs them:
 - `src/plot_strategy_results.py` — generates the four final backtest figures
 - `src/signal_generator.py` — standalone rolling z-score entry signals (`doit signal_generator`)
 - `docs_src/figures/07_strategy_flowchart.mmd` — Mermaid source for the pipeline diagram
+
+Outside the chain, `src/extend_backtest_periods.py` downloads the historical
+weeks used by [Multi-Week Backtest](multi_week_backtest.md).
 
 Run the test suite with `pytest src/`.
 
