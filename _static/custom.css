@@ -49,10 +49,12 @@
     --pst-font-family-base: "CMU Serif", "Times New Roman", Times, serif;
     --pst-font-family-heading: "CMU Serif", "Times New Roman", Times, serif;
 
-    /* Readable measure (~65–75 chars). Was none (full-bleed). */
+    /* Readable measure for prose only. Sidebars stay viewport-edge pinned;
+       the article column fills the middle and the text is centered in it. */
     --pst-body-max-width: 48rem;
 
     --pst-sidebar-primary-width: 20rem !important;
+    --pst-sidebar-secondary: 20rem !important;
     --pst-sidebar-secondary-width: 20rem !important;
 
     /* Theme defaults: h1 2.625rem / h2 2.125rem / h3 1.75rem — too large for
@@ -63,28 +65,35 @@
     --pst-font-size-h4: 1.1rem;
 }
 
-/* Keep the page shell flexible so sidebars lay out, but constrain the article. */
-.bd-main .bd-content {
+/* Full-bleed page shell: primary left, secondary right, middle grows. */
+.bd-container {
     max-width: none !important;
     width: 100% !important;
-    flex-grow: 1;
+    justify-content: stretch !important;
 }
 
-.bd-article-container {
-    max-width: var(--pst-body-max-width) !important;
-    width: 100% !important;
-}
-
-.bd-container {
+.bd-container .bd-container__inner,
+.bd-page-width {
     max-width: none !important;
     width: 100% !important;
 }
 
 div#main-content,
-main.bd-main,
+main.bd-main {
+    max-width: none !important;
+    width: 100% !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+}
+
+.bd-main .bd-content,
 div.bd-content {
     max-width: none !important;
     width: 100% !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    /* Keep Contents docked to the right edge of the middle+toc row. */
+    justify-content: flex-start !important;
 }
 
 .container,
@@ -95,15 +104,6 @@ div.bd-content {
     width: 100% !important;
 }
 
-article.bd-article {
-    max-width: var(--pst-body-max-width) !important;
-    width: 100% !important;
-}
-
-.bd-page-width {
-    max-width: none !important;
-}
-
 .bd-sidebar-primary,
 .bd-sidebar-secondary {
     flex: 0 0 20rem !important;
@@ -111,9 +111,19 @@ article.bd-article {
     max-width: 20rem !important;
 }
 
-.bd-content {
+/* Middle column fills leftover space; prose is narrowed and centered in it. */
+.bd-article-container {
     flex: 1 1 auto !important;
+    max-width: none !important;
+    width: auto !important;
     min-width: 0 !important;
+}
+
+article.bd-article {
+    max-width: var(--pst-body-max-width) !important;
+    width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
 }
 
 .bd-content-container {
