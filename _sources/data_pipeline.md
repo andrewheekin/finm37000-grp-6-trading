@@ -3,26 +3,39 @@
 The market-data pipeline
 ([issue #4](https://github.com/andrewheekin/finm37000-grp-6-trading/issues/4))
 turns raw Databento MBP-1 events into cleaned, timestamp-aligned parquet
-datasets. For a narrated tour with live output, see the **Brent-WTI Data
-Pipeline Walkthrough** notebook (under Notebooks in this site's catalog
-section).
+datasets. These datasets feed the backtest reported on
+[Strategy Results](strategy_results.md).
 
 ## Steps
 
 | Step | Module | What it does |
 |------|--------|--------------|
-| 0. Discovery | `src/instrument_discovery.py` | Confirms listed CL-BZ spread instruments exist, resolves roll dates per continuous rule, prices the pull before spending |
 | 1. Pull | `src/pull_databento.py` | Pulls MBP-1 for `CL.v.0`, `BZ.v.0` and three listed spreads; caches raw DBN one file per symbol |
 | 2. Clean/align | `src/clean_mbp1.py` | Events → 1s/1m grids (bounded forward-fill), listed-spread event series, and the aligned Brent-WTI dataset |
 | 3. Diagnostics | `src/plot_spread_diagnostics.py` | Six mean-reversion figures — see [Spread Diagnostics](spread_diagnostics.md) |
 
-Run everything with `doit`:
+Plain `doit` runs the production chain end to end, from the pull through the
+backtest and its figures:
+
+```
+config -> pull_databento -> clean_mbp1 -> run_strategy -> plot_strategy_results
+```
+
+The data-pipeline half of that chain can also be run a task at a time:
 
 ```
 doit pull_databento      # Databento -> DBN cache (billable; cached pulls are skipped)
 doit clean_mbp1          # cache -> parquet (grids, events, aligned)
 doit spread_diagnostics  # figures -> _output/figures
-doit run_notebooks       # execute + render the walkthrough notebook
+```
+
+Two supporting analyses are standalone scripts rather than `doit` tasks,
+because each one calls the Databento symbology API and neither produces an
+input the backtest depends on:
+
+```
+python src/instrument_discovery.py  # confirms listed spreads exist, prices the pull
+python src/roll_analysis.py         # splice size and cost of the roll convention
 ```
 
 ## Output layout
@@ -54,6 +67,10 @@ Column definitions and conventions: see the dataframe pages in this site's
 catalog section (Brent-WTI Aligned 1-minute / 1-second, Listed Spread
 Events) and
 [Methodology](project_overview/methodology.md).
+
+Rolling statistics must not span a contract change — use `regime_key` and
+`zscore_within_regime` rather than a bare `.rolling()`. See
+[Contract Rolls](contract_rolls.md).
 
 ## Local `_data` junction (for chartbook data loading)
 

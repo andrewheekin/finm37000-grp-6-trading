@@ -67,7 +67,7 @@ $ ts_recv       <datetime[ns, UTC]> 2026-06-05 21:00:00.185201+00:00
 | How is data pulled?            | doit pull_databento clean_mbp1 (src/pull_databento.py -> src/clean_mbp1.py)                                                    |
 | Data available up to (min)     | N/A                                                             |
 | Data available up to (max)     | N/A                                                             |
-| Dataframe Path                 | C:\Users\shpan\OneDrive\School\University of Chicago\Summer 2026\FINM 37000 - Futures and Related Derivatives\finm37000-grp-6-trading\_data\clean\cln6-bzq6_events_2026-06-01_2026-06-06.parquet                                                   |
+| Dataframe Path                 | /Users/andrewheekin/heekscripts/uchicago/2026q3_finm37000_futures_derivatives/finm37000-grp-6-trading/_data/clean/cln6-bzq6_events_2026-06-01_2026-06-06.parquet                                                   |
 
 
 **Linked Charts:**
@@ -83,9 +83,9 @@ $ ts_recv       <datetime[ns, UTC]> 2026-06-05 21:00:00.185201+00:00
 | Lead Pipeline Developer         | Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem             |
 | Contributors                    | Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem           |
 | Git Repo URL                    | https://github.com/andrewheekin/finm37000-grp-6-trading                        |
-| Pipeline Web Page               | <a href="file://C:/Users/shpan/OneDrive/School/University of Chicago/Summer 2026/FINM 37000 - Futures and Related Derivatives/finm37000-grp-6-trading/docs/index.html">Pipeline Web Page      |
-| Date of Last Code Update        | 2026-07-13 11:50:43           |
+| Pipeline Web Page               | <a href="https://andrewheekin.github.io/finm37000-grp-6-trading/">Pipeline Web Page      |
+| Date of Last Code Update        | 2026-08-11 21:50:55           |
 | OS Compatibility                |  |
-| Linked Dataframes               |  [FI:brent_wti_aligned_1m](../../dataframes/FI/brent_wti_aligned_1m.md)<br>  [FI:brent_wti_aligned_1s](../../dataframes/FI/brent_wti_aligned_1s.md)<br>  [FI:spread_events_front](../../dataframes/FI/spread_events_front.md)<br>  |
+| Linked Dataframes               |  [FI:brent_wti_aligned_1m](../../dataframes/FI/brent_wti_aligned_1m.md)<br>  [FI:brent_wti_aligned_1s](../../dataframes/FI/brent_wti_aligned_1s.md)<br>  [FI:spread_events_front](../../dataframes/FI/spread_events_front.md)<br>  [FI:entry_signals_1m](../../dataframes/FI/entry_signals_1m.md)<br>  [FI:brent_wti_strategy_1m](../../dataframes/FI/brent_wti_strategy_1m.md)<br>  |
 
 

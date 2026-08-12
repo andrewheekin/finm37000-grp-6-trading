@@ -1,0 +1,910 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Strategy Results &#8212; FINM 37000 Group 6 Trading</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=206a6f58" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="_static/documentation_options.js?v=b9472d72"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'strategy_results';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Data Pipeline" href="data_pipeline.html" />
+    <link rel="prev" title="Full Strategy Overview - A Walkthrough of the Architecture from Signal to Exit" href="strategy_overview.html" /> 
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+     
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="FINM 37000 Group 6 Trading - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="FINM 37000 Group 6 Trading - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="index.html">
+                    FINM 37000 Group 6 Trading
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Project Notes</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="project_overview.html">Project Overview</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="project_overview/goals.html">Goals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_overview/data_sources.html">Data Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_overview/methodology.html">Methodology</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="strategy_overview.html">Full Strategy Overview - A Walkthrough of the Architecture from Signal to Exit</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Strategy Results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_pipeline.html">Data Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contract_rolls.html">Contract Rolls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spread_diagnostics.html">Spread Diagnostics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="team_discussion.html">Team Discussion Archive</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Strategy Dataframes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="dataframes/brent_wti_aligned_1m.html">Description</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="dataframes/brent_wti_aligned_1s.html">Description</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="dataframes/spread_events_front.html">Description</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="dataframes/entry_signals_1m.html">Description</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="dataframes/brent_wti_strategy_1m.html">Description</a></li>
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Charts 📈</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cb/charts.html">Chart List</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Dataframes 📊</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/brent_wti_aligned_1m.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_aligned_1m</span></code> - Brent-WTI Aligned (1-minute)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/brent_wti_aligned_1s.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_aligned_1s</span></code> - Brent-WTI Aligned (1-second)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/brent_wti_strategy_1m.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_strategy_1m</span></code> - Brent-WTI Strategy Backtest (1-minute)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/entry_signals_1m.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:entry_signals_1m</span></code> - Entry Signals (1-minute)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/spread_events_front.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:spread_events_front</span></code> - Listed Spread Events (CLN6-BZQ6)</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/strategy_results.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Strategy Results</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#headline">Headline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#final-parameters">Final parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-statistics">Summary statistics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trade-log">Trade log</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spread-and-trades">Spread and trades</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#position">Position</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cumulative-p-l">Cumulative P&amp;L</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#per-trade-p-l">Per-trade P&amp;L</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-only-four-trades">Why only four trades</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-we-would-change-next">What we would change next</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproducing">Reproducing</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                   <section class="tex2jax_ignore mathjax_ignore" id="strategy-results">
+<h1>Strategy Results<a class="headerlink" href="#strategy-results" title="Link to this heading">#</a></h1>
+<p>Backtest of the final specification on the June 1–5, 2026 pilot week, produced
+by <code class="docutils literal notranslate"><span class="pre">doit</span> <span class="pre">run_strategy</span></code> and <code class="docutils literal notranslate"><span class="pre">doit</span> <span class="pre">plot_strategy_results</span></code>
+(<code class="docutils literal notranslate"><span class="pre">src/strategy_engine.py</span></code>, <code class="docutils literal notranslate"><span class="pre">src/plot_strategy_results.py</span></code>). Every figure and
+number on this page comes from <code class="docutils literal notranslate"><span class="pre">_output/brent_wti_strategy_1m.parquet</span></code>.</p>
+<p><a class="reference internal" href="strategy_overview.html"><span class="std std-doc">Full Strategy Overview</span></a> documents the design with the
+thresholds deliberately left open. This page pins them down and reports what
+the specification actually did.</p>
+<section id="headline">
+<h2>Headline<a class="headerlink" href="#headline" title="Link to this heading">#</a></h2>
+<p>The strategy finished the week at <strong>+$330</strong> on <strong>4 trades</strong> across 6,000
+eligible minutes. That number should not be read as an edge. One trade
+contributed <strong>+$420</strong>; the other three combined for <strong>−$90</strong>. With a sample
+this small, the result is indistinguishable from zero, and the honest
+conclusion is that the pilot week neither confirms nor refutes the economic
+intuition.</p>
+<p>The more useful output is <em>why</em> only four trades fired. See
+<a class="reference internal" href="#why-only-four-trades"><span class="xref myst">Why only four trades</span></a> below.</p>
+</section>
+<section id="final-parameters">
+<h2>Final parameters<a class="headerlink" href="#final-parameters" title="Link to this heading">#</a></h2>
+<p>The production values in <code class="docutils literal notranslate"><span class="pre">src/strategy_engine.py</span></code>:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head text-right"><p>Value</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DEFAULT_WINDOW</span></code></p></td>
+<td class="text-right"><p><code class="docutils literal notranslate"><span class="pre">30</span></code></p></td>
+<td><p>One-minute observations per rolling window</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DEFAULT_DEVIATION_THRESHOLD</span></code></p></td>
+<td class="text-right"><p><code class="docutils literal notranslate"><span class="pre">2.5</span></code></p></td>
+<td><p>Absolute z-score required to propose entry</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DEFAULT_HALF_LIFE_THRESHOLD</span></code></p></td>
+<td class="text-right"><p><code class="docutils literal notranslate"><span class="pre">15.0</span></code></p></td>
+<td><p>Maximum estimated half-life, in minutes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DEFAULT_EXIT_THRESHOLD</span></code></p></td>
+<td class="text-right"><p><code class="docutils literal notranslate"><span class="pre">0.5</span></code></p></td>
+<td><p>Exit when <code class="docutils literal notranslate"><span class="pre">abs(zscore)</span></code> falls to or below this</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DEFAULT_STOP_LOSS</span></code></p></td>
+<td class="text-right"><p><code class="docutils literal notranslate"><span class="pre">1000</span></code></p></td>
+<td><p>Maximum mark-to-market loss per trade, USD</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DEFAULT_TIME_STOP</span></code></p></td>
+<td class="text-right"><p><code class="docutils literal notranslate"><span class="pre">30</span></code></p></td>
+<td><p>Maximum holding period, in one-minute bars</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">USE_ADF</span></code> / <code class="docutils literal notranslate"><span class="pre">USE_KPSS</span></code></p></td>
+<td class="text-right"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> / <code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>Both stationarity tests required, at 5%</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The session runs 00:00–19:59 UTC, at most one listed-spread contract is held at
+a time, and P&amp;L uses the <code class="docutils literal notranslate"><span class="pre">CLN6-BZQ6</span></code> listed bid/ask with a 1,000-barrel
+multiplier. Long positions enter at the ask and exit at the bid; shorts enter
+at the bid and cover at the ask, so the quoted spread is paid on every
+round trip.</p>
+</section>
+<section id="summary-statistics">
+<h2>Summary statistics<a class="headerlink" href="#summary-statistics" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Metric</p></th>
+<th class="head text-right"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Trades</p></td>
+<td class="text-right"><p>4</p></td>
+</tr>
+<tr class="row-odd"><td><p>Total P&amp;L</p></td>
+<td class="text-right"><p>+$330</p></td>
+</tr>
+<tr class="row-even"><td><p>Mean P&amp;L per trade</p></td>
+<td class="text-right"><p>+$82.50</p></td>
+</tr>
+<tr class="row-odd"><td><p>Median P&amp;L per trade</p></td>
+<td class="text-right"><p>+$5.00</p></td>
+</tr>
+<tr class="row-even"><td><p>Best trade</p></td>
+<td class="text-right"><p>+$420</p></td>
+</tr>
+<tr class="row-odd"><td><p>Worst trade</p></td>
+<td class="text-right"><p>−$100</p></td>
+</tr>
+<tr class="row-even"><td><p>Profitable / losing / flat</p></td>
+<td class="text-right"><p>2 / 1 / 1</p></td>
+</tr>
+<tr class="row-odd"><td><p>Gross profit / gross loss</p></td>
+<td class="text-right"><p>+$430 / −$100</p></td>
+</tr>
+<tr class="row-even"><td><p>Maximum drawdown of cumulative P&amp;L</p></td>
+<td class="text-right"><p>−$150</p></td>
+</tr>
+<tr class="row-odd"><td><p>Mean holding period</p></td>
+<td class="text-right"><p>16.2 min</p></td>
+</tr>
+<tr class="row-even"><td><p>Longest holding period</p></td>
+<td class="text-right"><p>30 min (time stop)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Long / short</p></td>
+<td class="text-right"><p>2 / 2</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Exits split 3 mean-reversion and 1 time stop. The $1,000 stop-loss and the
+end-of-session exit never triggered, so no trade was force-closed by risk
+limits or by the 19:59 UTC cutoff.</p>
+</section>
+<section id="trade-log">
+<h2>Trade log<a class="headerlink" href="#trade-log" title="Link to this heading">#</a></h2>
+<p>All four trades, in order:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>#</p></th>
+<th class="head"><p>Entry (UTC)</p></th>
+<th class="head"><p>Exit (UTC)</p></th>
+<th class="head"><p>Side</p></th>
+<th class="head text-right"><p>Entry z</p></th>
+<th class="head text-right"><p>Half-life</p></th>
+<th class="head text-right"><p>Entry</p></th>
+<th class="head text-right"><p>Exit</p></th>
+<th class="head text-right"><p>Min held</p></th>
+<th class="head text-right"><p>P&amp;L</p></th>
+<th class="head"><p>Exit reason</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>06-01 16:54</p></td>
+<td><p>06-01 17:18</p></td>
+<td><p>Long</p></td>
+<td class="text-right"><p>−2.88</p></td>
+<td class="text-right"><p>0.9</p></td>
+<td class="text-right"><p>−3.09</p></td>
+<td class="text-right"><p>−3.19</p></td>
+<td class="text-right"><p>24</p></td>
+<td class="text-right"><p>−$100</p></td>
+<td><p>mean reversion</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>06-03 12:55</p></td>
+<td><p>06-03 13:25</p></td>
+<td><p>Short</p></td>
+<td class="text-right"><p>+2.81</p></td>
+<td class="text-right"><p>13.2</p></td>
+<td class="text-right"><p>−1.89</p></td>
+<td class="text-right"><p>−2.31</p></td>
+<td class="text-right"><p>30</p></td>
+<td class="text-right"><p>+$420</p></td>
+<td><p>time stop</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>06-04 06:45</p></td>
+<td><p>06-04 06:47</p></td>
+<td><p>Short</p></td>
+<td class="text-right"><p>+2.55</p></td>
+<td class="text-right"><p>0.8</p></td>
+<td class="text-right"><p>−1.68</p></td>
+<td class="text-right"><p>−1.69</p></td>
+<td class="text-right"><p>2</p></td>
+<td class="text-right"><p>+$10</p></td>
+<td><p>mean reversion</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>06-05 00:57</p></td>
+<td><p>06-05 01:06</p></td>
+<td><p>Long</p></td>
+<td class="text-right"><p>−2.54</p></td>
+<td class="text-right"><p>0.4</p></td>
+<td class="text-right"><p>−2.27</p></td>
+<td class="text-right"><p>−2.27</p></td>
+<td class="text-right"><p>9</p></td>
+<td class="text-right"><p>$0</p></td>
+<td><p>mean reversion</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Two details are worth noting. Trade 1 reverted in z-score terms — it exited at
+z = −0.48, exactly as designed — and still lost $100, because the reversion of
+the <em>synthetic</em> spread did not cover the round-trip cost of crossing the
+<em>listed</em> spread. Trade 2, the only materially profitable one, did not revert at
+all: it was closed by the 30-minute time stop at z = −1.01, having overshot
+through the mean rather than settling at it. The strategy’s single winner came
+from the exit rule that exists as a safeguard, not from the thesis.</p>
+</section>
+<section id="spread-and-trades">
+<h2>Spread and trades<a class="headerlink" href="#spread-and-trades" title="Link to this heading">#</a></h2>
+<p>Synthetic spread with its rolling mean, entry markers, and exits. The four
+entries are sparse against a week in which the spread traveled from about
+−$3.50/bbl to −$1.50/bbl and back.</p>
+<p><img alt="Synthetic spread with strategy trades" src="_images/strategy_01_spread_trades.png" /></p>
+</section>
+<section id="position">
+<h2>Position<a class="headerlink" href="#position" title="Link to this heading">#</a></h2>
+<p>Long, short, and flat through the week. The strategy is flat for 5,935 of
+6,000 minutes — it holds a position for only 65 minutes, roughly 1% of the
+sample.</p>
+<p><img alt="Strategy position through time" src="_images/strategy_02_position.png" /></p>
+</section>
+<section id="cumulative-p-l">
+<h2>Cumulative P&amp;L<a class="headerlink" href="#cumulative-p-l" title="Link to this heading">#</a></h2>
+<p>Executable cumulative P&amp;L. The step structure makes the concentration obvious:
+a drawdown to −$150 during trade 1, then a single jump on trade 2 that accounts
+for the entire final figure, then essentially flat.</p>
+<p><img alt="Cumulative strategy P&amp;L" src="_images/strategy_03_cum_pnl.png" /></p>
+</section>
+<section id="per-trade-p-l">
+<h2>Per-trade P&amp;L<a class="headerlink" href="#per-trade-p-l" title="Link to this heading">#</a></h2>
+<p>Realized P&amp;L per completed trade, which is the same story as a bar chart: one
+outlier and three trades near zero.</p>
+<p><img alt="Realized P&amp;L per trade" src="_images/strategy_04_trade_pnl.png" /></p>
+</section>
+<section id="why-only-four-trades">
+<h2>Why only four trades<a class="headerlink" href="#why-only-four-trades" title="Link to this heading">#</a></h2>
+<p>Each one-minute bar passes through the entry gates in sequence, and a bar is
+only evaluated while the strategy is flat. Counting how many bars survive each
+gate localizes the bottleneck:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Gate</p></th>
+<th class="head text-right"><p>Evaluated</p></th>
+<th class="head text-right"><p>Passed</p></th>
+<th class="head text-right"><p>Pass rate</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Bars in session (00:00–19:59 UTC)</p></td>
+<td class="text-right"><p>6,000</p></td>
+<td class="text-right"><p>6,000</p></td>
+<td class="text-right"><p>100.0%</p></td>
+</tr>
+<tr class="row-odd"><td><p>Flat, so eligible for entry</p></td>
+<td class="text-right"><p>6,000</p></td>
+<td class="text-right"><p>5,935</p></td>
+<td class="text-right"><p>98.9%</p></td>
+</tr>
+<tr class="row-even"><td><p>Complete single-regime window</p></td>
+<td class="text-right"><p>5,935</p></td>
+<td class="text-right"><p>5,760</p></td>
+<td class="text-right"><p>97.1%</p></td>
+</tr>
+<tr class="row-odd"><td><p>Deviation beyond 2.5σ</p></td>
+<td class="text-right"><p>5,760</p></td>
+<td class="text-right"><p>229</p></td>
+<td class="text-right"><p>4.0%</p></td>
+</tr>
+<tr class="row-even"><td><p>ADF and KPSS both pass</p></td>
+<td class="text-right"><p>229</p></td>
+<td class="text-right"><p>4</p></td>
+<td class="text-right"><p>1.7%</p></td>
+</tr>
+<tr class="row-odd"><td><p>Half-life ≤ 15 min</p></td>
+<td class="text-right"><p>4</p></td>
+<td class="text-right"><p>4</p></td>
+<td class="text-right"><p>100.0%</p></td>
+</tr>
+<tr class="row-even"><td><p>Executable listed quote present</p></td>
+<td class="text-right"><p>4</p></td>
+<td class="text-right"><p>4</p></td>
+<td class="text-right"><p>100.0%</p></td>
+</tr>
+<tr class="row-odd"><td><p>Not the final bar of a session</p></td>
+<td class="text-right"><p>4</p></td>
+<td class="text-right"><p>4</p></td>
+<td class="text-right"><p>100.0%</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The <strong>stationarity gate is the binding constraint</strong>. The 2.5σ deviation test is
+selective but not prohibitive: 229 bars breach the threshold, roughly 46
+candidate entries per day. Requiring the same 30-bar window to pass both ADF
+and KPSS at the 5% level removes 225 of those 229, a 98.3% rejection rate.
+Everything downstream is free — the half-life estimate, the executable-quote
+check, and the session-end check reject nothing at all.</p>
+<p>Splitting the two tests shows the rejection is almost entirely one of them.
+Across all 232 candidate windows that breach 2.5σ (the 229 above plus 3 that
+occur while a position is already open, so they are never evaluated for entry):</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Stationarity test</p></th>
+<th class="head text-right"><p>Windows passed</p></th>
+<th class="head text-right"><p>Pass rate</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ADF alone</p></td>
+<td class="text-right"><p>5</p></td>
+<td class="text-right"><p>2.2%</p></td>
+</tr>
+<tr class="row-odd"><td><p>KPSS alone</p></td>
+<td class="text-right"><p>114</p></td>
+<td class="text-right"><p>49.1%</p></td>
+</tr>
+<tr class="row-even"><td><p>Both, as configured</p></td>
+<td class="text-right"><p>4</p></td>
+<td class="text-right"><p>1.7%</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>KPSS admits about half the candidates; <strong>ADF rejects 227 of 232 on its own</strong>.
+The conjunction is barely more restrictive than ADF by itself.</p>
+<p>The likely reason is statistical power, not non-stationarity. ADF is being
+asked to reject a unit root from 30 observations, and at that sample size it
+has very little power to do so — the test fails to reject almost regardless of
+the underlying process. Because the gate is written to require rejection
+(<code class="docutils literal notranslate"><span class="pre">adf_pvalue</span> <span class="pre">&lt;</span> <span class="pre">0.05</span></code>) as its evidence <em>for</em> mean reversion, a low-power test
+becomes a near-universal veto. The window length was chosen from the diagnostics
+in <a class="reference internal" href="spread_diagnostics.html"><span class="std std-doc">Spread Diagnostics</span></a>, where 30 minutes is the horizon
+at which the deviation actually oscillates; that choice is sound for the signal
+but leaves ADF with too few points to say anything.</p>
+<p>The half-life gate is likewise inert at 15 minutes. Three of the four accepted
+windows estimated half-lives under one minute (0.9, 0.8, and 0.4), far inside
+the limit.</p>
+</section>
+<section id="what-we-would-change-next">
+<h2>What we would change next<a class="headerlink" href="#what-we-would-change-next" title="Link to this heading">#</a></h2>
+<p>The gate funnel points at specific, testable changes rather than a threshold
+sweep:</p>
+<ul class="simple">
+<li><p><strong>Give ADF a longer window, or drop it.</strong> Decoupling the stationarity window
+from the 30-bar signal window is the flexibility
+<a class="reference internal" href="strategy_overview.html"><span class="std std-doc">Full Strategy Overview</span></a> anticipated but the
+implementation does not use: <code class="docutils literal notranslate"><span class="pre">stationarity_test()</span></code> is always handed the same
+window as the z-score. Testing a few hundred bars would give ADF enough
+observations to be informative. Running with <code class="docutils literal notranslate"><span class="pre">USE_ADF</span> <span class="pre">=</span> <span class="pre">False</span></code> is the
+one-line version of the same experiment and would raise the candidate count
+from 4 to roughly 114.</p></li>
+<li><p><strong>Require the expected reversion to clear costs.</strong> Trade 1 reverted correctly
+and still lost money. An entry filter comparing the expected reversion in
+dollars against the listed spread’s quoted width — which
+<a class="reference internal" href="spread_diagnostics.html"><span class="std std-doc">Spread Diagnostics</span></a> shows is around $0.05/bbl, or
+$50 per contract, in the liquid hours — would have declined it.</p></li>
+<li><p><strong>Extend the sample.</strong> Four trades cannot support any conclusion. The costly
+input is Databento data, not compute; the pipeline is already
+parameterized by date range in <code class="docutils literal notranslate"><span class="pre">src/pull_databento.py</span></code>.</p></li>
+</ul>
+</section>
+<section id="reproducing">
+<h2>Reproducing<a class="headerlink" href="#reproducing" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>doit<span class="w"> </span>run_strategy<span class="w">           </span><span class="c1"># -&gt; _output/brent_wti_strategy_1m.parquet</span>
+doit<span class="w"> </span>plot_strategy_results<span class="w">  </span><span class="c1"># -&gt; _output/figures/strategy_0*.png</span>
+</pre></div>
+</div>
+<p>Both are part of the default <code class="docutils literal notranslate"><span class="pre">doit</span></code> chain. The per-bar backtest output is
+documented in
+<a class="reference internal" href="dataframes/brent_wti_strategy_1m.html"><span class="std std-doc">Brent-WTI Strategy Backtest (1-minute)</span></a>.</p>
+</section>
+</section>
+
+<div class="section ablog__blog_comments">
+   
+</div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="strategy_overview.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Full Strategy Overview - A Walkthrough of the Architecture from Signal to Exit</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="data_pipeline.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Data Pipeline</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#headline">Headline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#final-parameters">Final parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-statistics">Summary statistics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trade-log">Trade log</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spread-and-trades">Spread and trades</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#position">Position</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cumulative-p-l">Cumulative P&amp;L</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#per-trade-p-l">Per-trade P&amp;L</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-only-four-trades">Why only four trades</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-we-would-change-next">What we would change next</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproducing">Reproducing</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

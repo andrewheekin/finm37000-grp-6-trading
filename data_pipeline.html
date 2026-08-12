@@ -27,11 +27,11 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=4418a689" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
@@ -39,10 +39,10 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   
   <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
     <script src="_static/documentation_options.js?v=b9472d72"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
@@ -52,29 +52,36 @@
     <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'data_pipeline';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Spread Diagnostics" href="spread_diagnostics.html" />
-    <link rel="prev" title="Methodology" href="project_overview/methodology.html" /> 
+    <link rel="next" title="Contract Rolls" href="contract_rolls.html" />
+    <link rel="prev" title="Strategy Results" href="strategy_results.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />   
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+     
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -100,7 +107,51 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
     </header>
   
 
@@ -169,12 +220,29 @@
 <li class="toctree-l2"><a class="reference internal" href="project_overview/methodology.html">Methodology</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="strategy_overview.html">Full Strategy Overview - A Walkthrough of the Architecture from Signal to Exit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="strategy_results.html">Strategy Results</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Data Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contract_rolls.html">Contract Rolls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="spread_diagnostics.html">Spread Diagnostics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="team_discussion.html">Team Discussion Archive</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks 📖</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Strategy Dataframes</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="cb/notebooks/FI/02_brent_wti_data_pipeline.html">Brent-WTI Data Pipeline Walkthrough</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataframes/brent_wti_aligned_1m.html">Description</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="dataframes/brent_wti_aligned_1s.html">Description</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="dataframes/spread_events_front.html">Description</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="dataframes/entry_signals_1m.html">Description</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="dataframes/brent_wti_strategy_1m.html">Description</a></li>
+
+
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Charts 📈</span></p>
 <ul class="nav bd-sidenav">
@@ -184,6 +252,8 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/brent_wti_aligned_1m.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_aligned_1m</span></code> - Brent-WTI Aligned (1-minute)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/brent_wti_aligned_1s.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_aligned_1s</span></code> - Brent-WTI Aligned (1-second)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/brent_wti_strategy_1m.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_strategy_1m</span></code> - Brent-WTI Strategy Backtest (1-minute)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/entry_signals_1m.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:entry_signals_1m</span></code> - Entry Signals (1-minute)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/spread_events_front.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:spread_events_front</span></code> - Listed Spread Events (CLN6-BZQ6)</a></li>
 </ul>
 
@@ -297,11 +367,18 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
 
 
 <button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -329,7 +406,7 @@
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#steps">Steps</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#output-layout">Output layout</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-the-data">Loading the data</a></li>
@@ -350,9 +427,8 @@
 <p>The market-data pipeline
 (<a class="reference external" href="https://github.com/andrewheekin/finm37000-grp-6-trading/issues/4">issue #4</a>)
 turns raw Databento MBP-1 events into cleaned, timestamp-aligned parquet
-datasets. For a narrated tour with live output, see the <strong>Brent-WTI Data
-Pipeline Walkthrough</strong> notebook (under Notebooks in this site’s catalog
-section).</p>
+datasets. These datasets feed the backtest reported on
+<a class="reference internal" href="strategy_results.html"><span class="std std-doc">Strategy Results</span></a>.</p>
 <section id="steps">
 <h2>Steps<a class="headerlink" href="#steps" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="table">
@@ -363,30 +439,37 @@ section).</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>0. Discovery</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">src/instrument_discovery.py</span></code></p></td>
-<td><p>Confirms listed CL-BZ spread instruments exist, resolves roll dates per continuous rule, prices the pull before spending</p></td>
-</tr>
-<tr class="row-odd"><td><p>1. Pull</p></td>
+<tr class="row-even"><td><p>1. Pull</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">src/pull_databento.py</span></code></p></td>
 <td><p>Pulls MBP-1 for <code class="docutils literal notranslate"><span class="pre">CL.v.0</span></code>, <code class="docutils literal notranslate"><span class="pre">BZ.v.0</span></code> and three listed spreads; caches raw DBN one file per symbol</p></td>
 </tr>
-<tr class="row-even"><td><p>2. Clean/align</p></td>
+<tr class="row-odd"><td><p>2. Clean/align</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">src/clean_mbp1.py</span></code></p></td>
 <td><p>Events → 1s/1m grids (bounded forward-fill), listed-spread event series, and the aligned Brent-WTI dataset</p></td>
 </tr>
-<tr class="row-odd"><td><p>3. Diagnostics</p></td>
+<tr class="row-even"><td><p>3. Diagnostics</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">src/plot_spread_diagnostics.py</span></code></p></td>
 <td><p>Six mean-reversion figures — see <a class="reference internal" href="spread_diagnostics.html"><span class="std std-doc">Spread Diagnostics</span></a></p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>Run everything with <code class="docutils literal notranslate"><span class="pre">doit</span></code>:</p>
+<p>Plain <code class="docutils literal notranslate"><span class="pre">doit</span></code> runs the production chain end to end, from the pull through the
+backtest and its figures:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">config</span> <span class="o">-&gt;</span> <span class="n">pull_databento</span> <span class="o">-&gt;</span> <span class="n">clean_mbp1</span> <span class="o">-&gt;</span> <span class="n">run_strategy</span> <span class="o">-&gt;</span> <span class="n">plot_strategy_results</span>
+</pre></div>
+</div>
+<p>The data-pipeline half of that chain can also be run a task at a time:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">doit</span> <span class="n">pull_databento</span>      <span class="c1"># Databento -&gt; DBN cache (billable; cached pulls are skipped)</span>
 <span class="n">doit</span> <span class="n">clean_mbp1</span>          <span class="c1"># cache -&gt; parquet (grids, events, aligned)</span>
 <span class="n">doit</span> <span class="n">spread_diagnostics</span>  <span class="c1"># figures -&gt; _output/figures</span>
-<span class="n">doit</span> <span class="n">run_notebooks</span>       <span class="c1"># execute + render the walkthrough notebook</span>
+</pre></div>
+</div>
+<p>Two supporting analyses are standalone scripts rather than <code class="docutils literal notranslate"><span class="pre">doit</span></code> tasks,
+because each one calls the Databento symbology API and neither produces an
+input the backtest depends on:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">src</span><span class="o">/</span><span class="n">instrument_discovery</span><span class="o">.</span><span class="n">py</span>  <span class="c1"># confirms listed spreads exist, prices the pull</span>
+<span class="n">python</span> <span class="n">src</span><span class="o">/</span><span class="n">roll_analysis</span><span class="o">.</span><span class="n">py</span>         <span class="c1"># splice size and cost of the roll convention</span>
 </pre></div>
 </div>
 </section>
@@ -417,6 +500,9 @@ under it is committed.</p>
 catalog section (Brent-WTI Aligned 1-minute / 1-second, Listed Spread
 Events) and
 <a class="reference internal" href="project_overview/methodology.html"><span class="std std-doc">Methodology</span></a>.</p>
+<p>Rolling statistics must not span a contract change — use <code class="docutils literal notranslate"><span class="pre">regime_key</span></code> and
+<code class="docutils literal notranslate"><span class="pre">zscore_within_regime</span></code> rather than a bare <code class="docutils literal notranslate"><span class="pre">.rolling()</span></code>. See
+<a class="reference internal" href="contract_rolls.html"><span class="std std-doc">Contract Rolls</span></a>.</p>
 </section>
 <section id="local-data-junction-for-chartbook-data-loading">
 <h2>Local <code class="docutils literal notranslate"><span class="pre">_data</span></code> junction (for chartbook data loading)<a class="headerlink" href="#local-data-junction-for-chartbook-data-loading" title="Link to this heading">#</a></h2>
@@ -454,20 +540,20 @@ your external <code class="docutils literal notranslate"><span class="pre">DATA_
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="project_overview/methodology.html"
+       href="strategy_results.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Methodology</p>
+        <p class="prev-next-title">Strategy Results</p>
       </div>
     </a>
     <a class="right-next"
-       href="spread_diagnostics.html"
+       href="contract_rolls.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Spread Diagnostics</p>
+        <p class="prev-next-title">Contract Rolls</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -488,7 +574,7 @@ your external <code class="docutils literal notranslate"><span class="pre">DATA_
     <i class="fa-solid fa-list"></i> Contents
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#steps">Steps</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#output-layout">Output layout</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-the-data">Loading the data</a></li>
@@ -542,8 +628,8 @@ By Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
   </footer>

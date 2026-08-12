@@ -24,6 +24,11 @@ regeneration and the `_data` junction setup.)
 - `*_n_events == 0` marks a bucket whose quote is a carry-forward; activity
   columns are never forward-filled.
 - Legs are combined with an outer join — no timestamps are dropped.
+- Prices are **raw and unadjusted**. Across a contract roll the series splices
+  two contracts, so a rolling window spanning a roll mixes them. Use
+  `regime_key` + `rolling_within_regime` / `zscore_within_regime` from
+  `clean_mbp1` rather than a bare `.rolling()` — see
+  [Contract Rolls](../contract_rolls.md).
 
 ## Data Dictionary
 

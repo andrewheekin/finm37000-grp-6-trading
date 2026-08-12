@@ -31,15 +31,20 @@ Two representations of the spread are carried side by side:
   downstream code decides what to exclude.
 - **Alignment:** legs are combined with an outer join on the UTC index, so
   no timestamps are silently discarded.
-- **Rolls:** every row keeps its underlying `instrument_id`;
-  `is_roll_date` flags dates whose mapped contract changed. The pilot week
-  contains no rolls, so the flag is exercised by the full pull.
+- **Rolls:** every row keeps its underlying `instrument_id`; `is_roll_date`
+  flags dates whose mapped contract changed. Because the legs roll on
+  different dates, rolling statistics are computed within a constant *pair*
+  of held contracts (`regime_key` + `rolling_within_regime`) rather than
+  spanning a splice worth 1–14 spread sigma — see
+  [Contract Rolls](../contract_rolls.md).
 
 ## Implementation Notes
 
 - Pipeline steps are chained with `doit`:
-  `pull_databento -> clean_mbp1 -> spread_diagnostics -> run_notebooks`.
-  `doit clean` never deletes the billable DBN cache.
+  `config -> pull_databento -> clean_mbp1 -> run_strategy ->
+  plot_strategy_results`, with `spread_diagnostics` and `signal_generator` as
+  side branches off `clean_mbp1`. `doit clean` never deletes the billable DBN
+  cache.
 - Pure-function tests (`src/test_pipeline.py`, no network or API key) cover
   cache naming, event cleaning, gridding and the forward-fill limit, roll
   flagging, alignment, spread filtering, and the rolling-deviation
@@ -52,4 +57,11 @@ Two representations of the spread are carried side by side:
 
 - The pilot week is one mid-cycle week; estimates from it (liquidity
   profiles, deviation distributions) are conditional on that window.
-- Roll handling is unit-tested but not yet exercised on real data.
+- Roll handling has now been exercised on real data (the staggered June 2026
+  rolls, plus every `.v.0` roll from 2025-01 to 2026-07). The measured splice
+  sizes are regime-dependent: ~1.1 spread sigma in 2025, rising to a mean of
+  7.1 for BZ in the steep-backwardation 2026 market.
+- Analysis code written before this convention (`src/eda.ipynb`,
+  `src/plot_spread_diagnostics.py`) still uses bare `.rolling()`. Its results
+  are unaffected on the pilot week, which contains no rolls, but must be
+  revisited before running on the full sample.

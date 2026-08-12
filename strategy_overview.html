@@ -1,0 +1,779 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Full Strategy Overview - A Walkthrough of the Architecture from Signal to Exit &#8212; FINM 37000 Group 6 Trading</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=206a6f58" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="_static/documentation_options.js?v=b9472d72"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'strategy_overview';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Strategy Results" href="strategy_results.html" />
+    <link rel="prev" title="Methodology" href="project_overview/methodology.html" /> 
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+     
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="FINM 37000 Group 6 Trading - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="FINM 37000 Group 6 Trading - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="index.html">
+                    FINM 37000 Group 6 Trading
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Project Notes</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="project_overview.html">Project Overview</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="project_overview/goals.html">Goals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_overview/data_sources.html">Data Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_overview/methodology.html">Methodology</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Full Strategy Overview - A Walkthrough of the Architecture from Signal to Exit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="strategy_results.html">Strategy Results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_pipeline.html">Data Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contract_rolls.html">Contract Rolls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spread_diagnostics.html">Spread Diagnostics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="team_discussion.html">Team Discussion Archive</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Strategy Dataframes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="dataframes/brent_wti_aligned_1m.html">Description</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="dataframes/brent_wti_aligned_1s.html">Description</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="dataframes/spread_events_front.html">Description</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="dataframes/entry_signals_1m.html">Description</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="dataframes/brent_wti_strategy_1m.html">Description</a></li>
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Charts 📈</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cb/charts.html">Chart List</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Dataframes 📊</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/brent_wti_aligned_1m.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_aligned_1m</span></code> - Brent-WTI Aligned (1-minute)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/brent_wti_aligned_1s.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_aligned_1s</span></code> - Brent-WTI Aligned (1-second)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/brent_wti_strategy_1m.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_strategy_1m</span></code> - Brent-WTI Strategy Backtest (1-minute)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/entry_signals_1m.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:entry_signals_1m</span></code> - Entry Signals (1-minute)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/spread_events_front.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:spread_events_front</span></code> - Listed Spread Events (CLN6-BZQ6)</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/strategy_overview.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Full Strategy Overview - A Walkthrough of the Architecture from Signal to Exit</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rolling-window-anatomy">Rolling Window Anatomy</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#test-1-z-score">Test 1: Z-Score</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#test-2-stationarity">Test 2: Stationarity</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#test-3-half-life-estimation">Test 3: Half-Life Estimation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exit-methodology">Exit Methodology</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#z-score-reversion-exit">Z-Score Reversion Exit</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#time-stop-exit">Time Stop Exit</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stop-loss-exit">Stop-Loss Exit</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#end-of-session-exit">End-of-Session Exit</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                   <section class="tex2jax_ignore mathjax_ignore" id="full-strategy-overview-a-walkthrough-of-the-architecture-from-signal-to-exit">
+<h1>Full Strategy Overview - A Walkthrough of the Architecture from Signal to Exit<a class="headerlink" href="#full-strategy-overview-a-walkthrough-of-the-architecture-from-signal-to-exit" title="Link to this heading">#</a></h1>
+<p>This document provides a conceptual walkthrough of the intraday mean-reversion strategy used to trade the Brent–WTI spread. Its purpose is to document the full decision-making architecture of the strategy before implementation, so that each component can be understood independently and then translated cleanly into code.</p>
+<p>Thresholds and window lengths are deliberately left unspecified here, since the point of the document is the architecture rather than any single parameterization. For the values that were actually implemented and what they produced on the pilot week, see <a class="reference internal" href="strategy_results.html"><span class="std std-doc">Strategy Results</span></a>.</p>
+<p>At a high level, the strategy searches for temporary dislocations in the spread and enters a position only when there is sufficient evidence that the deviation is both meaningful and likely to revert over a short horizon. Rather than treating every large movement in the spread as a trading opportunity, the strategy applies a sequence of filters designed to distinguish potentially mean-reverting deviations from movements that may reflect a genuine change in the relationship between the two markets.</p>
+<p>For each observation, the strategy evaluates the most recent rolling window of spread data and asks three questions:</p>
+<ol class="arabic">
+<li><p><strong>Is the current spread sufficiently far from its recent mean?</strong></p>
+<p>A rolling z-score measures the magnitude of the current deviation relative to the spread’s recent behavior. A potential trade is considered only when this z-score crosses a configurable entry threshold.</p>
+</li>
+<li><p><strong>Does the spread appear mean-reverting within the current window?</strong></p>
+<p>A stationarity test is applied to a rolling window ending in the time step (which need not be identical to the rolling window used to detect deviations, although can default to it). This acts as a validity check on the signal: a large deviation is not enough on its own if the recent spread dynamics do not provide evidence of a stable, mean-reverting relationship.</p>
+</li>
+<li><p><strong>Is the estimated mean reversion fast enough for the strategy’s intended horizon?</strong></p>
+<p>If the window passes the stationarity check, its mean-reversion half-life is estimated. The signal is accepted only when the estimated half-life falls within a configurable short-term limit, helping ensure that the expected convergence is compatible with an intraday trading strategy.</p>
+</li>
+</ol>
+<p>A position is entered only when all three conditions are satisfied. The direction of the trade is determined by the sign of the deviation: the strategy takes a position that benefits from the spread moving back toward its recent equilibrium.</p>
+<p>Once a trade is open, the entry filters are replaced by a separate set of exit rules:</p>
+<ul class="simple">
+<li><p>The primary exit occurs when the <strong>z-score returns to a configurable reverted level</strong>, indicating that the dislocation has largely closed.</p></li>
+<li><p>Additional safeguards include a <strong>maximum holding-period time stop</strong> and a <strong>stop-loss rule</strong> designed to limit losses when the spread moves further away from equilibrium rather than reverting.</p></li>
+</ul>
+<p>The architecture can therefore be summarized as:
+$<span class="math notranslate nohighlight">\( \text{Rolling Window} → \text{Z-Score Signal} → \text{Stationarity Check} → \text{Half-Life Check} → \text{Trade Entry} → \text{Exit Management} \)</span>$</p>
+<p>All thresholds, window lengths, significance levels, holding-period limits, and risk parameters are intentionally left unspecified in this document. These values are intended to be configurable inputs within implementation so that the strategy can be tested, tuned, and compared across different parameter choices without changing its underlying logic.</p>
+<p>The remainder of this document walks through each stage of this process in detail, beginning with the rolling window that supplies the data used by every subsequent decision.</p>
+<section id="rolling-window-anatomy">
+<h2>Rolling Window Anatomy<a class="headerlink" href="#rolling-window-anatomy" title="Link to this heading">#</a></h2>
+<p>The rolling window is the foundation of the strategy. Every signal calculation and subsequent validity check is performed using the most recent window of spread observations, allowing the strategy to continuously evaluate the current Brent–WTI relationship relative to its recent behavior.</p>
+<p>At each minute (t), the spread is constructed from the continuous front-month <code class="docutils literal notranslate"><span class="pre">CL.v.0</span></code> and <code class="docutils literal notranslate"><span class="pre">BZ.v.0</span></code> data from Databento. Using the bid and ask prices of the two legs, the synthetic spread bid and ask are formed, and the midpoint is calculated as:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{Spread Mid}_t
+=
+\frac{\text{Spread Bid}_t + \text{Spread Ask}_t}{2}
+\]</div>
+<p>The rolling window at time (t) contains the most recent (n) midpoint observations:</p>
+<div class="math notranslate nohighlight">
+\[
+W_t = \{S_{t-n+1}, \ldots, S_t\}
+\]</div>
+<p>where (n) is a configurable window length.
+The windows are overlapping rather than divided into fixed blocks. In live trading, every new minute causes the window to roll forward by one observation. The strategy then restarts its decision process from the top using the newly formed window:
+$<span class="math notranslate nohighlight">\( \text{New observation} → \text{Update spread} → \text{Roll window} → \text{Run signal checks} \)</span>$</p>
+<p><strong>Window Validity</strong></p>
+<p>A rolling window should only be used if:</p>
+<ul class="simple">
+<li><p>it contains the full required number of one-minute observations;</p></li>
+<li><p>the observations are continuous in time;</p></li>
+<li><p>it does not cross a change in the underlying contract represented by either CL.v.0 or BZ.v.0.</p></li>
+</ul>
+<p>The final condition handles futures rolls. Because the continuous symbols can switch from one underlying futures contract to another, a window that spans an instrument transition may contain a mechanical price discontinuity caused by the roll rather than a genuine movement in the Brent–WTI relationship.</p>
+<p>The implementation should therefore use the instrument identifiers in the data to determine whether either leg changes contract within the current window. If a transition occurs, that window is discarded. Once enough observations from the new contracts have accumulated to form a complete post-roll window, signal evaluation resumes normally.</p>
+</section>
+<section id="test-1-z-score">
+<h2>Test 1: Z-Score<a class="headerlink" href="#test-1-z-score" title="Link to this heading">#</a></h2>
+<p>Once a rolling window has passed the structural validity checks, the strategy’s first signal check is the current spread z-score.</p>
+<p>The z-score measures how far the most recent spread midpoint is from the mean of its rolling window, expressed in units of the window’s standard deviation:</p>
+<div class="math notranslate nohighlight">
+\[
+z_t = \frac{S_t - \mu_t}{\sigma_t}
+\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(S_t\)</span> is the current synthetic spread midpoint;</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mu_t\)</span> is the mean spread midpoint within the current rolling window;</p></li>
+<li><p><span class="math notranslate nohighlight">\(\sigma_t\)</span> is the standard deviation of the spread midpoint within that window.</p></li>
+</ul>
+<p>Because both the mean and standard deviation are recalculated from the current rolling window, the z-score measures the current spread relative to its recent local behavior, rather than against a fixed long-run level.</p>
+<p>A potential trade is generated when the <strong>absolute value of the current z-score exceeds a configurable entry threshold</strong>:</p>
+<div class="math notranslate nohighlight">
+\[
+|z_t| \geq z_{\text{entry}}
+\]</div>
+<p>The threshold <span class="math notranslate nohighlight">\(z_{\text{entry}}\)</span> should remain a configurable strategy parameter rather than being hard-coded.</p>
+<p>The sign of the z-score determines the direction of the potential trade:</p>
+<ul class="simple">
+<li><p>Positive z-score: The spread is above its recent mean, so the candidate trade is positioned for the spread to decrease.</p></li>
+<li><p>Negative z-score: The spread is below its recent mean, so the candidate trade is positioned for the spread to increase.</p></li>
+</ul>
+<p>Crossing the entry threshold does not immediately cause the strategy to enter a position.
+A large z-score only establishes that the current spread is unusually far from its recent mean. It does not establish that the spread is actually mean-reverting. A large deviation could instead reflect a trend, structural change, or other shift in the relationship between Brent and WTI.
+The z-score therefore acts as the first filter in the strategy architecture.</p>
+</section>
+<section id="test-2-stationarity">
+<h2>Test 2: Stationarity<a class="headerlink" href="#test-2-stationarity" title="Link to this heading">#</a></h2>
+<p>If the current z-score crosses the entry threshold, the strategy next evaluates whether the spread within the current rolling window exhibits sufficiently stationary behavior.</p>
+<p>Rather than hard-coding a particular stationarity test into the strategy, the strategy in practice can use multiple tests that can be independently enabled or disabled. This is for the purpose of having flexibility in both backtesting and live usage to see which combination of tests prove to be the most profitable from a P&amp;L perspective; specifically, the implementation would allow the user to toggle which tests to use for a run of the strategy, for example:</p>
+<ul class="simple">
+<li><p>use_adf = <code class="docutils literal notranslate"><span class="pre">True</span></code> / <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p>use_kpss = <code class="docutils literal notranslate"><span class="pre">True</span></code> / <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p>Additional tests can be added in the same way if needed</p></li>
+</ul>
+<p>The statistical parameters associated with each test, including significance levels and time window, should also remain configurable rather than being hard-coded. The implementation then combines the results of the enabled tests according to the chosen stationarity rule. For example, the strategy may require all enabled tests to agree that the window is sufficiently stationary before allowing the signal to continue. This decision rule should itself be implemented flexibly so that alternative combinations can be evaluated during backtesting if desired.</p>
+<p>The stationarity stage ultimately produces a simple pass/fail decision:</p>
+<ul class="simple">
+<li><p>Stationarity criteria fail → Reject signal</p></li>
+<li><p>Stationarity criteria pass → Continue to half-life estimation</p></li>
+</ul>
+<p>If the window fails the configured stationarity criteria, no position is entered. The strategy waits for the next one-minute observation, rolls the window forward, and begins the signal-generation process again from the z-score check. If the window passes, the signal proceeds to the final validation stage: estimating whether the window’s mean-reversion half-life is sufficiently short for the strategy’s intended intraday horizon.</p>
+</section>
+<section id="test-3-half-life-estimation">
+<h2>Test 3: Half-Life Estimation<a class="headerlink" href="#test-3-half-life-estimation" title="Link to this heading">#</a></h2>
+<p>The mean-reversion half-life represents the estimated amount of time required for a deviation from equilibrium to shrink by one-half. For an intraday strategy, this provides a practical measure of whether the spread is expected to revert quickly enough for the candidate trade to be worthwhile. A spread may appear stationary while still reverting too slowly for the intended holding horizon. The half-life check therefore acts as the final validation step before trade entry.</p>
+<p>For the current rolling window, define the one-period change in the spread as:
+$<span class="math notranslate nohighlight">\(
+\Delta S_t = S_t - S_{t-1}
+\)</span><span class="math notranslate nohighlight">\(
+The strategy estimates the relationship:
+\)</span><span class="math notranslate nohighlight">\(
+\Delta S_t = \alpha + \beta S_{t-1} + \varepsilon_t
+\)</span>$
+where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(S_{t-1}\)</span> is the lagged spread midpoint,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\Delta S_t\)</span> is the subsequent one-minute change in the spread,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\alpha\)</span> is an intercept,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\beta\)</span> measures the tendency of the spread to move back toward equilibrium,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\varepsilon_t\)</span> is the residual term.</p></li>
+</ul>
+<p>For mean reversion to be present, the estimated coefficient (\beta) should be negative. This means that when the spread is relatively high, its subsequent expected change is downward, and when the spread is relatively low, its subsequent expected change is upward.</p>
+<p>The estimated half-life is then:
+$<span class="math notranslate nohighlight">\(
+h = \frac{\ln(2)}{-\beta}
+\)</span><span class="math notranslate nohighlight">\(
+Because the strategy uses one-minute observations, \)</span>h$ is interpreted in minutes.</p>
+<p>The estimated half-life is compared against a configurable maximum acceptable value:
+$<span class="math notranslate nohighlight">\(
+0 &lt; h \leq h_{\text{max}}
+\)</span><span class="math notranslate nohighlight">\(
+where \)</span>h_{\text{max}}$ represents the longest expected reversion period that the strategy is willing to accept.</p>
+<p>If the estimated half-life exceeds this limit, the candidate signal is rejected. Although the spread may exhibit mean-reverting behavior, the expected convergence would be too slow for the strategy’s intended short-term horizon, making the spread increasingly vulnerable to regime changes and less likely to cleanly mean revert.</p>
+<p>The signal will also be rejected when the half-life cannot be interpreted meaningfully. This includes cases where:</p>
+<ul class="simple">
+<li><p>the estimated (\beta) is zero or positive;</p></li>
+<li><p>the resulting half-life is nonpositive;</p></li>
+<li><p>the estimate is missing, infinite, or otherwise numerically invalid.</p></li>
+</ul>
+<p>If the estimate is valid and falls within the configured limit, the candidate signal passes the final entry check.</p>
+<p>This check will also come with a Boolean toggle when running the strategy, so that backtesting will allow the user to explore cases in which half-life isn’t used as a filter and compare results.</p>
+<p>The half-life stage completes the sequence of entry checks:
+$<span class="math notranslate nohighlight">\( \text{Stationarity Criteria Met → Estimate Half-Life → Half-Life Acceptable?} \)</span>$</p>
+<p>No → reject the signal and restart on the next observation.</p>
+<p>Yes → approve the signal for trade entry.</p>
+<p>Together, these conditions require the spread to be meaningfully displaced, statistically consistent with mean reversion, and expected to revert within an acceptable intraday timeframe.</p>
+</section>
+<section id="exit-methodology">
+<h2>Exit Methodology<a class="headerlink" href="#exit-methodology" title="Link to this heading">#</a></h2>
+<p>Once a position has been entered, the strategy stops evaluating the entry filters for that trade and begins monitoring a separate set of exit conditions.
+The purpose of the exit framework is to close the position when:</p>
+<ul class="simple">
+<li><p>the expected mean reversion has occurred;</p></li>
+<li><p>the trade has remained open longer than intended;</p></li>
+<li><p>the spread continues moving against the position;</p></li>
+<li><p>the strategy reaches the end of its permitted trading session.</p></li>
+</ul>
+<p>Each exit rule should be configurable so that alternative specifications can be compared during backtesting.</p>
+<section id="z-score-reversion-exit">
+<h3>Z-Score Reversion Exit<a class="headerlink" href="#z-score-reversion-exit" title="Link to this heading">#</a></h3>
+<p>The primary exit occurs when the spread returns sufficiently close to its recent equilibrium. Because the trade was entered after the z-score crossed an extreme entry threshold, the position is expected to profit as the z-score moves back toward zero. The strategy should therefore define a configurable exit level:
+$<span class="math notranslate nohighlight">\(
+z_{\text{exit}}
+\)</span>$</p>
+<p>The exit threshold will generally be closer to zero than the entry threshold. For a trade entered when the spread was above its rolling mean, the position should be closed once the z-score falls to the configured reverted level:
+$<span class="math notranslate nohighlight">\(
+z_t \leq z_{\text{exit}}
+\)</span>$</p>
+<p>For a trade entered when the spread was below its rolling mean, the position should be closed once the z-score rises to the corresponding lower-side exit level:
+$<span class="math notranslate nohighlight">\(
+z_t \geq -z_{\text{exit}}
+\)</span>$</p>
+<p>Equivalently, a symmetric specification may close the trade when:
+$<span class="math notranslate nohighlight">\(
+|z_t| \leq z_{\text{exit}}
+\)</span>$</p>
+<p>This does not require the z-score to return exactly to zero. Requiring complete convergence may cause the strategy to remain in a trade after most of the expected reversion has already occurred.</p>
+<p>The exit threshold should remain configurable so backtesting can evaluate the trade-off between:</p>
+<ul class="simple">
+<li><p>exiting earlier and realizing gains more quickly;</p></li>
+<li><p>waiting for greater convergence and potentially capturing more of the spread movement.</p></li>
+</ul>
+</section>
+<section id="time-stop-exit">
+<h3>Time Stop Exit<a class="headerlink" href="#time-stop-exit" title="Link to this heading">#</a></h3>
+<p>A time stop closes a position once it has been held for longer than a configurable maximum duration:
+$<span class="math notranslate nohighlight">\(
+T_{\text{held}} \geq T_{\text{max}}
+\)</span>$</p>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(T_{\text{held}}\)</span> is the number of minutes elapsed since entry;</p></li>
+<li><p><span class="math notranslate nohighlight">\(T_{\text{max}}\)</span> is the maximum permitted holding period.</p></li>
+</ul>
+<p>Because the strategy is designed around short-term intraday mean reversion, if the spread has not reverted within the expected timeframe, the original trading thesis may no longer be valid.
+The time stop also prevents capital from remaining tied up in stale positions and limits exposure to changing market conditions.</p>
+<p>The maximum holding period should be configurable and may be informed by the half-life estimates observed during strategy development and backtesting.</p>
+</section>
+<section id="stop-loss-exit">
+<h3>Stop-Loss Exit<a class="headerlink" href="#stop-loss-exit" title="Link to this heading">#</a></h3>
+<p>The stop-loss rule closes the position when the loss reaches a configurable limit. A stop loss may be defined using realized and unrealized trade P&amp;L:
+$<span class="math notranslate nohighlight">\(
+\text{PnL}_t \leq -L_{\text{max}}
+\)</span>$</p>
+<p>where <span class="math notranslate nohighlight">\(L_{\text{max}}\)</span> is the maximum acceptable loss per trade.</p>
+<p>Alternatively, the stop may be expressed in terms of additional spread or z-score movement against the position. The implementation should allow the chosen stop-loss specification and its associated limit to remain configurable.
+The purpose of this rule is to protect the strategy when the spread does not revert as expected and instead continues moving away from the entry level. This may occur because of a structural market move, a breakdown in the recent relationship between Brent and WTI, or an unusually large short-term shock.
+A stop-loss exit should override the expectation that the spread may eventually revert. Once the configured loss limit is reached, the position should be closed rather than held indefinitely.</p>
+</section>
+<section id="end-of-session-exit">
+<h3>End-of-Session Exit<a class="headerlink" href="#end-of-session-exit" title="Link to this heading">#</a></h3>
+<p>Because the strategy is intraday, all open positions should be closed before the end of the configured trading interval.
+If a position remains open when the strategy reaches its configured session-ending time, it should be exited regardless of its current z-score, holding period, or P&amp;L.</p>
+<p>This prevents overnight exposure and ensures that the strategy begins each new trading session without an existing position.
+The session-ending time should be configurable alongside the daily start and end times used to construct valid rolling windows.</p>
+<p>Each exit mechanism should be independently enabled or disabled using Boolean parameters, for example:</p>
+<ul class="simple">
+<li><p>use_zscore_exit = <code class="docutils literal notranslate"><span class="pre">True</span></code> / <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p>use_time_stop = <code class="docutils literal notranslate"><span class="pre">True</span></code> / <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p>use_stop_loss = <code class="docutils literal notranslate"><span class="pre">True</span></code> / <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p>use_session_exit = <code class="docutils literal notranslate"><span class="pre">True</span></code> / <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+<p>The associated thresholds and limits should also remain configurable.</p>
+<p>This design allows the team to compare different exit specifications without rewriting the core strategy. For example, backtesting can determine whether the time stop improves performance, whether a stop loss is too restrictive, or whether a partial z-score reversion is a better exit target than a return to zero.</p>
+<p>The exit process can therefore be summarized as:
+$<span class="math notranslate nohighlight">\( \text{Open Position → Update Position Each Minute → Evaluate Exit Conditions → Close Position When Any Enabled Rule Is Triggered} \)</span>$
+Once the trade is closed, the strategy returns to its normal signal-generation process and begins searching for the next valid entry opportunity.</p>
+</section>
+</section>
+</section>
+
+<div class="section ablog__blog_comments">
+   
+</div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="project_overview/methodology.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Methodology</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="strategy_results.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Strategy Results</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rolling-window-anatomy">Rolling Window Anatomy</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#test-1-z-score">Test 1: Z-Score</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#test-2-stationarity">Test 2: Stationarity</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#test-3-half-life-estimation">Test 3: Half-Life Estimation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exit-methodology">Exit Methodology</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#z-score-reversion-exit">Z-Score Reversion Exit</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#time-stop-exit">Time Stop Exit</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stop-loss-exit">Stop-Loss Exit</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#end-of-session-exit">End-of-Session Exit</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
