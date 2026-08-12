@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>System Message: WARNING/2 (/Users/andrewheekin/heekscripts/uchicago/2026q3_finm37000_futures_derivatives/finm37000-grp-6-trading/_docs/_chartbook/index.md, line 1) Substitution error:UndefinedError: ‘pipeline_manifest’ is undefined [myst.substitution] &#8212; FINM 37000 Group 6 Trading</title>
+    <title>System Message: WARNING/2 (/Users/andrewheekin/heekscripts/uchicago/2026q3_finm37000_futures_derivatives/finm37000-grp-6-trading/_docs/_chartbook/index.md, line 1) Substitution error:UndefinedError: ‘pipeline_manifest’ is undefined [myst.substitution] &#8212; Trading Brent-WTI Intraday Mean Reversion</title>
   
   
   
@@ -35,7 +35,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=d038801a" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=2ef1ee83" />
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   
   <!-- So that users can add custom icons -->
@@ -144,10 +144,6 @@
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
-      <span class="fa-solid fa-outdent"></span>
-    </button>
-  
 </div>
 
     </header>
@@ -190,8 +186,8 @@
       
     
     
-    <img src="../_static/logo.png" class="logo__image only-light" alt="FINM 37000 Group 6 Trading - Home"/>
-    <img src="../_static/logo.png" class="logo__image only-dark pst-js-only" alt="FINM 37000 Group 6 Trading - Home"/>
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Trading Brent-WTI Intraday Mean Reversion - Home"/>
+    <img src="../_static/logo.png" class="logo__image only-dark pst-js-only" alt="Trading Brent-WTI Intraday Mean Reversion - Home"/>
   
   
 </a></div>
@@ -208,7 +204,7 @@
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1">
                 <a class="reference internal" href="../index.html">
-                    FINM 37000 Group 6 Trading
+                    Trading Brent-WTI Intraday Mean Reversion
                 </a>
             </li>
         </ul>
@@ -225,6 +221,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../data_pipeline.html">Data Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contract_rolls.html">Contract Rolls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../spread_diagnostics.html">Spread Diagnostics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_run.html">How to Run</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../team_discussion.html">Team Discussion Archive</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Strategy Dataframes</span></p>
@@ -234,10 +231,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../dataframes/spread_events_front.html">Listed Spread Events (CLN6-BZQ6)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../dataframes/entry_signals_1m.html">Entry Signals (1-minute)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../dataframes/brent_wti_strategy_1m.html">Brent-WTI Strategy Backtest (1-minute)</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Charts</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../cb/charts.html">Chart List</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Dataframes</span></p>
 <ul class="nav bd-sidenav">
@@ -380,9 +373,7 @@
 <button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
 </button>
-<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
-</button>
+
 </div></div>
       
     </div>
@@ -398,16 +389,6 @@
     <div id="print-main-content">
         <div id="jb-print-toc">
             
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a><ul class="nav section-nav flex-column">
-</ul>
-</li>
-</ul>
-            </nav>
         </div>
     </div>
 </div>
@@ -418,15 +399,14 @@
                 <article class="bd-article">
                    <section class="tex2jax_ignore mathjax_ignore" id="users-andrewheekin-heekscripts-uchicago-2026q3-finm37000-futures-derivatives-finm37000-grp-6-trading-docs-chartbook-index-md-1-warning-2-substitution-error-undefinederror-pipeline-manifest-is-undefined-myst-substitution">
 <h1><a class="headerlink" href="#users-andrewheekin-heekscripts-uchicago-2026q3-finm37000-futures-derivatives-finm37000-grp-6-trading-docs-chartbook-index-md-1-warning-2-substitution-error-undefinederror-pipeline-manifest-is-undefined-myst-substitution" title="Link to this heading">#</a></h1>
-<p>Last updated: Aug 12, 2026, 12:29:14 PM</p>
+<p>FINM 37000 | Summer 2026 | Group 6</p>
+<p>By Michael Dowling, Andrew Heekin, Bhuvanesh Kodem, Sam Zhang</p>
 <p>{% if index_toc_content %}
 
 {% elif site_pages_list %}</p>
 <div class="toctree-wrapper compound">
 </div>
 <p>{% endif %}</p>
-<section id="table-of-contents">
-<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Link to this heading">#</a></h2>
 <div class="toctree-wrapper compound">
 </div>
 <p>{% if notes_list %}</p>
@@ -435,13 +415,8 @@
 <p>{% endif %}</p>
 <div class="toctree-wrapper compound">
 </div>
-<ul class="postlist-style-none postlist simple">
-</ul>
 <div class="toctree-wrapper compound">
 </div>
-<div class="toctree-wrapper compound">
-</div>
-</section>
 </section>
 
 <div class="section ablog__blog_comments">
@@ -465,25 +440,6 @@
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item"><div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a><ul class="nav section-nav flex-column">
-</ul>
-</li>
-</ul>
-  </nav></div>
-
-</div></div>
-              
             
           </div>
           <footer class="bd-footer-content">
@@ -493,7 +449,7 @@
   <div class="footer-item">
     
 <p class="component-author">
-By Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem
+By Michael Dowling, Andrew Heekin, Bhuvanesh Kodem, Sam Zhang
 </p>
 
   </div>
@@ -503,7 +459,7 @@ By Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem
 
   <p class="copyright">
     
-      © Copyright 2026, Andrew Heekin, Michael Dowling, Sam Zhang, Bhuvanesh Kodem.
+      © Copyright 2026, Michael Dowling, Andrew Heekin, Bhuvanesh Kodem, Sam Zhang.
       <br/>
     
   </p>

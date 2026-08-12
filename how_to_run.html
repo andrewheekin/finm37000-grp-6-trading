@@ -1,0 +1,724 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>How to Run &#8212; Trading Brent-WTI Intraday Mean Reversion</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=2ef1ee83" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="_static/documentation_options.js?v=b9472d72"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'how_to_run';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Team Discussion Archive" href="team_discussion.html" />
+    <link rel="prev" title="Spread Diagnostics" href="spread_diagnostics.html" /> 
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+     
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Trading Brent-WTI Intraday Mean Reversion - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="Trading Brent-WTI Intraday Mean Reversion - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="index.html">
+                    Trading Brent-WTI Intraday Mean Reversion
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Project Notes</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="project_overview.html">Project Overview</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="project_overview/goals.html">Goals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_overview/data_sources.html">Data Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_overview/methodology.html">Methodology</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="strategy_overview.html">Full Strategy Overview - A Walkthrough of the Architecture from Signal to Exit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="strategy_results.html">Strategy Results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_pipeline.html">Data Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contract_rolls.html">Contract Rolls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spread_diagnostics.html">Spread Diagnostics</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">How to Run</a></li>
+<li class="toctree-l1"><a class="reference internal" href="team_discussion.html">Team Discussion Archive</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Strategy Dataframes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="dataframes/brent_wti_aligned_1m.html">Brent-WTI Aligned (1-minute)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataframes/brent_wti_aligned_1s.html">Brent-WTI Aligned (1-second)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataframes/spread_events_front.html">Listed Spread Events (CLN6-BZQ6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataframes/entry_signals_1m.html">Entry Signals (1-minute)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataframes/brent_wti_strategy_1m.html">Brent-WTI Strategy Backtest (1-minute)</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Dataframes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/brent_wti_aligned_1m.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_aligned_1m</span></code> - Brent-WTI Aligned (1-minute)</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/brent_wti_aligned_1s.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_aligned_1s</span></code> - Brent-WTI Aligned (1-second)</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/brent_wti_strategy_1m.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:brent_wti_strategy_1m</span></code> - Brent-WTI Strategy Backtest (1-minute)</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/entry_signals_1m.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:entry_signals_1m</span></code> - Entry Signals (1-minute)</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="cb/dataframes/FI/spread_events_front.html">Dataframe: <code class="docutils literal notranslate"><span class="pre">FI:spread_events_front</span></code> - Listed Spread Events (CLN6-BZQ6)</a></li>
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/how_to_run.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>How to Run</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-and-activate-a-virtual-environment">1. Create and activate a virtual environment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#add-your-databento-api-key">2. Add your Databento API key</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#set-strategy-parameters">3. Set strategy parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-the-complete-project">4. Run the complete project</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#repository-layout">Repository layout</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regenerating-the-pipeline-diagram">Regenerating the pipeline diagram</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regenerating-the-logo">Regenerating the logo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#publishing-the-documentation-site">Publishing the documentation site</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                   <section class="tex2jax_ignore mathjax_ignore" id="how-to-run">
+<h1>How to Run<a class="headerlink" href="#how-to-run" title="Link to this heading">#</a></h1>
+<section id="create-and-activate-a-virtual-environment">
+<h2>1. Create and activate a virtual environment<a class="headerlink" href="#create-and-activate-a-virtual-environment" title="Link to this heading">#</a></h2>
+<p>From the repository root:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+</pre></div>
+</div>
+<p>On Windows:</p>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="p">.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">activate</span>
+</pre></div>
+</div>
+<p>Install all project dependencies:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+</section>
+<section id="add-your-databento-api-key">
+<h2>2. Add your Databento API key<a class="headerlink" href="#add-your-databento-api-key" title="Link to this heading">#</a></h2>
+<p>Copy the example environment file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span>.env.example<span class="w"> </span>.env
+</pre></div>
+</div>
+<p>Then edit <code class="docutils literal notranslate"><span class="pre">.env</span></code> so it contains:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>DATABENTO_API_KEY=your_key_here
+</pre></div>
+</div>
+<p>The key must have access to the Databento CME Globex (<code class="docutils literal notranslate"><span class="pre">GLBX.MDP3</span></code>) historical dataset. The first run downloads the required MBP-1 data; later runs reuse the files cached in <code class="docutils literal notranslate"><span class="pre">_data/databento/</span></code>.</p>
+</section>
+<section id="set-strategy-parameters">
+<h2>3. Set strategy parameters<a class="headerlink" href="#set-strategy-parameters" title="Link to this heading">#</a></h2>
+<p>The production backtest parameters are defined near the top of <code class="docutils literal notranslate"><span class="pre">src/strategy_engine.py</span></code>:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head text-right"><p>Default</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DEFAULT_WINDOW</span></code></p></td>
+<td class="text-right"><p><code class="docutils literal notranslate"><span class="pre">30</span></code></p></td>
+<td><p>Number of one-minute observations in each rolling window</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DEFAULT_DEVIATION_THRESHOLD</span></code></p></td>
+<td class="text-right"><p><code class="docutils literal notranslate"><span class="pre">2.5</span></code></p></td>
+<td><p>Absolute z-score required to propose entry</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DEFAULT_HALF_LIFE_THRESHOLD</span></code></p></td>
+<td class="text-right"><p><code class="docutils literal notranslate"><span class="pre">15.0</span></code></p></td>
+<td><p>Maximum estimated mean-reversion half-life, in minutes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DEFAULT_EXIT_THRESHOLD</span></code></p></td>
+<td class="text-right"><p><code class="docutils literal notranslate"><span class="pre">0.5</span></code></p></td>
+<td><p>Exit when <code class="docutils literal notranslate"><span class="pre">abs(z-score)</span></code> falls to or below this value</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DEFAULT_STOP_LOSS</span></code></p></td>
+<td class="text-right"><p><code class="docutils literal notranslate"><span class="pre">1000</span></code></p></td>
+<td><p>Maximum allowed mark-to-market loss per trade, in USD</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DEFAULT_TIME_STOP</span></code></p></td>
+<td class="text-right"><p><code class="docutils literal notranslate"><span class="pre">30</span></code></p></td>
+<td><p>Maximum holding period, in one-minute bars</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">USE_ADF</span></code></p></td>
+<td class="text-right"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>Require the ADF stationarity test to pass</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">USE_KPSS</span></code></p></td>
+<td class="text-right"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>Require the KPSS stationarity test to pass</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The strategy is currently hard-coded to one-minute bars and the 00:00–19:59 UTC trading window. The <code class="docutils literal notranslate"><span class="pre">run_strategy()</span></code> function also defaults to a contract multiplier of <code class="docutils literal notranslate"><span class="pre">1000.0</span></code>.</p>
+</section>
+<section id="run-the-complete-project">
+<h2>4. Run the complete project<a class="headerlink" href="#run-the-complete-project" title="Link to this heading">#</a></h2>
+<p>From the repository root:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>doit
+</pre></div>
+</div>
+<p>The task chain creates the data/output directories, pulls or loads the cached Databento data, cleans and aligns the MBP-1 data, runs the strategy backtest, and saves the strategy plots.</p>
+<p>To rerun from scratch while preserving the billable Databento cache:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>doit<span class="w"> </span>clean
+doit
+</pre></div>
+</div>
+<p>The Databento cache is intentionally not deleted by <code class="docutils literal notranslate"><span class="pre">doit</span> <span class="pre">clean</span></code>.</p>
+</section>
+<section id="repository-layout">
+<h2>Repository layout<a class="headerlink" href="#repository-layout" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Path</p></th>
+<th class="head"><p>Contents</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dodo.py</span></code></p></td>
+<td><p>The reproducible end-to-end task pipeline</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">src/</span></code></p></td>
+<td><p>Pipeline modules and their tests</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">notebooks/</span></code></p></td>
+<td><p>Exploratory research notebooks, not part of the <code class="docutils literal notranslate"><span class="pre">doit</span></code> chain</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">docs_src/</span></code></p></td>
+<td><p>Project documentation, dataframe reference pages, and figures</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">data_manual/</span></code></p></td>
+<td><p>Contract specifications and data notes kept under version control</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">_data/</span></code>, <code class="docutils literal notranslate"><span class="pre">_output/</span></code></p></td>
+<td><p>Generated by the pipeline; not committed</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The pipeline modules, in the order the chain runs them:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">src/pull_databento.py</span></code> — downloads and caches Databento MBP-1 data</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/clean_mbp1.py</span></code> — cleans, resamples, aligns, and handles contract-roll regimes</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/strategy_engine.py</span></code> — entry tests, position state, exits, and P&amp;L</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/plot_strategy_results.py</span></code> — generates the four final backtest figures</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/signal_generator.py</span></code> — standalone rolling z-score entry signals (<code class="docutils literal notranslate"><span class="pre">doit</span> <span class="pre">signal_generator</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">docs_src/figures/07_strategy_flowchart.mmd</span></code> — Mermaid source for the pipeline diagram</p></li>
+</ul>
+<p>Run the test suite with <code class="docutils literal notranslate"><span class="pre">pytest</span> <span class="pre">src/</span></code>.</p>
+<p>For the design rationale behind the entry stack and exit rules, see
+<a class="reference internal" href="strategy_overview.html"><span class="std std-doc">Full Strategy Overview</span></a>.</p>
+</section>
+<section id="regenerating-the-pipeline-diagram">
+<h2>Regenerating the pipeline diagram<a class="headerlink" href="#regenerating-the-pipeline-diagram" title="Link to this heading">#</a></h2>
+<p>The diagram in <a class="reference internal" href="index.html#pipeline-overview"><span class="std std-ref">Pipeline Overview</span></a> is rendered from a committed Mermaid source file, so it can be edited and re-rendered when parameters change. Rendering needs Node, which is deliberately not a dependency of the <code class="docutils literal notranslate"><span class="pre">doit</span></code> pipeline:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>npx<span class="w"> </span>-y<span class="w"> </span>@mermaid-js/mermaid-cli@11<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-i<span class="w"> </span>docs_src/figures/07_strategy_flowchart.mmd<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-o<span class="w"> </span>docs_src/figures/07_strategy_flowchart.png<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-b<span class="w"> </span>white<span class="w"> </span>-s<span class="w"> </span><span class="m">3</span>
+</pre></div>
+</div>
+</section>
+<section id="regenerating-the-logo">
+<h2>Regenerating the logo<a class="headerlink" href="#regenerating-the-logo" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">assets/logo.png</span></code> (site sidebar) and <code class="docutils literal notranslate"><span class="pre">assets/favicon.ico</span></code> (browser tab) are
+drawn by <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">src/make_logo.py</span></code>, using the same palette as the strategy
+figures. Both are committed, so this only needs re-running if the wordmark or
+colors change.</p>
+</section>
+<section id="publishing-the-documentation-site">
+<h2>Publishing the documentation site<a class="headerlink" href="#publishing-the-documentation-site" title="Link to this heading">#</a></h2>
+<p>The site at
+<a class="reference external" href="https://andrewheekin.github.io/finm37000-grp-6-trading/">andrewheekin.github.io/finm37000-grp-6-trading</a>
+is served from the <code class="docutils literal notranslate"><span class="pre">gh-pages</span></code> branch. Publishing is manual
+(<a class="reference external" href="https://github.com/andrewheekin/finm37000-grp-6-trading/issues/34">issue #34</a>
+tracks automating it). Build from an activated virtualenv, because <code class="docutils literal notranslate"><span class="pre">chartbook</span></code>
+shells out to <code class="docutils literal notranslate"><span class="pre">sphinx-build</span></code> and needs it on <code class="docutils literal notranslate"><span class="pre">PATH</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+
+<span class="c1"># ChartBook&#39;s stock index captions ship with emoji; overlay our plain-text</span>
+<span class="c1"># copy (docs_src/_chartbook/index.md) before building.</span>
+cp<span class="w"> </span>docs_src/_chartbook/index.md<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>.venv/lib/python*/site-packages/chartbook/docs_src_pipeline/index.md
+
+chartbook<span class="w"> </span>build<span class="w"> </span>-f<span class="w">          </span><span class="c1"># -&gt; ./docs (gitignored)</span>
+
+<span class="c1"># The index page is generated from README.md, which references figures by their</span>
+<span class="c1"># repo-root-relative paths. Sphinx does not copy those, so mirror them or every</span>
+<span class="c1"># image on the landing page 404s.</span>
+mkdir<span class="w"> </span>-p<span class="w"> </span>docs/docs_src/figures
+cp<span class="w"> </span>docs_src/figures/*.png<span class="w"> </span>docs/docs_src/figures/
+</pre></div>
+</div>
+<p>Preview locally with <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">http.server</span></code> inside <code class="docutils literal notranslate"><span class="pre">docs/</span></code>, then publish the
+build to <code class="docutils literal notranslate"><span class="pre">gh-pages</span></code> using a worktree, since <code class="docutils literal notranslate"><span class="pre">docs/</span></code> is gitignored on <code class="docutils literal notranslate"><span class="pre">main</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>worktree<span class="w"> </span>add<span class="w"> </span>../gh-pages-build<span class="w"> </span>gh-pages
+rsync<span class="w"> </span>-a<span class="w"> </span>--delete<span class="w"> </span>--exclude<span class="w"> </span>.git<span class="w"> </span>docs/<span class="w"> </span>../gh-pages-build/
+touch<span class="w"> </span>../gh-pages-build/.nojekyll
+<span class="nb">cd</span><span class="w"> </span>../gh-pages-build<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>-A<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Update documentation&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>push
+<span class="nb">cd</span><span class="w"> </span>-<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>worktree<span class="w"> </span>remove<span class="w"> </span>../gh-pages-build
+</pre></div>
+</div>
+<p>Note that figures embedded in the site’s own pages must live under
+<code class="docutils literal notranslate"><span class="pre">docs_src/figures/</span></code> and be committed, since <code class="docutils literal notranslate"><span class="pre">_output/</span></code> is not. After running
+<code class="docutils literal notranslate"><span class="pre">doit</span></code>, copy any regenerated figures across before rebuilding the site.</p>
+</section>
+</section>
+
+<div class="section ablog__blog_comments">
+   
+</div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="spread_diagnostics.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Spread Diagnostics</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="team_discussion.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Team Discussion Archive</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-and-activate-a-virtual-environment">1. Create and activate a virtual environment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#add-your-databento-api-key">2. Add your Databento API key</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#set-strategy-parameters">3. Set strategy parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-the-complete-project">4. Run the complete project</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#repository-layout">Repository layout</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regenerating-the-pipeline-diagram">Regenerating the pipeline diagram</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regenerating-the-logo">Regenerating the logo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#publishing-the-documentation-site">Publishing the documentation site</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Michael Dowling, Andrew Heekin, Bhuvanesh Kodem, Sam Zhang
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Michael Dowling, Andrew Heekin, Bhuvanesh Kodem, Sam Zhang.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
