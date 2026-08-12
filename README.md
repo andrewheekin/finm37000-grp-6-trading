@@ -2,19 +2,19 @@
 
 ## Overview and Results
 
-This project builds and backtests an end-to-end **intraday mean-reversion strategy on the Brent–WTI crude-oil spread** using CME Globex MBP-1 market data from Databento. The final pipeline downloads the market data, constructs synchronized one-minute datasets, generates statistically filtered trade signals, executes those signals against the exchange-listed Brent–WTI spread, calculates executable P&L, and produces a set of backtest figures. The entire production workflow is reproducible with a single `doit` command once a Databento API key is supplied.
+This project builds and backtests an end-to-end **intraday mean-reversion strategy on the Brent–WTI crude-oil spread** using CME Globex MBP-1 market data from Databento. The pipeline downloads the market data, constructs synchronized one-minute datasets, generates statistically filtered trade signals, executes them against the exchange-listed Brent–WTI spread, and produces executable P&L and backtest figures. The workflow is reproducible with a single `doit` command once a Databento API key is supplied.
 
-The main result is a **negative but informative trading result**: over our June 1–5, 2026 pilot sample, the implemented mean-reversion specification did not generate robust positive P&L. We tested different entry thresholds, including 3.0 and 2.5 standard deviations; lowering the threshold created more opportunities but did not make the strategy reliably profitable. Rather than optimize aggressively to a five-day sample, we preserve a transparent baseline that demonstrates the full research and execution framework and highlights where the economic intuition does and does not survive realistic market-data and execution constraints.
+The main result is a **negative but informative trading result**: over the June 1–5, 2026 pilot sample, the implemented mean-reversion specification did not generate robust positive P&L. We tested entry thresholds of 3.0 and 2.5 standard deviations; lowering the threshold created more opportunities but did not make it reliably profitable. Rather than optimize aggressively to a five-day sample, we preserve a transparent baseline that shows where the economic intuition does and does not survive realistic market-data and execution constraints.
 
 ## Pipeline Overview
 
-The four bands below map to the `doit` task chain: data acquisition and cleaning, the three entry gates applied to every one-minute bar, position management through to an exit, and the saved outputs.
+The four bands below map to the `doit` task chain: data acquisition and cleaning, the three entry gates, position management through to an exit, and the saved outputs.
 
 ![Brent-WTI strategy pipeline and entry/exit logic](docs_src/figures/07_strategy_flowchart.png)
 
 ## Data and Spread Construction
 
-The pipeline pulls Databento `GLBX.MDP3` **MBP-1** data for the volume-rolled front contracts `CL.v.0` (WTI) and `BZ.v.0` (Brent), together with exchange-listed Brent–WTI spread instruments. Raw DBN files are cached under `_data/databento/`, so subsequent runs do not repurchase data that is already present.
+The pipeline pulls Databento `GLBX.MDP3` **MBP-1** data for the volume-rolled front contracts `CL.v.0` (WTI) and `BZ.v.0` (Brent), together with exchange-listed Brent–WTI spread instruments. Raw DBN files are cached under `_data/databento/`, so subsequent runs do not repurchase data.
 
 `src/clean_mbp1.py` converts the event data to fixed **1-second and 1-minute** grids and builds an aligned dataset. The strategy signal is based on the synthetic spread
 
@@ -22,47 +22,34 @@ $$
 S_t = CL_t - BZ_t,
 $$
 
-using the midpoint of each outright's best bid and ask. During the pilot week, the front listed spread `CLN6-BZQ6` matches the contracts underlying the two continuous outrights, so it is used for trade execution. Long positions enter at the listed spread ask and exit at its bid; short positions enter at the bid and cover at the ask. This makes the backtest P&L reflect the observed bid–ask spread rather than midpoint-only execution.
+using the midpoint of each outright's best bid and ask. During the pilot week the front listed spread `CLN6-BZQ6` matches the contracts underlying the two continuous outrights, so it is used for execution: long positions enter at its ask and exit at its bid, short positions the reverse. Backtest P&L pays the observed bid–ask spread rather than assuming midpoint fills.
 
-Contract rolls are handled explicitly. Each row retains the underlying CL and BZ instrument IDs, and a rolling window is valid only if all observations belong to the same `(CL contract, BZ contract)` regime. Windows also require consecutive one-minute bars and active, non-stale outright quotes. This prevents artificial spread jumps caused by continuous-contract splicing from being mistaken for mean-reversion signals.
+Contract rolls are handled explicitly: each row retains the underlying CL and BZ instrument IDs, and a rolling window is valid only if every observation belongs to the same `(CL contract, BZ contract)` regime, with consecutive one-minute bars and active, non-stale outright quotes. This prevents spread jumps from continuous-contract splicing being mistaken for mean-reversion signals.
 
 ## What the Spread Looks Like
 
-`doit spread_diagnostics` regenerates six figures that motivate the design.
-Three of them carry most of the argument, and together they explain both why we
-expected an edge and why we did not find one.
+`doit spread_diagnostics` regenerates six figures that motivate the design; three carry most of the argument.
 
-Over the pilot week the spread trended from about −$3.50/bbl on Monday to
-−$1.50/bbl on Thursday before retracing sharply. There is no stable level to
-revert to across the week, which rules out anchoring on a fixed long-run mean
-and pushes the design toward a trailing window.
+Over the pilot week the spread trended from about −$3.50/bbl to −$1.50/bbl before retracing sharply. With no stable level to revert to, the design anchors on a trailing window rather than a long-run mean.
 
 ![Synthetic spread over the pilot week](docs_src/figures/01_spread_week.png)
 
-Choosing that window is the central trade-off. At a daily horizon the deviation
-sits on one side of zero for a full day at a time — persistent drift, not
-reversion. At 30 minutes it oscillates tightly around zero, which is the
-behavior the strategy wants, but the amplitude is mostly within ±$0.20/bbl.
+Choosing that window is a key trade-off: daily-horizon deviations may have no zero-crossings for a full day, while 30-minute deviations oscillate around zero with amplitude mostly within ±$0.20/bbl.
 
 ![Rolling deviations at three horizons](docs_src/figures/02_rolling_deviations.png)
 
-That small amplitude is the problem, because it has to cover execution. For
-most of the day the books are tight and nearly identical across venues, with a
-median quoted width around $0.05/bbl, then they blow out after 20:00 UTC — and
-in that window the front listed spread is the *worst* of the three, not the
-best. This is why the strategy stops trading at 19:59 UTC.
+That amplitude has to cover execution. Quoted widths sit near a $0.05/bbl median for most of the day, then blow out after 20:00 UTC — which is why the strategy stops trading at 19:59 UTC.
 
 ![Quoted width by hour, synthetic vs listed](docs_src/figures/06_width_by_hour.png)
 
-The remaining three figures — the deviation histogram, the PACF of deviations,
-and top-of-book activity by hour — are documented in
+The remaining figures are documented in
 [`docs_src/spread_diagnostics.md`](docs_src/spread_diagnostics.md).
 
 ## Strategy Logic
 
-The strategy operates only from **00:00 through 19:59 UTC** and holds at most one listed-spread contract at a time. At every eligible minute, it forms a trailing rolling window and applies three entry gates:
+The strategy operates only from **00:00 through 19:59 UTC** and holds at most one listed-spread contract. At every eligible minute, it forms a trailing rolling window and applies three entry gates:
 
-1. **Deviation:** compute the spread z-score relative to its rolling mean and sample standard deviation. A sufficiently negative z-score proposes a long spread; a sufficiently positive z-score proposes a short spread.
+1. **Deviation:** compute the spread z-score relative to its rolling mean and sample standard deviation. A sufficiently negative z-score proposes a long spread; a sufficiently positive z-score, a short.
 2. **Stationarity:** by default, the rolling window must pass both an Augmented Dickey–Fuller test and a KPSS test at the 5% level. Either test can be disabled in `src/strategy_engine.py`.
 3. **Half-life:** fit an AR(1) model to the spread window and convert the autoregressive coefficient to an estimated mean-reversion half-life. Entry is allowed only when the estimate is positive and below the configured maximum.
 
@@ -70,18 +57,14 @@ The default specification uses a **30-minute window**, **2.5σ entry threshold**
 
 ## Outputs
 
-Running the full pipeline creates the cleaned parquet datasets under `_data/clean/`, the backtest results at:
-
-`_output/brent_wti_strategy_1m.parquet`
-
-and four figures under `_output/figures/`:
+Running `doit` creates the cleaned parquet datasets under `_data/clean/` and writes everything else to `_output/`: the backtest results at `_output/brent_wti_strategy_1m.parquet`, the standalone entry signals at `_output/brent_wti_signals_1m.parquet`, and ten figures under `_output/figures/` — the six spread diagnostics plus four backtest figures:
 
 - `strategy_01_spread_trades.png` — synthetic spread, rolling mean, entries, and exits
 - `strategy_02_position.png` — long/short/flat position through time
 - `strategy_03_cum_pnl.png` — cumulative executable P&L
 - `strategy_04_trade_pnl.png` — realized P&L for each completed trade
 
-The backtest parquet also records the rolling mean and standard deviation, z-score, estimated half-life, entry/exit flags, exit reason, position age, position P&L, step P&L, and cumulative P&L for each one-minute observation.
+The backtest parquet records the rolling mean and standard deviation, z-score, estimated half-life, entry/exit flags, exit reason, position age, and per-bar and cumulative P&L.
 
 ---
 
@@ -149,7 +132,7 @@ From the repository root:
 doit
 ```
 
-The task chain creates the data/output directories, pulls or loads the cached Databento data, cleans and aligns the MBP-1 data, runs the strategy backtest, and saves the strategy plots.
+The task chain creates the data/output directories, pulls or loads the cached Databento data, cleans and aligns the MBP-1 data, generates the diagnostic figures and standalone entry signals, runs the strategy backtest, and saves the strategy plots.
 
 To rerun from scratch while preserving the billable Databento cache:
 
