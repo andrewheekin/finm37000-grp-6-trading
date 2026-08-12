@@ -88,6 +88,8 @@ The figures connect the three periods within each year. Green and red markers sh
 
 ![2026 connected spread, trades, and cumulative P&L](docs_src/figures/strategy_yearly_spread_pnl_2026.png)
 
+We also tested alternative parameters in [`notebooks/ewm_7d_zscore_backtest.ipynb`](notebooks/ewm_7d_zscore_backtest.ipynb), including a five-trading-day exponentially weighted z-score, different entry and exit thresholds, stop losses, and holding periods. These experiments help evaluate sensitivity to parameter choices rather than relying on a single specification.
+
 ---
 
 # How to Run
