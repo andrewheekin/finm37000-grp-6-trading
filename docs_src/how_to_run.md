@@ -62,7 +62,7 @@ From the repository root:
 doit
 ```
 
-The task chain creates the data/output directories, pulls or loads the cached Databento data, cleans and aligns the MBP-1 data, runs the strategy backtest, and saves the strategy plots.
+The task chain creates the data/output directories, pulls or loads the cached Databento data, cleans and aligns the MBP-1 data, runs the strategy backtest, and saves the strategy plots. The backtest parquet and figure paths are listed under [Output files](strategy_results.md#output-files) on Strategy Results.
 
 To rerun from scratch while preserving the billable Databento cache:
 
