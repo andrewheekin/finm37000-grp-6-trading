@@ -71,12 +71,12 @@ The backtest parquet records the rolling mean and standard deviation, z-score, e
 | Year | Data blocks | Trades | Winning trades | P&L |
 |---|---:|---:|---:|---:|
 | 2023 | 3 | 33 | 4 | −$550 |
-| 2024 | 3 | 37 | 1 | −$630 |
-| 2025 | 3 | 41 | 2 | −$460 |
+| 2024 | 3 | 48 | 0 | −$940 |
+| 2025 | 3 | 50 | 2 | −$580 |
 | 2026 | 3 | 14 | 6 | +$170 |
-| **Total** | **12** | **125** | **13** | **−$1,470** |
+| **Total** | **12** | **145** | **12** | **−$1,900** |
 
-The baseline completes 125 trades and produces **−$1,470** after executable bid/ask fills. Only 2026 is positive, so the specification does not show robust profitability across the sampled years.
+The baseline completes 145 trades and produces **−$1,900** after executable bid/ask fills. Only 2026 is positive, so the specification does not show robust profitability across the sampled years.
 
 The figures connect the three periods within each year. Green and red markers show long and short entries, purple crosses show exits, and dashed vertical lines mark period boundaries.
 
